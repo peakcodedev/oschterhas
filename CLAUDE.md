@@ -23,7 +23,9 @@ Web-App (PWA) für die Oster-Suche im Gelände. Ein Plattform-Admin legt **Insta
 - **Login**: Peakcode Identity = Keycloak aus `/Users/ufo/CODE/identity_peakcode`, Realm `oschterhas`, BFF mit httpOnly-Cookie, nur auf `admin.`-Host
 - **Frontend** `apps/web`: Angular, Standalone Components, Signals, TypeScript strict, **NgRx**, Leaflet, Transloco, Service Worker
 - **Domain**: `oschterhas.li` (`.ch` ist besetzt). Produktion hinter Caddy (Wildcard- und On-Demand-Zertifikate)
-- **Lokal**: Suche unter `http://tann.oschterhas.localhost:4200`, Verwaltung unter `http://admin.oschterhas.localhost:4200`, Keycloak `http://localhost:8180`, Mailpit `http://localhost:8025`
+- **Lokal**: Suche unter `http://tann.oschterhas.localhost:4300`, Verwaltung unter `http://admin.oschterhas.localhost:4300` (Port 4300 fest, weil Keycloak genau diese Redirect-URI kennt), Keycloak `http://localhost:8180`, Mailpit `http://localhost:8025`
+- **Testkonten** (Realm `oschterhas`, Passwort `OSCHTERHAS_TEST_USER_PASSWORD` in `identity_peakcode/.env`): `pia.plattform@oschterhas.test` (Plattform-Admin), `otto.organisator@oschterhas.test` (Organisator `tann`), `olga.organisatorin@oschterhas.test` (Organisatorin `vorschau`), `nina.neu@unbekannt.test` (kein Zugang)
+- **Secrets lokal**: `dotnet user-secrets` im Projekt `Oschterhas.Api` (`Oidc:ClientSecret`, `IdentityAdmin:ClientSecret`), gleiche Werte wie in `identity_peakcode/.env`
 - **Versionen**: .NET 10 SDK (`apps/api/global.json`), Node 24 LTS (`.nvmrc`)
 
 ## Befehle
@@ -44,7 +46,7 @@ dotnet format --verify-no-changes
 
 # Frontend (in apps/web)
 nvm use && npm ci
-npm start                                                 # http://tann.oschterhas.localhost:4200, Proxy /api → :5080
+npm start                                                 # http://tann.oschterhas.localhost:4300, Proxy /api → :5080
 npm test
 npm run lint
 npm run format:check

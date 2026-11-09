@@ -33,7 +33,7 @@ Alles andere (LGPL, MPL, GPL, AGPL, Dual-/Source-available-Lizenzen, „Communit
 | Npgsql.EntityFrameworkCore.PostgreSQL | PostgreSQL | PostgreSQL-Provider |
 | xunit.v3 | Apache-2.0 | Unit-Tests (Microsoft Testing Platform) |
 | Microsoft.Extensions.TimeProvider.Testing | MIT | `FakeTimeProvider` in Tests |
-| Microsoft.Extensions.Options, Microsoft.Extensions.Caching.Memory | MIT | Optionen und Cache in Core (ohne ASP.NET-Abhängigkeit) |
+| Microsoft.Extensions.Options, Microsoft.Extensions.Caching.Memory, Microsoft.Extensions.Http | MIT | Optionen, Cache und HttpClientFactory in Core (ohne ASP.NET-Abhängigkeit) |
 | Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore | MIT | Health-Check mit DB-Prüfung |
 | NSubstitute (+ NSubstitute.Analyzers.CSharp) | BSD-3-Clause | Test-Doubles |
 
@@ -46,7 +46,7 @@ Keycloak-Admin-API: eigener schlanker `HttpClient`-Client in `Oschterhas.Core/Id
 | @ngrx/store, effects, entity, router-store, store-devtools | MIT | State-Management |
 | @jsverse/transloco | MIT | i18n |
 | leaflet | BSD-2-Clause | Karte |
-| qrcode | MIT | QR-Code für die Instanz-Adresse |
+| qrcode (+ @types/qrcode, dev) | MIT | QR-Code für die Instanz-Adresse |
 
 ### Betrieb
 | Software | Lizenz | Zweck |

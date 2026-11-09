@@ -146,8 +146,8 @@ Regeln:
 Die Zuordnung Host → Instanz wird 30 Sekunden mit `IMemoryCache` zwischengespeichert (auch negative Ergebnisse). Ab M4 wird der Cache beim Ändern einer Instanz zusätzlich invalidiert. Die Middleware läuft nur für `/api`-Pfade; Controller lesen das Ergebnis mit `HttpContext.GetHostResolution()`. Die eigene Host-Auflösung ersetzt das starre `AllowedHosts`.
 
 ### Lokale Entwicklung
-- `http://tann.oschterhas.localhost:4200` (Instanz) und `http://admin.oschterhas.localhost:4200` (Verwaltung). Chrome und Firefox lösen `*.localhost` automatisch auf. Für Safari Einträge in `/etc/hosts` nötig.
-- Custom Domain testen: z. B. `ostern.cevi-test.localhost:4200` als Custom Domain eintragen. In der Entwicklung setzt `CustomDomains:AutoVerifyInDevelopment = true` den Status direkt auf `Verified`.
+- `http://tann.oschterhas.localhost:4300` (Instanz) und `http://admin.oschterhas.localhost:4300` (Verwaltung). Chrome und Firefox lösen `*.localhost` automatisch auf. Für Safari Einträge in `/etc/hosts` nötig.
+- Custom Domain testen: z. B. `ostern.cevi-test.localhost:4300` als Custom Domain eintragen. In der Entwicklung setzt `CustomDomains:AutoVerifyInDevelopment = true` den Status direkt auf `Verified`.
 - Angular-Dev-Server mit `allowedHosts: ['.localhost']`, Proxy `/api` → API **mit unverändertem Host-Header**.
 
 ### Produktion
@@ -199,11 +199,14 @@ Relevant ist nur `<wpt>`. Referenz ist der echte swisstopo-App-Export `samples/s
   - `oschterhas-user-admin`: Service-Account nur mit `manage-users`, `view-users`, `query-users`.
   - Testbenutzer mit festen IDs: ein Plattform-Admin, zwei Organisator/innen, ein Konto ohne Zugang.
 - Oschterhas-Konfiguration: `Oidc:Authority` = `http://localhost:8180/realms/oschterhas`, `Oidc:ClientId`, `Oidc:ClientSecret`, `IdentityAdmin:BaseUrl`, `IdentityAdmin:ClientId`, `IdentityAdmin:ClientSecret`. Secrets lokal per `dotnet user-secrets`.
-- ASP.NET: `Microsoft.AspNetCore.Authentication.OpenIdConnect` + Cookie. Callback `/api/auth/callback`. Beim Login wird `AppUser` über **Issuer + Subject** gesucht oder angelegt. Ohne Eintrag in der Oschterhas-DB bzw. ohne Rolle → „Kein Zugang".
+- ASP.NET: `Microsoft.AspNetCore.Authentication.OpenIdConnect` + Cookie. Callback `/api/auth/callback`, Authorization Request per PAR (Standard in .NET 10). Beim Login wird `AppUser` über **Issuer + Subject** gesucht. Ohne Eintrag in der Oschterhas-DB → Redirect `/?login=no_access`.
+- Standard-Challenge ist das Cookie (API antwortet `401`); nur `/api/auth/login` startet OIDC. Das Cookie enthält nur die User-ID und das ID-Token (für den Keycloak-Logout); Access- und Refresh-Token werden verworfen.
+- Bei **jedem** Request lädt `OnValidatePrincipal` den Benutzer aus der DB: gesperrte oder entfernte Konten verlieren sofort den Zugriff, Rollenänderungen gelten sofort.
+- Berechtigungen prüfen die Core-Services (`InstanceAccess`), nicht Controller-Attribute: so sind sie mit Unit-Tests abgedeckt.
 - **Organisator/in erfassen** (durch Plattform-Admin): E-Mail + Name eingeben → Core ruft `IIdentityAdminClient` → Keycloak-Benutzer anlegen (oder vorhandenen per E-Mail finden) → `execute-actions-email` (`UPDATE_PASSWORD`) → `AppUser` mit Issuer + Subject anlegen → Zuordnung `InstanceOrganizer`.
 - **Plattform-Admin**: Flag `IsPlatformAdmin` am `AppUser`. Erster Admin per Entwicklungs-Seed (fester Testbenutzer) bzw. in Produktion per Konfiguration `Auth:InitialPlatformAdmins` (Liste von Subjects).
 - Cookie: `HttpOnly`, `Secure`, `SameSite=Lax`, **ohne `Domain`-Attribut** (gilt nur für `admin.`, nicht für Instanz-Subdomains). Antiforgery-Token als Header `X-XSRF-TOKEN`.
-- Autorisierung: Policy `PlatformAdmin` und ressourcenbasierte Prüfung `InstanceOrganizer` (ist der Benutzer der Instanz zugeordnet?) in jedem Organisator-Endpunkt.
+- Autorisierung: Fallback-Policy „angemeldet" für alles ausser `[AllowAnonymous]` (öffentliche Endpunkte, Login, Health). Plattform-Admin und Zuordnung zur Instanz prüft Core bei jeder Operation.
 
 ## Frontend: Aufbau & NgRx
 

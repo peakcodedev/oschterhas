@@ -1,0 +1,125 @@
+<section class="card">
+  <div class="page-header">
+    <h2>{{ 'admin.hares.title' | transloco }}</h2>
+    <button
+      type="button"
+      class="button button--secondary button--small"
+      [disabled]="saving()"
+      (click)="add()"
+    >
+      {{ 'admin.hares.add' | transloco }}
+    </button>
+  </div>
+  <p class="form__hint">{{ 'admin.hares.mapHint' | transloco }}</p>
+
+  <app-admin-hare-map
+    [hares]="hares()"
+    [selectedHareId]="selected()?.id ?? null"
+    [preview]="preview()"
+    [ariaLabel]="'admin.hares.mapLabel' | transloco"
+    (selected)="select($event)"
+    (moved)="moved($event)"
+  />
+
+  @if (selected(); as hare) {
+    <form class="form hare-edit" (submit)="saveSelected($event)">
+      <h3>{{ displayName(hare) }} (#{{ hare.number }})</h3>
+      <label class="form__field">
+        <span class="form__label">{{ 'admin.hares.name' | transloco }}</span>
+        <input
+          class="input"
+          name="name"
+          maxlength="100"
+          [placeholder]="'hare.defaultName' | transloco: { number: hare.number }"
+          [value]="editName()"
+          (input)="editName.set(value($event))"
+        />
+      </label>
+      <label class="form__field">
+        <span class="form__label">{{ 'admin.hares.description' | transloco }}</span>
+        <input
+          class="input"
+          name="description"
+          maxlength="500"
+          [value]="editDescription()"
+          (input)="editDescription.set(value($event))"
+        />
+      </label>
+      <p class="form__hint">{{ hare.lat.toFixed(6) }}, {{ hare.lon.toFixed(6) }}</p>
+      <div class="form__actions">
+        <button type="button" class="button button--secondary" (click)="select(null)">
+          {{ 'common.close' | transloco }}
+        </button>
+        <button type="submit" class="button" [disabled]="saving()">
+          {{ 'common.save' | transloco }}
+        </button>
+      </div>
+    </form>
+  }
+
+  <label class="checkbox">
+    <input type="checkbox" [checked]="onlyHidden()" (change)="onlyHidden.set(!onlyHidden())" />
+    {{ 'admin.hares.onlyHidden' | transloco }}
+  </label>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">{{ 'admin.hares.name' | transloco }}</th>
+        <th scope="col">{{ 'admin.hares.status' | transloco }}</th>
+        <th scope="col">
+          <span class="visually-hidden">{{ 'admin.hares.actions' | transloco }}</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (hare of visibleHares(); track hare.id) {
+        <tr [class.table__row--selected]="hare.id === selected()?.id">
+          <td>{{ hare.number }}</td>
+          <td>
+            <button type="button" class="link-button" (click)="select(hare.id)">
+              {{ displayName(hare) }}
+            </button>
+            @if (hare.description) {
+              <span class="list__meta">{{ hare.description }}</span>
+            }
+          </td>
+          <td>
+            @if (hare.foundAt) {
+              {{
+                (hare.foundBy ? 'hare.foundBy' : 'hare.found') | transloco: { name: hare.foundBy }
+              }}
+            } @else {
+              {{ 'hare.hidden' | transloco }}
+            }
+          </td>
+          <td class="table__actions">
+            @if (hare.foundAt) {
+              <button
+                type="button"
+                class="button button--secondary button--small"
+                [disabled]="saving()"
+                (click)="reset(hare)"
+              >
+                {{ 'admin.hares.reset' | transloco }}
+              </button>
+            }
+            <button
+              type="button"
+              class="button button--danger button--small"
+              [disabled]="saving()"
+              (click)="remove(hare)"
+            >
+              {{ 'admin.hares.delete' | transloco }}
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4">{{ 'admin.hares.empty' | transloco }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>

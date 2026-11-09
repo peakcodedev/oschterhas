@@ -1,0 +1,59 @@
+<div class="admin">
+  <header class="admin__header">
+    <a class="admin__brand" routerLink="/"
+      >{{ 'app.name' | transloco }} · {{ 'admin.title' | transloco }}</a
+    >
+    @if (user(); as user) {
+      <nav class="admin__nav" [attr.aria-label]="'admin.nav.label' | transloco">
+        <a routerLink="/instanzen" routerLinkActive="admin__link--active" class="admin__link">
+          {{ 'admin.nav.instances' | transloco }}
+        </a>
+        @if (user.isPlatformAdmin) {
+          <a routerLink="/benutzer" routerLinkActive="admin__link--active" class="admin__link">
+            {{ 'admin.nav.users' | transloco }}
+          </a>
+        }
+      </nav>
+      <div class="admin__user">
+        <span class="admin__user-name">{{ user.displayName }}</span>
+        <button type="button" class="button button--secondary button--small" (click)="logout()">
+          {{ 'admin.logout' | transloco }}
+        </button>
+      </div>
+    }
+  </header>
+
+  <main class="admin__main">
+    @switch (status()) {
+      @case ('signedIn') {
+        <app-message-banner />
+        <router-outlet />
+      }
+      @case ('anonymous') {
+        <section class="card login">
+          <h1>{{ 'admin.login.title' | transloco }}</h1>
+          <p>{{ 'admin.login.text' | transloco }}</p>
+          @if (loginReason(); as reason) {
+            <p class="login__reason" role="alert">
+              {{ 'admin.login.reason.' + reason | transloco }}
+            </p>
+          }
+          <button type="button" class="button" (click)="login()">
+            {{ 'admin.login.button' | transloco }}
+          </button>
+        </section>
+      }
+      @case ('error') {
+        <section class="card">
+          <p role="alert">{{ 'errors.network' | transloco }}</p>
+          <button type="button" class="button" (click)="retry()">
+            {{ 'common.retry' | transloco }}
+          </button>
+        </section>
+      }
+      @default {
+        <p aria-busy="true">{{ 'common.loading' | transloco }}</p>
+      }
+    }
+  </main>
+</div>

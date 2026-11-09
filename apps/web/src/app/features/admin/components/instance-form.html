@@ -1,0 +1,66 @@
+<form class="form" (submit)="submit($event)">
+  <label class="form__field">
+    <span class="form__label">{{ 'admin.instance.slug' | transloco }}</span>
+    <span class="form__slug">
+      <input
+        class="input"
+        name="slug"
+        required
+        minlength="3"
+        maxlength="40"
+        pattern="[a-z0-9]([a-z0-9\-]*[a-z0-9])?"
+        autocapitalize="off"
+        spellcheck="false"
+        [value]="slug()"
+        [disabled]="!canEditSlug()"
+        (input)="slug.set(value($event))"
+      />
+      <span class="form__suffix">.{{ baseDomain() }}</span>
+    </span>
+    <span class="form__hint">{{ 'admin.instance.slugHint' | transloco }}</span>
+  </label>
+
+  <label class="form__field">
+    <span class="form__label">{{ 'admin.instance.name' | transloco }}</span>
+    <input
+      class="input"
+      name="name"
+      required
+      maxlength="100"
+      [value]="name()"
+      (input)="name.set(value($event))"
+    />
+  </label>
+
+  <label class="form__field">
+    <span class="form__label">{{ 'admin.instance.eventDate' | transloco }}</span>
+    <input
+      class="input"
+      type="date"
+      name="eventDate"
+      [value]="eventDate()"
+      (input)="eventDate.set(value($event))"
+    />
+  </label>
+
+  <label class="form__field">
+    <span class="form__label">{{ 'admin.instance.description' | transloco }}</span>
+    <textarea
+      class="input"
+      name="description"
+      rows="3"
+      maxlength="2000"
+      [value]="description()"
+      (input)="description.set(value($event))"
+    ></textarea>
+  </label>
+
+  <div class="form__actions">
+    <button type="button" class="button button--secondary" (click)="cancelled.emit()">
+      {{ 'common.cancel' | transloco }}
+    </button>
+    <button type="submit" class="button" [disabled]="saving()">
+      {{ 'common.save' | transloco }}
+    </button>
+  </div>
+</form>

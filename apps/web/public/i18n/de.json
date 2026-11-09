@@ -14,12 +14,131 @@
   },
   "admin": {
     "title": "Verwaltung",
-    "comingSoon": "Die Verwaltung folgt bald."
+    "logout": "Abmelden",
+    "nav": {
+      "label": "Verwaltung",
+      "instances": "Suchen",
+      "users": "Benutzer"
+    },
+    "login": {
+      "title": "Anmelden",
+      "text": "Die Verwaltung ist für Organisatorinnen und Organisatoren. Melde dich mit deinem Peakcode-Konto an.",
+      "button": "Mit Peakcode anmelden",
+      "reason": {
+        "no_access": "Dieses Konto hat keinen Zugang zu Oschterhas. Bitte wende dich an die Plattform-Administration.",
+        "disabled": "Dieses Konto wurde gesperrt.",
+        "failed": "Die Anmeldung hat nicht geklappt. Bitte versuche es nochmals."
+      }
+    },
+    "status": {
+      "Draft": "Entwurf",
+      "Active": "Läuft",
+      "Ended": "Beendet"
+    },
+    "instances": {
+      "title": "Suchen",
+      "new": "Neue Suche",
+      "empty": "Noch keine Suchen vorhanden.",
+      "progress": "{{found}} von {{total}} Hasen gefunden"
+    },
+    "instance": {
+      "slug": "Adresse",
+      "slugHint": "3–40 Zeichen: Kleinbuchstaben, Ziffern und Bindestrich. Kann später nur von der Plattform-Administration geändert werden.",
+      "name": "Name",
+      "eventDate": "Datum",
+      "description": "Beschreibung"
+    },
+    "detail": {
+      "start": "Suche starten",
+      "end": "Suche beenden",
+      "backToDraft": "Zurück auf Entwurf",
+      "restart": "Wieder starten",
+      "confirmStart": "Suche jetzt starten? Die Hasen werden für alle sichtbar.",
+      "confirmEnd": "Suche beenden? Danach kann niemand mehr Hasen als gefunden markieren.",
+      "confirmDraft": "Zurück auf Entwurf? Die Hasen sind dann nicht mehr sichtbar.",
+      "open": "Öffnen",
+      "copy": "Adresse kopieren",
+      "print": "QR-Code drucken",
+      "alsoAt": "Auch erreichbar unter {{url}}",
+      "details": "Angaben",
+      "dangerZone": "Löschen",
+      "delete": "Suche löschen",
+      "confirmDelete": "Suche «{{name}}» mit allen Hasen endgültig löschen?"
+    },
+    "organizers": {
+      "title": "Organisator/innen",
+      "empty": "Noch niemand zugeordnet.",
+      "pending": "Einladung offen",
+      "resend": "Einladung erneut senden",
+      "remove": "Entfernen",
+      "email": "E-Mail",
+      "name": "Name",
+      "invite": "Einladen",
+      "inviteHint": "Neue Personen erhalten eine E-Mail von Peakcode, mit der sie ihr Passwort setzen.",
+      "confirmRemove": "{{name}} von dieser Suche entfernen?"
+    },
+    "hares": {
+      "title": "Hasen",
+      "add": "Hase hinzufügen",
+      "mapHint": "Marker antippen zum Bearbeiten, ziehen zum Verschieben. Neue Hasen erscheinen in der Kartenmitte.",
+      "mapLabel": "Karte der Hasen zum Bearbeiten",
+      "name": "Name",
+      "description": "Beschreibung",
+      "status": "Status",
+      "actions": "Aktionen",
+      "reset": "Zurücksetzen",
+      "delete": "Löschen",
+      "empty": "Keine Hasen.",
+      "onlyHidden": "Nur nicht gefundene zeigen",
+      "confirmDelete": "{{name}} löschen?"
+    },
+    "gpx": {
+      "title": "GPX importieren",
+      "hint": "Exportiere die Wegpunkte aus der swisstopo-App als GPX-Datei (max. 5 MB, 1000 Wegpunkte). Nur Wegpunkte werden übernommen.",
+      "choose": "GPX-Datei wählen",
+      "reading": "{{file}} wird gelesen …",
+      "importing": "Wird importiert …",
+      "result": "Import fertig: {{created}} neu, {{updated}} aktualisiert, {{deleted}} gelöscht.",
+      "found": "{{count}} Wegpunkte gefunden.",
+      "existing": "Bisher {{count}} Hasen ({{found}} gefunden), {{matching}} mit gleicher swisstopo-ID.",
+      "previewOnMap": "Die Wegpunkte sind auf der Karte unten gestrichelt markiert.",
+      "warnings": "{{count}} Hinweise",
+      "mode": "Wie übernehmen?",
+      "modeMerge": "Zusammenführen: gleiche swisstopo-ID aktualisieren, neue hinzufügen, übrige behalten",
+      "modeReplace": "Ersetzen: alle bisherigen Hasen löschen",
+      "import": "Importieren",
+      "confirmReplaceFound": "{{count}} Hasen sind bereits gefunden. Beim Ersetzen geht das verloren. Trotzdem ersetzen?"
+    },
+    "qr": {
+      "alt": "QR-Code für {{url}}"
+    },
+    "users": {
+      "title": "Benutzer",
+      "name": "Name",
+      "admin": "Plattform-Admin",
+      "active": "Aktiv",
+      "adminFor": "{{name}} ist Plattform-Admin",
+      "activeFor": "{{name}} ist aktiv"
+    },
+    "messages": {
+      "saved": "Gespeichert.",
+      "instanceCreated": "Suche angelegt.",
+      "instanceDeleted": "Suche gelöscht.",
+      "organizerInvited": "Einladung verschickt.",
+      "organizerAdded": "Zugeordnet.",
+      "organizerRemoved": "Entfernt.",
+      "invitationSent": "Einladung erneut verschickt.",
+      "hareDeleted": "Hase gelöscht.",
+      "gpxImported": "GPX importiert."
+    }
   },
   "common": {
     "loading": "Wird geladen …",
     "retry": "Nochmals versuchen",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "close": "Schliessen",
+    "save": "Speichern",
+    "edit": "Bearbeiten"
   },
   "hare": {
     "defaultName": "Hase {{number}}",
@@ -59,5 +178,67 @@
   },
   "live": {
     "disconnected": "Verbindung unterbrochen – neuer Versuch läuft …"
+  },
+  "errors": {
+    "unknown": "Etwas ist schiefgelaufen. Bitte versuche es nochmals.",
+    "network": "Keine Verbindung zum Server.",
+    "unauthorized": "Deine Anmeldung ist abgelaufen. Bitte melde dich neu an.",
+    "rate_limited": "Zu viele Anfragen. Bitte warte einen Moment.",
+    "auth": {
+      "platform_admin_required": "Das darf nur die Plattform-Administration."
+    },
+    "instance": {
+      "not_found": "Diese Suche gibt es nicht oder du hast keinen Zugriff.",
+      "slug_required": "Bitte eine Adresse angeben.",
+      "slug_invalid": "Die Adresse darf nur Kleinbuchstaben, Ziffern und Bindestriche enthalten (3–40 Zeichen).",
+      "slug_reserved": "Diese Adresse ist reserviert.",
+      "slug_taken": "Diese Adresse ist schon vergeben.",
+      "slug_change_forbidden": "Die Adresse kann nur die Plattform-Administration ändern.",
+      "name_required": "Bitte einen Namen angeben.",
+      "name_too_long": "Der Name ist zu lang (max. 100 Zeichen).",
+      "description_too_long": "Die Beschreibung ist zu lang (max. 2000 Zeichen).",
+      "changed": "Jemand anderes hat die Suche inzwischen geändert. Bitte neu laden."
+    },
+    "organizer": {
+      "email_invalid": "Bitte eine gültige E-Mail-Adresse angeben.",
+      "name_invalid": "Bitte einen Namen angeben (max. 200 Zeichen).",
+      "already_assigned": "Diese Person ist schon zugeordnet.",
+      "already_active": "Diese Person hat sich schon angemeldet.",
+      "invitation_failed": "Die Person wurde zugeordnet, aber die Einladung konnte nicht verschickt werden. Bitte später erneut senden.",
+      "not_found": "Diese Person ist nicht zugeordnet."
+    },
+    "identity": {
+      "unavailable": "Peakcode Identity ist gerade nicht erreichbar.",
+      "user_conflict": "Bei Peakcode gibt es bereits ein Konto, das nicht passt. Bitte Administration kontaktieren."
+    },
+    "hare": {
+      "not_found": "Diesen Hasen gibt es nicht mehr.",
+      "changed": "Jemand anderes hat den Hasen inzwischen geändert. Bitte neu laden.",
+      "coordinates_invalid": "Die Position ist ungültig.",
+      "name_too_long": "Der Name ist zu lang (max. 100 Zeichen).",
+      "description_too_long": "Die Beschreibung ist zu lang (max. 500 Zeichen)."
+    },
+    "gpx": {
+      "file_missing": "Bitte eine GPX-Datei wählen.",
+      "file_too_large": "Die Datei ist grösser als 5 MB.",
+      "invalid_xml": "Die Datei ist kein gültiges XML.",
+      "dtd_not_allowed": "Die Datei enthält eine DTD und wird aus Sicherheitsgründen abgelehnt.",
+      "not_gpx": "Die Datei ist keine GPX-Datei.",
+      "no_waypoints": "Die Datei enthält keine Wegpunkte.",
+      "too_many_waypoints": "Die Datei enthält mehr als 1000 Wegpunkte."
+    },
+    "user": {
+      "cannot_demote_self": "Du kannst dich nicht selbst sperren oder herabstufen.",
+      "not_found": "Diesen Benutzer gibt es nicht."
+    }
+  },
+  "gpxWarnings": {
+    "gpx": {
+      "invalid_coordinates": "Wegpunkt ohne gültige Koordinaten übersprungen.",
+      "duplicate_waypoint_id": "swisstopo-ID kommt doppelt vor.",
+      "name_truncated": "Name gekürzt.",
+      "description_truncated": "Beschreibung gekürzt.",
+      "waypoint_id_truncated": "swisstopo-ID gekürzt."
+    }
   }
 }

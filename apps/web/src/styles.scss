@@ -3,6 +3,9 @@
   --color-text: #1f2937;
   --color-muted: #4b5563;
   --color-background: #ffffff;
+  --color-page: #f6f7f9;
+  --color-success-bg: #dcfce7;
+  --color-error-bg: #fee2e2;
   --color-surface: #ffffff;
   --color-border: #e5e7eb;
   --color-border-strong: #6b7280;
@@ -115,4 +118,271 @@ body {
   stroke: var(--color-position);
   stroke-opacity: 0.4;
   stroke-width: 1;
+}
+
+/* ---- Administration: shared building blocks ---- */
+.card {
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.list__title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-text);
+}
+
+.list__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.list__meta {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.list__actions,
+.table__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--color-info-bg);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-top: 12px;
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 14rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.form__label {
+  font-weight: 600;
+}
+
+.form__hint {
+  margin: 4px 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.form__slug {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form__suffix {
+  color: var(--color-muted);
+}
+
+.form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  font: inherit;
+  background: var(--color-surface);
+}
+
+textarea.input {
+  padding: 8px 12px;
+}
+
+.input:focus-visible,
+.link-button:focus-visible {
+  outline: 3px solid var(--color-position);
+  outline-offset: 1px;
+}
+
+.input:disabled {
+  background: var(--color-page);
+  color: var(--color-muted);
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.button--small {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 0.9rem;
+}
+
+.button--danger {
+  background: var(--color-error);
+}
+
+a.button {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.file-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table__row--selected {
+  background: var(--color-info-bg);
+}
+
+.table__checkbox {
+  width: 22px;
+  height: 22px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.hare-marker--selected {
+  outline: 3px solid var(--color-position);
+  outline-offset: 2px;
+}
+
+.preview-marker {
+  fill: transparent;
+  stroke: var(--color-position);
+  stroke-width: 3;
+  stroke-dasharray: 4 3;
+}
+
+/* Print view of the instance page: only the QR poster. */
+@media print {
+  .no-print,
+  .admin__header,
+  app-message-banner {
+    display: none !important;
+  }
+
+  .admin,
+  .card {
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .print-area .qr-poster {
+    flex-direction: column;
+    text-align: center;
+    margin-top: 10vh;
+  }
+
+  .print-area .qr-poster__code {
+    width: 12cm !important;
+    height: 12cm !important;
+  }
+
+  .print-area .qr-poster__title {
+    font-size: 28pt;
+  }
+
+  .print-area .qr-poster__url {
+    font-size: 18pt;
+    color: #000000;
+  }
 }

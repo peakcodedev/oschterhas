@@ -18,10 +18,10 @@ dotnet run --project src/Oschterhas.Api     # http://localhost:5080, wendet Migr
 cd ../web
 nvm install && nvm use
 npm ci
-npm start                                   # http://tann.oschterhas.localhost:4200
+npm start                                   # http://tann.oschterhas.localhost:4300
 ```
 
-Lokale Adressen: `tann.oschterhas.localhost:4200` (Suche), `admin.oschterhas.localhost:4200` (Verwaltung), `oschterhas.localhost:4200` (Info-Seite). Chrome und Firefox lösen `*.localhost` selbst auf, für Safari braucht es Einträge in `/etc/hosts`.
+Lokale Adressen: `tann.oschterhas.localhost:4300` (Suche), `admin.oschterhas.localhost:4300` (Verwaltung), `oschterhas.localhost:4300` (Info-Seite). Für die Verwaltung muss Peakcode Identity laufen (`identity_peakcode`, Realm `oschterhas`). Chrome und Firefox lösen `*.localhost` selbst auf, für Safari braucht es Einträge in `/etc/hosts`.
 
 Details und alle Befehle: [CLAUDE.md](CLAUDE.md).
 

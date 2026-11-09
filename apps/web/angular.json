@@ -37,7 +37,8 @@
               "src/styles.scss"
             ],
             "allowedCommonJsDependencies": [
-              "leaflet"
+              "leaflet",
+              "qrcode"
             ]
           },
           "configurations": {

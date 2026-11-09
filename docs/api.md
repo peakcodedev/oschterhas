@@ -4,8 +4,8 @@ Basis-Pfad `/api`, gleiche Origin wie die Angular-App. JSON (camelCase), Fehler 
 Massgebend ist das generierte OpenAPI-Dokument `/openapi/v1.json` (nur in der Entwicklung erreichbar); diese Seite ist die Planungsübersicht.
 
 Zwei Arten von Hosts:
-- **Admin-Host** `admin.oschterhas.li` (lokal `admin.oschterhas.localhost:4200`): Login, Verwaltung. 🔒 = Session-Cookie nötig; ändernde Requests zusätzlich mit Header `X-XSRF-TOKEN`.
-- **Instanz-Host** `<slug>.oschterhas.li` (lokal `<slug>.oschterhas.localhost:4200`) **oder die verifizierte Custom Domain** der Instanz (z. B. `ostern.ceviduernten.ch`): öffentliche Endpunkte. Die Instanz ergibt sich aus dem Host, nicht aus dem Pfad.
+- **Admin-Host** `admin.oschterhas.li` (lokal `admin.oschterhas.localhost:4300`): Login, Verwaltung. 🔒 = Session-Cookie nötig; ändernde Requests zusätzlich mit Header `X-XSRF-TOKEN`.
+- **Instanz-Host** `<slug>.oschterhas.li` (lokal `<slug>.oschterhas.localhost:4300`) **oder die verifizierte Custom Domain** der Instanz (z. B. `ostern.ceviduernten.ch`): öffentliche Endpunkte. Die Instanz ergibt sich aus dem Host, nicht aus dem Pfad.
 
 Rollen: **PA** = Plattform-Admin, **ORG** = der Instanz zugeordnete Organisator/in (PA darf immer).
 
@@ -13,21 +13,26 @@ Rollen: **PA** = Plattform-Admin, **ORG** = der Instanz zugeordnete Organisator/
 
 | Methode | Pfad | Beschreibung |
 |---|---|---|
-| GET | `/auth/login?returnUrl=/instanzen` | Redirect zu Keycloak (Code + PKCE); `returnUrl` nur relativ |
-| GET | `/auth/callback` | OIDC-Callback, setzt Cookie, aktualisiert `lastLoginAt` |
-| POST | `/auth/logout` | 🔒 Session beenden + Keycloak-Logout |
-| GET | `/auth/me` | Konto inkl. `isPlatformAdmin` und zugeordneten Instanzen, sonst `401` |
+| GET | `/auth/login?returnUrl=/instanzen` | Redirect zu Keycloak (Code + PKCE, per PAR); `returnUrl` nur lokal, sonst `/` |
+| GET | `/auth/callback` | OIDC-Callback, setzt Session-Cookie; Konto ohne Zugang → Redirect `/?login=no_access` bzw. `disabled`/`failed` |
+| GET | `/auth/me` | 🔒 `{ id, email, displayName, isPlatformAdmin }`; setzt das Cookie `XSRF-TOKEN` für Angular; ohne Session `401` |
+| POST | `/auth/logout` | 🔒 als **Formular-POST** mit Feld `__RequestVerificationToken`, damit der Browser dem Redirect zum Keycloak-Logout folgen kann |
+
+Alle Verwaltungs-Endpunkte antworten ohne Session mit `401` (nie mit Redirect), auf anderen Hosts mit `404` (`admin.not_available`).
 
 ## Instanzen (Admin-Host)
 
 | Methode | Pfad | Rolle | Beschreibung |
 |---|---|---|---|
 | GET | `/instances` | 🔒 PA, ORG | PA: alle; ORG: eigene |
-| POST | `/instances` | 🔒 PA | `{ slug, name, description?, eventDate? }`; `409` bei vergebenem Slug |
-| GET | `/instances/{id}` | 🔒 PA, ORG | inkl. Organisator/innen und Fortschritt |
-| PATCH | `/instances/{id}` | 🔒 PA, ORG | ORG: `name`, `description`, `eventDate`, `status`; PA zusätzlich `slug` |
-| DELETE | `/instances/{id}` | 🔒 PA | |
-| GET | `/instances/check-slug?slug=tann` | 🔒 PA | `{ available, reason? }` |
+| POST | `/instances` | 🔒 PA | `{ slug, name, description?, eventDate? }` → `201`; `409` bei vergebenem Slug |
+| GET | `/instances/check-slug?slug=tann` | 🔒 PA | `{ slug, available, reason? }` |
+| GET | `/instances/{id}` | 🔒 PA, ORG | inkl. Organisator/innen, `publicUrl` (Custom Domain wenn verifiziert) und `subdomainUrl` |
+| PUT | `/instances/{id}` | 🔒 PA, ORG | `{ slug, name, description?, eventDate? }`; Slug ändern nur PA (`403 instance.slug_change_forbidden`) |
+| POST | `/instances/{id}/status` | 🔒 PA, ORG | `{ status: Draft \| Active \| Ended }` |
+| DELETE | `/instances/{id}` | 🔒 PA | `204` |
+
+Organisator/innen sehen fremde Instanzen nicht: `404` statt `403`.
 
 ## Custom Domain (Admin-Host)
 
@@ -62,11 +67,11 @@ Die Instanz-Antworten (`GET /instances/{id}`) enthalten `customDomain`, `customD
 |---|---|---|---|
 | GET | `/instances/{id}/hares` | 🔒 PA, ORG | alle Hasen |
 | POST | `/instances/{id}/hares` | 🔒 PA, ORG | Hase manuell `{ name, description?, lat, lon }` |
-| PATCH | `/instances/{id}/hares/{hareId}` | 🔒 PA, ORG | `{ name?, description?, lat?, lon? }` |
+| PUT | `/instances/{id}/hares/{hareId}` | 🔒 PA, ORG | `{ name, description, lat, lon }` (Name leer → „Hase {Nummer}") |
 | DELETE | `/instances/{id}/hares/{hareId}` | 🔒 PA, ORG | |
 | POST | `/instances/{id}/hares/{hareId}/reset` | 🔒 PA, ORG | Gefunden-Status zurücksetzen |
 | POST | `/instances/{id}/gpx/preview` | 🔒 PA, ORG | `multipart/form-data` `file` → `{ waypoints, warnings }`, speichert nichts |
-| POST | `/instances/{id}/gpx` | 🔒 PA, ORG | `file`, `mode=replace\|merge` → `{ created, updated, deleted, warnings }` |
+| POST | `/instances/{id}/gpx?mode=Replace\|Merge` | 🔒 PA, ORG | `file` → `{ created, updated, deleted, warnings }`; max. 20 Uploads/Minute |
 
 Upload max. 5 MB, max. 1000 Wegpunkte (`413`/`422` mit Problem Details).
 

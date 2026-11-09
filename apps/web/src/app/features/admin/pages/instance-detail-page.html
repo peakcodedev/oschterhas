@@ -1,0 +1,155 @@
+<p class="no-print">
+  <a routerLink="/instanzen">← {{ 'admin.instances.title' | transloco }}</a>
+</p>
+
+@switch (status()) {
+  @case ('notFound') {
+    <p class="card" role="alert">{{ 'errors.instance.not_found' | transloco }}</p>
+  }
+  @case ('error') {
+    <p class="card" role="alert">{{ 'errors.unknown' | transloco }}</p>
+  }
+  @default {
+    @if (instance(); as instance) {
+      <div class="page-header no-print">
+        <h1>{{ instance.name }}</h1>
+        <app-status-badge [status]="instance.status" />
+      </div>
+
+      <section class="card print-area">
+        <div class="status-row no-print">
+          <p>{{ 'admin.instances.progress' | transloco: progress() }}</p>
+          <div class="form__actions">
+            @switch (instance.status) {
+              @case ('Draft') {
+                <button
+                  type="button"
+                  class="button"
+                  [disabled]="saving()"
+                  (click)="setStatus('Active')"
+                >
+                  {{ 'admin.detail.start' | transloco }}
+                </button>
+              }
+              @case ('Active') {
+                <button
+                  type="button"
+                  class="button"
+                  [disabled]="saving()"
+                  (click)="setStatus('Ended')"
+                >
+                  {{ 'admin.detail.end' | transloco }}
+                </button>
+                <button
+                  type="button"
+                  class="button button--secondary"
+                  [disabled]="saving()"
+                  (click)="setStatus('Draft')"
+                >
+                  {{ 'admin.detail.backToDraft' | transloco }}
+                </button>
+              }
+              @case ('Ended') {
+                <button
+                  type="button"
+                  class="button button--secondary"
+                  [disabled]="saving()"
+                  (click)="setStatus('Active')"
+                >
+                  {{ 'admin.detail.restart' | transloco }}
+                </button>
+              }
+            }
+          </div>
+        </div>
+
+        <app-qr-poster [url]="instance.publicUrl" [title]="instance.name" />
+
+        <div class="form__actions no-print">
+          <a
+            class="button button--secondary"
+            [href]="instance.publicUrl"
+            target="_blank"
+            rel="noopener"
+            >{{ 'admin.detail.open' | transloco }}</a
+          >
+          <button type="button" class="button button--secondary" (click)="copy(instance.publicUrl)">
+            {{ 'admin.detail.copy' | transloco }}
+          </button>
+          <button type="button" class="button button--secondary" (click)="print()">
+            {{ 'admin.detail.print' | transloco }}
+          </button>
+        </div>
+        @if (instance.publicUrl !== instance.subdomainUrl) {
+          <p class="form__hint no-print">
+            {{ 'admin.detail.alsoAt' | transloco: { url: instance.subdomainUrl } }}
+          </p>
+        }
+      </section>
+
+      <section class="card no-print">
+        <div class="page-header">
+          <h2>{{ 'admin.detail.details' | transloco }}</h2>
+          @if (!editing()) {
+            <button
+              type="button"
+              class="button button--secondary button--small"
+              (click)="editing.set(true)"
+            >
+              {{ 'common.edit' | transloco }}
+            </button>
+          }
+        </div>
+        @if (editing()) {
+          <app-instance-form
+            [instance]="instance"
+            [canEditSlug]="user()?.isPlatformAdmin ?? false"
+            [saving]="saving()"
+            [baseDomain]="baseDomain"
+            (submitted)="save($event)"
+            (cancelled)="editing.set(false)"
+          />
+        } @else {
+          <dl class="details">
+            <dt>{{ 'admin.instance.eventDate' | transloco }}</dt>
+            <dd>{{ instance.eventDate ?? '–' }}</dd>
+            <dt>{{ 'admin.instance.description' | transloco }}</dt>
+            <dd>{{ instance.description ?? '–' }}</dd>
+          </dl>
+        }
+      </section>
+
+      <div class="no-print">
+        @if (user()?.isPlatformAdmin) {
+          <app-organizers-section [instance]="instance" [saving]="saving()" />
+        }
+
+        <app-gpx-import-section [instanceId]="instance.id" [gpx]="gpx()" />
+
+        <app-hares-section
+          [instanceId]="instance.id"
+          [hares]="hares()"
+          [selected]="selectedHare()"
+          [preview]="gpx().status === 'preview' ? (gpx().preview?.waypoints ?? []) : []"
+          [saving]="saving()"
+        />
+
+        @if (user()?.isPlatformAdmin) {
+          <section class="card danger-zone">
+            <h2>{{ 'admin.detail.dangerZone' | transloco }}</h2>
+            <button
+              type="button"
+              class="button button--danger"
+              [disabled]="saving()"
+              (click)="remove()"
+            >
+              {{ 'admin.detail.delete' | transloco }}
+            </button>
+          </section>
+        }
+      </div>
+    } @else {
+      <p aria-busy="true">{{ 'common.loading' | transloco }}</p>
+    }
+  }
+}

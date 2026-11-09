@@ -8,6 +8,7 @@ public sealed class OrganizersController(IOrganizerService organizers) : AdminCo
 {
     /// <summary>Creates the account at Peakcode Identity if needed, sends the invitation and assigns the person.</summary>
     [HttpPost]
+    [ProducesResponseType<OrganizerDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status422UnprocessableEntity, "application/problem+json")]
     public async Task<ActionResult<OrganizerDto>> Add(Guid instanceId, AddOrganizerRequest request, CancellationToken cancellationToken) =>

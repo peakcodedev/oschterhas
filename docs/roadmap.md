@@ -44,18 +44,19 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [x] Unit-Tests: `sample_data_2.gpx` (65 Hasen), `beispiel-hasen.gpx`, 300/1000/1001 Wegpunkte, doppelte `waypoint_id`, DTD/XXE, fehlender Name, ungültige Koordinaten, `<trk>` ignoriert, GPX 1.0, Namespace-Varianten
 
 ## M4 – Peakcode Identity & Verwaltung
-- [ ] Im Repo `identity_peakcode`: Realm `oschterhas` mit `oschterhas-bff`, `oschterhas-user-admin` und Testbenutzern (feste IDs)
-- [ ] OIDC + Cookie (BFF) auf dem Admin-Host, `/api/auth/*`, Zuordnung über Issuer + Subject, Antiforgery
-- [ ] Policies `PlatformAdmin` und `InstanceOrganizer` + Tests
-- [ ] Angular: `auth`-Feature, Guard, Login/Logout
-- [ ] Plattform-Admin: Instanzen anlegen/bearbeiten/löschen (mit Slug-Prüfung)
-- [ ] `IIdentityAdminClient` (Keycloak-Admin-API, `RetryHandler`) + Tests mit Fake-`HttpMessageHandler`
-- [ ] Organisator/in erfassen, einladen, zuordnen, entfernen; Einladung erneut senden
-- [ ] NgRx-Feature `admin`; Instanz-Übersicht für Organisator/innen
-- [ ] GPX-Upload mit Kartenvorschau, Modi `replace`/`merge`, Warnungen
-- [ ] Hasen bearbeiten (Drag, umbenennen, löschen, hinzufügen), Gefunden zurücksetzen
-- [ ] Suche aktivieren/beenden, Adresse + QR-Code (druckbar), Liste „nicht gefunden"
-- [ ] Konten-Übersicht (sperren, Plattform-Admin setzen)
+- [x] Im Repo `identity_peakcode` (Branch `feat/oschterhas-realm`): Realm `oschterhas` mit `oschterhas-bff`, `oschterhas-user-admin` und Testbenutzern (feste IDs)
+- [x] OIDC + Cookie (BFF) auf dem Admin-Host, `/api/auth/*`, Zuordnung über Issuer + Subject, Antiforgery, `401` statt Redirect für API-Aufrufe
+- [x] Berechtigungen in den Core-Services (Plattform-Admin, Organisator/in der Instanz; fremde Instanzen → `404`) + Tests
+- [x] Angular: `auth`-Feature, Login-Seite in der Verwaltung, Abmelden per Formular-POST
+- [x] Plattform-Admin: Instanzen anlegen/bearbeiten/löschen (mit Slug-Prüfung)
+- [x] `IIdentityAdminClient` (Keycloak-Admin-API, Token-Cache, `RetryHandler`) + Tests mit Fake-`HttpMessageHandler`
+- [x] Organisator/in erfassen, einladen, zuordnen, entfernen; Einladung erneut senden
+- [x] NgRx-Feature `admin`; Instanz-Übersicht für Organisator/innen
+- [x] GPX-Upload mit Kartenvorschau, Modi `Replace`/`Merge`, Warnungen
+- [x] Hasen bearbeiten (Drag, umbenennen, löschen, hinzufügen), Gefunden zurücksetzen
+- [x] Suche starten/beenden, Adresse + QR-Code (druckbar), Liste „nur nicht gefundene"
+- [x] Konten-Übersicht (sperren, Plattform-Admin setzen)
+- [ ] Im Browser mit echtem Keycloak-Login durchgespielt (Login-Seite und Weiterleitung geprüft; Anmeldung selbst steht aus)
 
 ## M4b – Custom Domains
 - [ ] Domain-Normalisierung und -Validierung (IDN/Punycode, keine IPs, nicht `oschterhas.li`) in Core + Tests

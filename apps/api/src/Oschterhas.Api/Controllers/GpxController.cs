@@ -16,6 +16,7 @@ public sealed class GpxController(IGpxImportService import) : AdminControllerBas
 
     /// <summary>Parses the file and shows what would happen; saves nothing.</summary>
     [HttpPost("preview")]
+    [ProducesResponseType<GpxPreviewDto>(StatusCodes.Status200OK)]
     [Consumes("multipart/form-data")]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status422UnprocessableEntity, "application/problem+json")]
     public async Task<ActionResult<GpxPreviewDto>> Preview(Guid instanceId, IFormFile file, CancellationToken cancellationToken)
@@ -31,6 +32,7 @@ public sealed class GpxController(IGpxImportService import) : AdminControllerBas
 
     /// <summary>Imports the waypoints: <c>replace</c> deletes all hares first, <c>merge</c> updates by swisstopo waypoint id.</summary>
     [HttpPost]
+    [ProducesResponseType<GpxImportResultDto>(StatusCodes.Status200OK)]
     [Consumes("multipart/form-data")]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status422UnprocessableEntity, "application/problem+json")]

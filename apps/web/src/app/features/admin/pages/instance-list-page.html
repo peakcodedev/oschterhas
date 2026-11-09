@@ -1,0 +1,50 @@
+<div class="page-header">
+  <h1>{{ 'admin.instances.title' | transloco }}</h1>
+  @if (user()?.isPlatformAdmin && !creating()) {
+    <button type="button" class="button" (click)="creating.set(true)">
+      {{ 'admin.instances.new' | transloco }}
+    </button>
+  }
+</div>
+
+@if (creating()) {
+  <section class="card">
+    <h2>{{ 'admin.instances.new' | transloco }}</h2>
+    <app-instance-form
+      [canEditSlug]="true"
+      [saving]="saving()"
+      [baseDomain]="baseDomain"
+      (submitted)="create($event)"
+      (cancelled)="creating.set(false)"
+    />
+  </section>
+}
+
+@switch (status()) {
+  @case ('loaded') {
+    @if (instances().length === 0) {
+      <p class="card">{{ 'admin.instances.empty' | transloco }}</p>
+    }
+    <ul class="list">
+      @for (instance of instances(); track instance.id) {
+        <li class="card list__item">
+          <a class="list__title" [routerLink]="['/instanzen', instance.id]">{{ instance.name }}</a>
+          <app-status-badge [status]="instance.status" />
+          <span class="list__meta">{{ instance.publicUrl }}</span>
+          <span class="list__meta">
+            {{
+              'admin.instances.progress'
+                | transloco: { found: instance.foundHares, total: instance.totalHares }
+            }}
+          </span>
+        </li>
+      }
+    </ul>
+  }
+  @case ('error') {
+    <p class="card" role="alert">{{ 'errors.unknown' | transloco }}</p>
+  }
+  @default {
+    <p aria-busy="true">{{ 'common.loading' | transloco }}</p>
+  }
+}

@@ -14,12 +14,131 @@
   },
   "admin": {
     "title": "Verwaltig",
-    "comingSoon": "D Verwaltig chunnt bald."
+    "logout": "Abmelde",
+    "nav": {
+      "label": "Verwaltig",
+      "instances": "Suechene",
+      "users": "Benutzer"
+    },
+    "login": {
+      "title": "Amelde",
+      "text": "D Verwaltig isch für d Organisatorinne und Organisatore. Meld di mit dim Peakcode-Konto a.",
+      "button": "Mit Peakcode amelde",
+      "reason": {
+        "no_access": "Das Konto het kei Zuegang zu Oschterhas. Bitte meld di bi de Plattform-Administration.",
+        "disabled": "Das Konto isch gsperrt worde.",
+        "failed": "S Amelde het nöd klappet. Bitte probier nomal."
+      }
+    },
+    "status": {
+      "Draft": "Entwurf",
+      "Active": "Lauft",
+      "Ended": "Fertig"
+    },
+    "instances": {
+      "title": "Suechene",
+      "new": "Neui Suechi",
+      "empty": "No kei Suechene vorhande.",
+      "progress": "{{found}} vo {{total}} Hase gfunde"
+    },
+    "instance": {
+      "slug": "Adrässe",
+      "slugHint": "3–40 Zeiche: Chliibuechstabe, Ziffere und Bindestrich. Chan spöter nur vo de Plattform-Administration gänderet werde.",
+      "name": "Name",
+      "eventDate": "Datum",
+      "description": "Beschriibig"
+    },
+    "detail": {
+      "start": "Suechi starte",
+      "end": "Suechi beände",
+      "backToDraft": "Zrugg uf Entwurf",
+      "restart": "Wieder starte",
+      "confirmStart": "Suechi jetzt starte? D Hase werded für alli sichtbar.",
+      "confirmEnd": "Suechi beände? Nachher cha niemer meh Hase als gfunde markiere.",
+      "confirmDraft": "Zrugg uf Entwurf? D Hase sind dänn nüme sichtbar.",
+      "open": "Öffne",
+      "copy": "Adrässe kopiere",
+      "print": "QR-Code drucke",
+      "alsoAt": "Au erreichbar under {{url}}",
+      "details": "Angabe",
+      "dangerZone": "Lösche",
+      "delete": "Suechi lösche",
+      "confirmDelete": "Suechi «{{name}}» mit allne Hase für immer lösche?"
+    },
+    "organizers": {
+      "title": "Organisator/inne",
+      "empty": "No niemer zueteilt.",
+      "pending": "Iladig offe",
+      "resend": "Iladig nomal schicke",
+      "remove": "Entferne",
+      "email": "E-Mail",
+      "name": "Name",
+      "invite": "Ilade",
+      "inviteHint": "Neui Persone überchömed es Mail vo Peakcode, mit dem si ihres Passwort setzed.",
+      "confirmRemove": "{{name}} vo dere Suechi entferne?"
+    },
+    "hares": {
+      "title": "Hase",
+      "add": "Hase dezuetue",
+      "mapHint": "Marker atippe zum Bearbeite, zieh zum Verschiebe. Neui Hase erschiined i de Mitti vo de Charte.",
+      "mapLabel": "Charte vo de Hase zum Bearbeite",
+      "name": "Name",
+      "description": "Beschriibig",
+      "status": "Status",
+      "actions": "Aktione",
+      "reset": "Zruggsetze",
+      "delete": "Lösche",
+      "empty": "Kei Hase.",
+      "onlyHidden": "Nur nöd gfundeni zeige",
+      "confirmDelete": "{{name}} lösche?"
+    },
+    "gpx": {
+      "title": "GPX importiere",
+      "hint": "Exportier d Wegpünkt us de swisstopo-App als GPX-Datei (max. 5 MB, 1000 Wegpünkt). Es werded nur Wegpünkt übernoh.",
+      "choose": "GPX-Datei uswähle",
+      "reading": "{{file}} wird gläse …",
+      "importing": "Wird importiert …",
+      "result": "Import fertig: {{created}} neu, {{updated}} aktualisiert, {{deleted}} glöscht.",
+      "found": "{{count}} Wegpünkt gfunde.",
+      "existing": "Bis jetzt {{count}} Hase ({{found}} gfunde), {{matching}} mit de glichä swisstopo-ID.",
+      "previewOnMap": "D Wegpünkt sind uf de Charte une gstrichlet markiert.",
+      "warnings": "{{count}} Hiwiis",
+      "mode": "Wie übernäh?",
+      "modeMerge": "Zämefüere: glichi swisstopo-ID aktualisiere, neui dezuetue, de Rest bhalte",
+      "modeReplace": "Ersetze: alli bisherige Hase lösche",
+      "import": "Importiere",
+      "confirmReplaceFound": "{{count}} Hase sind scho gfunde. Bim Ersetze gaht das verlore. Trotzdem ersetze?"
+    },
+    "qr": {
+      "alt": "QR-Code für {{url}}"
+    },
+    "users": {
+      "title": "Benutzer",
+      "name": "Name",
+      "admin": "Plattform-Admin",
+      "active": "Aktiv",
+      "adminFor": "{{name}} isch Plattform-Admin",
+      "activeFor": "{{name}} isch aktiv"
+    },
+    "messages": {
+      "saved": "Gspeicheret.",
+      "instanceCreated": "Suechi aagleit.",
+      "instanceDeleted": "Suechi glöscht.",
+      "organizerInvited": "Iladig verschickt.",
+      "organizerAdded": "Zueteilt.",
+      "organizerRemoved": "Entfernt.",
+      "invitationSent": "Iladig nomal verschickt.",
+      "hareDeleted": "Hase glöscht.",
+      "gpxImported": "GPX importiert."
+    }
   },
   "common": {
     "loading": "Wird glade …",
     "retry": "Nomal probiere",
-    "cancel": "Abbräche"
+    "cancel": "Abbräche",
+    "close": "Zuemache",
+    "save": "Speichere",
+    "edit": "Bearbeite"
   },
   "hare": {
     "defaultName": "Hase {{number}}",
@@ -59,5 +178,67 @@
   },
   "live": {
     "disconnected": "Verbindig unterbroche – es wird nomal probiert …"
+  },
+  "errors": {
+    "unknown": "Öppis isch schiefgange. Bitte probier nomal.",
+    "network": "Kei Verbindig zum Server.",
+    "unauthorized": "Dini Amäldig isch abgloffe. Bitte meld di neu a.",
+    "rate_limited": "Z vill Afroge. Bitte wart en Moment.",
+    "auth": {
+      "platform_admin_required": "Das dörf nur d Plattform-Administration."
+    },
+    "instance": {
+      "not_found": "Die Suechi gits nöd oder du hesch kei Zuegriff.",
+      "slug_required": "Bitte e Adrässe agä.",
+      "slug_invalid": "D Adrässe dörf nur Chliibuechstabe, Ziffere und Bindestrich ha (3–40 Zeiche).",
+      "slug_reserved": "Die Adrässe isch reserviert.",
+      "slug_taken": "Die Adrässe isch scho vergä.",
+      "slug_change_forbidden": "D Adrässe cha nur d Plattform-Administration ändere.",
+      "name_required": "Bitte en Name agä.",
+      "name_too_long": "Dä Name isch z lang (max. 100 Zeiche).",
+      "description_too_long": "D Beschriibig isch z lang (max. 2000 Zeiche).",
+      "changed": "Öpper anders het d Suechi inzwüsche gänderet. Bitte neu lade."
+    },
+    "organizer": {
+      "email_invalid": "Bitte e gültigi E-Mail-Adrässe agä.",
+      "name_invalid": "Bitte en Name agä (max. 200 Zeiche).",
+      "already_assigned": "Die Person isch scho zueteilt.",
+      "already_active": "Die Person het sich scho agmeldet.",
+      "invitation_failed": "D Person isch zueteilt, aber d Iladig het nöd chöne verschickt werde. Bitte spöter nomal schicke.",
+      "not_found": "Die Person isch nöd zueteilt."
+    },
+    "identity": {
+      "unavailable": "Peakcode Identity isch grad nöd erreichbar.",
+      "user_conflict": "Bi Peakcode gits scho es Konto, wo nöd passt. Bitte d Administration kontaktiere."
+    },
+    "hare": {
+      "not_found": "Dä Hase gits nüme.",
+      "changed": "Öpper anders het dä Hase inzwüsche gänderet. Bitte neu lade.",
+      "coordinates_invalid": "D Position isch ungültig.",
+      "name_too_long": "Dä Name isch z lang (max. 100 Zeiche).",
+      "description_too_long": "D Beschriibig isch z lang (max. 500 Zeiche)."
+    },
+    "gpx": {
+      "file_missing": "Bitte e GPX-Datei uswähle.",
+      "file_too_large": "D Datei isch grösser als 5 MB.",
+      "invalid_xml": "D Datei isch kei gültigs XML.",
+      "dtd_not_allowed": "D Datei het e DTD und wird us Sicherheitsgründ abglehnt.",
+      "not_gpx": "D Datei isch kei GPX-Datei.",
+      "no_waypoints": "D Datei het kei Wegpünkt.",
+      "too_many_waypoints": "D Datei het meh als 1000 Wegpünkt."
+    },
+    "user": {
+      "cannot_demote_self": "Du chasch di nöd sälber sperre oder abestufe.",
+      "not_found": "Dä Benutzer gits nöd."
+    }
+  },
+  "gpxWarnings": {
+    "gpx": {
+      "invalid_coordinates": "Wegpunkt ohni gültigi Koordinate übersprunge.",
+      "duplicate_waypoint_id": "swisstopo-ID chunnt doppelt vor.",
+      "name_truncated": "Name kürzt.",
+      "description_truncated": "Beschriibig kürzt.",
+      "waypoint_id_truncated": "swisstopo-ID kürzt."
+    }
   }
 }

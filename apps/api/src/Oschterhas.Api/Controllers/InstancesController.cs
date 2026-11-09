@@ -8,6 +8,7 @@ public sealed class InstancesController(IInstanceAdminService instances) : Admin
 {
     /// <summary>Platform admins see all instances, organizers their own.</summary>
     [HttpGet]
+    [ProducesResponseType<IReadOnlyList<InstanceSummaryDto>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<InstanceSummaryDto>>> List(CancellationToken cancellationToken) =>
         FromResult(await instances.ListAsync(Actor, cancellationToken));
 
@@ -24,14 +25,17 @@ public sealed class InstancesController(IInstanceAdminService instances) : Admin
     }
 
     [HttpGet("check-slug")]
+    [ProducesResponseType<SlugCheckDto>(StatusCodes.Status200OK)]
     public async Task<ActionResult<SlugCheckDto>> CheckSlug([FromQuery] string? slug, CancellationToken cancellationToken) =>
         FromResult(await instances.CheckSlugAsync(Actor, slug, cancellationToken));
 
     [HttpGet("{instanceId:guid}")]
+    [ProducesResponseType<InstanceDetailDto>(StatusCodes.Status200OK)]
     public async Task<ActionResult<InstanceDetailDto>> Get(Guid instanceId, CancellationToken cancellationToken) =>
         FromResult(await instances.GetAsync(Actor, instanceId, cancellationToken));
 
     [HttpPut("{instanceId:guid}")]
+    [ProducesResponseType<InstanceDetailDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status422UnprocessableEntity, "application/problem+json")]
     public async Task<ActionResult<InstanceDetailDto>> Update(Guid instanceId, UpdateInstanceRequest request, CancellationToken cancellationToken) =>
@@ -39,6 +43,7 @@ public sealed class InstancesController(IInstanceAdminService instances) : Admin
 
     /// <summary>Start (Active) or end (Ended) the search, or set it back to Draft.</summary>
     [HttpPost("{instanceId:guid}/status")]
+    [ProducesResponseType<InstanceDetailDto>(StatusCodes.Status200OK)]
     public async Task<ActionResult<InstanceDetailDto>> SetStatus(Guid instanceId, SetInstanceStatusRequest request, CancellationToken cancellationToken) =>
         FromResult(await instances.SetStatusAsync(Actor, instanceId, request, cancellationToken));
 
