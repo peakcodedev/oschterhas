@@ -85,7 +85,8 @@
             "proxyConfig": "proxy.conf.json",
             "allowedHosts": [
               ".localhost"
-            ]
+            ],
+            "port": 4300
           }
         },
         "test": {

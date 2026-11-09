@@ -20,6 +20,7 @@ internal static class RateLimiting
 {
     public const string MarkFound = "mark-found";
     public const string EventStream = "event-stream";
+    public const string GpxUpload = "gpx-upload";
 
     public static IServiceCollection AddOschterhasRateLimiting(this IServiceCollection services, IConfiguration configuration)
     {
@@ -38,6 +39,10 @@ internal static class RateLimiting
                     Window = TimeSpan.FromMinutes(1),
                     QueueLimit = 0,
                 }));
+
+            limiter.AddPolicy(GpxUpload, context => RateLimitPartition.GetFixedWindowLimiter(
+                ClientKey(context),
+                _ => new FixedWindowRateLimiterOptions { PermitLimit = 20, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
 
             limiter.AddPolicy(EventStream, context => RateLimitPartition.GetConcurrencyLimiter(
                 ClientKey(context),

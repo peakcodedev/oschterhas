@@ -1,5 +1,6 @@
 using System.Net.ServerSentEvents;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Oschterhas.Api.Http;
@@ -13,6 +14,7 @@ namespace Oschterhas.Api.Controllers;
 
 /// <summary>Endpoints for searchers. The instance always comes from the host name, never from the path.</summary>
 [ApiController]
+[AllowAnonymous]
 [Route("api/public")]
 public sealed class PublicController(
     IPublicInstanceService instances,

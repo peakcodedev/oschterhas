@@ -22,11 +22,62 @@ internal static class DevelopmentSeeder
         var now = scope.ServiceProvider.GetRequiredService<TimeProvider>().GetUtcNow();
         var ct = app.Lifetime.ApplicationStopping;
 
-        if (await db.Instances.AnyAsync(ct))
+        if (!await db.Instances.AnyAsync(ct))
+        {
+            await SeedInstancesAsync(app, db, now, ct);
+        }
+
+        if (!await db.Users.AnyAsync(ct))
+        {
+            await SeedUsersAsync(app, db, now, ct);
+        }
+    }
+
+    /// <summary>
+    /// Test users of the Keycloak realm "oschterhas" (identity_peakcode/realms/oschterhas-realm.json, fixed ids).
+    /// nina.neu@unbekannt.test is deliberately missing: she has no access.
+    /// </summary>
+    private static async Task SeedUsersAsync(WebApplication app, AppDbContext db, DateTimeOffset now, CancellationToken ct)
+    {
+        var issuer = app.Configuration["Oidc:Authority"];
+        if (string.IsNullOrEmpty(issuer))
         {
             return;
         }
 
+        AppUser User(string subject, string email, string name, bool admin) => new()
+        {
+            Id = Guid.NewGuid(),
+            IdentityIssuer = issuer,
+            IdentitySubject = subject,
+            Email = email,
+            DisplayName = name,
+            IsPlatformAdmin = admin,
+            CreatedAt = now,
+        };
+
+        var pia = User("7a2b0c10-0000-4b00-8000-000000000001", "pia.plattform@oschterhas.test", "Pia Plattform", admin: true);
+        var otto = User("7a2b0c10-0000-4b00-8000-000000000002", "otto.organisator@oschterhas.test", "Otto Organisator", admin: false);
+        var olga = User("7a2b0c10-0000-4b00-8000-000000000003", "olga.organisatorin@oschterhas.test", "Olga Organisatorin", admin: false);
+        db.Users.AddRange(pia, otto, olga);
+
+        var instances = await db.Instances.Where(i => i.Slug == "tann" || i.Slug == "vorschau").ToDictionaryAsync(i => i.Slug, ct);
+        if (instances.TryGetValue("tann", out var tann))
+        {
+            db.InstanceOrganizers.Add(new InstanceOrganizer { InstanceId = tann.Id, UserId = otto.Id, CreatedAt = now });
+        }
+
+        if (instances.TryGetValue("vorschau", out var vorschau))
+        {
+            db.InstanceOrganizers.Add(new InstanceOrganizer { InstanceId = vorschau.Id, UserId = olga.Id, CreatedAt = now });
+        }
+
+        await db.SaveChangesAsync(ct);
+        app.Logger.LogInformation("Development seed: users Pia (platform admin), Otto (tann) and Olga (vorschau) created");
+    }
+
+    private static async Task SeedInstancesAsync(WebApplication app, AppDbContext db, DateTimeOffset now, CancellationToken ct)
+    {
         var samples = Path.GetFullPath(app.Configuration["DevelopmentSeed:SamplesDirectory"] ?? "../../../../samples", app.Environment.ContentRootPath);
         var tannWaypoints = ReadWaypoints(Path.Combine(samples, "sample_data_2.gpx"));
         var exampleWaypoints = ReadWaypoints(Path.Combine(samples, "beispiel-hasen.gpx"));

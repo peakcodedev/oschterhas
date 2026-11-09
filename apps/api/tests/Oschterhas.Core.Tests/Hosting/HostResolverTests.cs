@@ -12,6 +12,7 @@ public class HostResolverTests
 
     private readonly IInstanceRepository _instances = Substitute.For<IInstanceRepository>();
     private readonly MemoryCache _cache = new(new MemoryCacheOptions());
+    private readonly HostCacheInvalidator _invalidator = new();
     private readonly HostResolver _resolver;
 
     public HostResolverTests()
@@ -20,7 +21,7 @@ public class HostResolverTests
         _instances.FindIdByVerifiedCustomDomainAsync("ostern.ceviduernten.ch", Arg.Any<CancellationToken>()).Returns(CeviId);
 
         var options = Options.Create(new HostingOptions { BaseDomain = "oschterhas.li", AdminSubdomain = "admin" });
-        _resolver = new HostResolver(options, _instances, _cache);
+        _resolver = new HostResolver(options, _instances, _cache, _invalidator);
     }
 
     [Theory]
@@ -102,6 +103,16 @@ public class HostResolverTests
         await Resolve("TANN.oschterhas.li");
 
         await _instances.Received(1).FindIdBySlugAsync("tann", Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Invalidate_DropsCachedResults()
+    {
+        await Resolve("tann.oschterhas.li");
+        _invalidator.Invalidate();
+        await Resolve("tann.oschterhas.li");
+
+        await _instances.Received(2).FindIdBySlugAsync("tann", Arg.Any<CancellationToken>());
     }
 
     private ValueTask<HostResolution> Resolve(string host) =>

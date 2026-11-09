@@ -22,4 +22,36 @@ internal sealed class InstanceRepository(AppDbContext db) : IInstanceRepository
             .AsNoTracking()
             .Include(i => i.Hares.OrderBy(h => h.Number))
             .FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
+
+    public async Task<IReadOnlyList<Instance>> ListAsync(Guid? organizerId, CancellationToken cancellationToken) =>
+        await db.Instances
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Where(i => organizerId == null || i.Organizers.Any(o => o.UserId == organizerId))
+            .Include(i => i.Hares)
+            .Include(i => i.Organizers).ThenInclude(o => o.User)
+            .OrderByDescending(i => i.EventDate).ThenBy(i => i.Name)
+            .ToListAsync(cancellationToken);
+
+    public Task<Instance?> FindForUpdateAsync(Guid id, CancellationToken cancellationToken) =>
+        db.Instances
+            .AsSplitQuery()
+            .Include(i => i.Organizers).ThenInclude(o => o.User)
+            .Include(i => i.Hares)
+            .FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
+
+    public Task<bool> SlugExistsAsync(string slug, CancellationToken cancellationToken) =>
+        db.Instances.AnyAsync(i => i.Slug == slug, cancellationToken);
+
+    public Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken) =>
+        db.Instances.AnyAsync(i => i.Id == id, cancellationToken);
+
+    public Task<bool> IsOrganizerAsync(Guid instanceId, Guid userId, CancellationToken cancellationToken) =>
+        db.InstanceOrganizers.AnyAsync(o => o.InstanceId == instanceId && o.UserId == userId, cancellationToken);
+
+    public void Add(Instance instance) => db.Instances.Add(instance);
+
+    public void Remove(Instance instance) => db.Instances.Remove(instance);
+
+    public Task SaveChangesAsync(CancellationToken cancellationToken) => db.SaveAsync(cancellationToken);
 }

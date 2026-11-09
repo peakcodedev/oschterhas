@@ -8,7 +8,8 @@ namespace Oschterhas.Core.Hosting;
 internal sealed class HostResolver(
     IOptions<HostingOptions> options,
     IInstanceRepository instances,
-    IMemoryCache cache) : IHostResolver
+    IMemoryCache cache,
+    IHostCacheInvalidator invalidator) : IHostResolver
 {
     /// <summary>Short, so new instances and removed custom domains take effect quickly.</summary>
     internal static readonly TimeSpan CacheDuration = TimeSpan.FromSeconds(30);
@@ -41,7 +42,10 @@ internal sealed class HostResolver(
         }
 
         var resolution = await ResolveInstanceAsync(name, baseDomain, cancellationToken).ConfigureAwait(false);
-        cache.Set(cacheKey, resolution, CacheDuration);
+        cache.Set(
+            cacheKey,
+            resolution,
+            new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = CacheDuration }.AddExpirationToken(invalidator.ChangeToken));
         return resolution;
     }
 
