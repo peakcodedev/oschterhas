@@ -1,0 +1,27 @@
+# Abhängigkeiten & Builds
+node_modules/
+dist/
+.angular/
+coverage/
+*.tsbuildinfo
+
+# Umgebung
+.env
+.env.*
+!.env.example
+
+# Editor & OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+
+# Claude (lokale Einstellungen)
+.claude/settings.local.json
+
+# .NET
+bin/
+obj/
+*.user
+TestResults/

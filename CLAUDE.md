@@ -1,0 +1,83 @@
+# CLAUDE.md – Oschterhas
+
+Web-App (PWA) für die Oster-Suche im Gelände. Ein Plattform-Admin legt **Instanzen** an (eine Suche pro Instanz, erreichbar unter `<slug>.oschterhas.li` und optional unter einer eigenen Custom Domain wie `ostern.ceviduernten.ch`) und erfasst dafür Organisator/innen. Diese importieren die Verstecke als GPX-Wegpunkte. Suchende sehen die Hasen ohne Login auf der Karte und markieren sie als gefunden – live für alle.
+
+## Wichtige Dokumente (vor grösseren Änderungen lesen)
+
+- [docs/konzept.md](docs/konzept.md) – Rollen, Abläufe, User Stories, **offene Fragen**
+- [docs/architektur.md](docs/architektur.md) – Projekte, Entscheidungen, Subdomains, GPX, Auth, NgRx
+- [docs/datenmodell.md](docs/datenmodell.md) – Entitäten und Felder
+- [docs/api.md](docs/api.md) – Endpunkte pro Host
+- [docs/lizenzen.md](docs/lizenzen.md) – erlaubte und verbotene Pakete
+- [docs/owasp-checkliste.md](docs/owasp-checkliste.md) – Sicherheitsanforderungen
+- [docs/roadmap.md](docs/roadmap.md) – Meilensteine; **Fortschritt dort abhaken**
+
+## Tech-Stack (Kurzfassung)
+
+- **Backend** `apps/api`: .NET 10, ASP.NET Core **Controllers**, EF Core 10 + Npgsql, PostgreSQL, SSE, OpenAPI
+  - `Oschterhas.Api` – Controllers, Auth, Middleware, `Program.cs`
+  - `Oschterhas.Core` – Geschäftslogik, DTOs, Mapping, GPX-Parser, Keycloak-Admin-Client
+  - `Oschterhas.Data` – Entitäten, `AppDbContext`, Configurations, Repositories, Migrations
+  - `Oschterhas.Common` – kleine wiederverwendbare Bausteine (`Result`, `Retry`, `IClock`)
+  - Abhängigkeiten nur `Api → Core → Data → Common`. Neue Projekte nur mit klarem Grund, Schema `Oschterhas.<Name>`.
+- **Login**: Peakcode Identity = Keycloak aus `/Users/ufo/CODE/identity_peakcode`, Realm `oschterhas`, BFF mit httpOnly-Cookie, nur auf `admin.`-Host
+- **Frontend** `apps/web`: Angular, Standalone Components, Signals, TypeScript strict, **NgRx**, Leaflet, Transloco, Service Worker
+- **Domain**: `oschterhas.li` (`.ch` ist besetzt). Produktion hinter Caddy (Wildcard- und On-Demand-Zertifikate)
+- **Lokal**: Suche unter `http://tann.oschterhas.localhost:4200`, Verwaltung unter `http://admin.oschterhas.localhost:4200`, Keycloak `http://localhost:8180`, Mailpit `http://localhost:8025`
+- **Versionen**: .NET 10 SDK (`apps/api/global.json`), Node 24 LTS (`.nvmrc`)
+
+## Befehle
+
+> Werden in Meilenstein M0 eingerichtet. Diese Liste aktuell halten.
+
+```bash
+docker compose up -d db                                   # PostgreSQL (dieses Repo)
+docker compose -f /Users/ufo/CODE/identity_peakcode/docker-compose.yml up -d   # Keycloak + Mailpit
+
+# Backend (in apps/api)
+dotnet build
+dotnet test
+dotnet run --project src/Oschterhas.Api
+dotnet ef migrations add <Name> --project src/Oschterhas.Data --startup-project src/Oschterhas.Api --output-dir Migrations
+dotnet ef database update --project src/Oschterhas.Data --startup-project src/Oschterhas.Api
+dotnet format --verify-no-changes
+
+# Frontend (in apps/web)
+nvm use && npm ci
+npm start
+npm test
+npm run lint
+npm run api:types                                         # TS-Typen aus OpenAPI
+```
+
+## Harte Regeln
+
+- **Lizenzen**: keine Pakete mit kommerziellen oder unklaren Lizenzen. **Verboten u. a.: MediatR, AutoMapper, Polly, FluentAssertions, Moq, MassTransit, Duende.** Vor jedem neuen Paket `docs/lizenzen.md` prüfen und ergänzen. Fehlt etwas, selbst bauen (in `Oschterhas.Common`, mit Tests).
+- **Migrationen**: jede Modelländerung → neue Migration mit sprechendem Namen, zusammen mit der Änderung committen. Eingecheckte Migrationen nie ändern oder löschen. Nie `EnsureCreated()`.
+- **Tests**: nur **Unit-Tests** mit xUnit v3 und **NSubstitute**. Keine Integrationstests, keine Testcontainers, keine InMemory-DB. Abhängigkeiten über Interfaces abstrahieren, damit sie sich ersetzen lassen.
+- **GPX**: Referenz ist der echte swisstopo-Export `samples/sample_data_2.gpx`. Nur `<wpt>` auswerten, Standardname „Wegpunkt" → „Hase {Nummer}", Routen/Tracks ignorieren und nicht speichern. Nur .NET-Basisbibliothek (`XmlReader`). Limit 1000 Wegpunkte (mindestens 300 müssen gehen). DTD/XXE verboten.
+- **Instanzen**: die Instanz kommt bei öffentlichen Endpunkten **immer aus dem Host-Header** (Subdomain oder verifizierte Custom Domain), nie aus Pfad oder Body. Links und QR-Codes nie aus dem Host-Header bauen, sondern aus der gespeicherten Adresse. Organisator-Endpunkte prüfen immer die Zuordnung zur Instanz.
+- **Identity**: Benutzer über **Issuer + Subject** zuordnen, nie nur über E-Mail. Rollen leben in der Oschterhas-DB, nicht in Keycloak. Keine Selbstregistrierung; Organisator/innen werden eingeladen.
+- **Frontend-State**: fachliches State über NgRx. Komponenten machen keine HTTP-Aufrufe; HTTP und SSE laufen in Effects.
+- **Sicherheit**: neue Endpunkte gegen `docs/owasp-checkliste.md` prüfen.
+- **Secrets**: nie ins Repo. Lokal `dotnet user-secrets`, in Produktion Umgebungsvariablen. `.env` im Identity-Repo nicht lesen.
+
+## Konventionen
+
+- **Sprache**: Code, Bezeichner, Commits (Conventional Commits) auf Englisch. Doku in `docs/` auf Deutsch. UI-Texte nur über Transloco-Keys, immer in `de`, `gsw` **und** `en`.
+- **Begriffe im Code**: `Instance` (Instanz), `Hare` (Hase), `Organizer`, `PlatformAdmin`, `Slug`, `CustomDomain`.
+- **C#**: Nullable an, Warnungen als Fehler, file-scoped namespaces, `record` für DTOs, primäre Konstruktoren. Controllers dünn: Eingabe prüfen → Core-Service → `ActionResult`/Problem Details. Mapping als `ToDto()`-Extension in Core. `CancellationToken` überall durchreichen.
+- **EF Core**: Konfiguration per `IEntityTypeConfiguration<T>`, keine Attribute an Entitäten. Lesen mit `AsNoTracking()` und Projektion.
+- **Angular**: `inject()`, neue Control-Flow-Syntax, `store.selectSignal()`. NgRx mit `createFeature`, `createActionGroup`, funktionalen Effects, `@ngrx/entity`. Mobile-first, Touch-Ziele ≥ 44 px.
+- **Koordinaten**: intern WGS84 (`lat`, `lon`). Leaflet `[lat, lon]`.
+- **Kleine Schritte**: ein Roadmap-Punkt pro Commit/PR, danach in `docs/roadmap.md` abhaken.
+- **Datenschutz**: Suchende ohne Konto, keine IP-Speicherung, Spitzname freiwillig. Hosting und Backups in der Schweiz.
+
+## Arbeitsweise mit Claude
+
+1. Nächsten offenen Punkt aus `docs/roadmap.md` nehmen (oder `/naechster-schritt`).
+2. Bei Unklarheiten zuerst `docs/konzept.md` → „Offene Fragen" prüfen und nachfragen statt raten.
+3. Umsetzen, Unit-Tests schreiben, Build/Tests/Lint laufen lassen.
+4. Bei UI-Änderungen im Browser prüfen (mobile Breite 375 px).
+5. Roadmap und betroffene Doku aktualisieren.
+6. Änderungen am Realm gehören ins Repo `identity_peakcode` (dessen `AGENTS.md` beachten), nicht hierher.
