@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 
-namespace Oschterhas.Api.Hosting;
+namespace Oschterhas.Core.Hosting;
 
 internal sealed class HostingOptionsValidator : IValidateOptions<HostingOptions>
 {

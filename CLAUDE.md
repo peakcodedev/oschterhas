@@ -50,16 +50,17 @@ npm run lint
 npm run format:check
 npm run build
 npm run licenses:check
+npm run api:types                                         # TS-Typen aus OpenAPI neu erzeugen (API muss laufen)
 ```
 
-Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). CI: `.github/workflows/ci.yml` führt dieselben Prüfungen aus.
+Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed (leere DB): `tann` (aktiv, Custom Domain `ostern.cevi-test.localhost`), `vorschau` (Entwurf), `vorbei` (beendet). DB zurücksetzen: `docker compose down -v && docker compose up -d db`. CI: `.github/workflows/ci.yml` führt dieselben Prüfungen aus.
 
 ## Harte Regeln
 
 - **Lizenzen**: keine Pakete mit kommerziellen oder unklaren Lizenzen. **Verboten u. a.: MediatR, AutoMapper, Polly, FluentAssertions, Moq, MassTransit, Duende.** Vor jedem neuen Paket `docs/lizenzen.md` prüfen und ergänzen. Fehlt etwas, selbst bauen (in `Oschterhas.Common`, mit Tests).
 - **Migrationen**: jede Modelländerung → neue Migration mit sprechendem Namen, zusammen mit der Änderung committen. Eingecheckte Migrationen nie ändern oder löschen. Nie `EnsureCreated()`.
 - **Tests**: nur **Unit-Tests** mit xUnit v3 und **NSubstitute**. Keine Integrationstests, keine Testcontainers, keine InMemory-DB. Abhängigkeiten über Interfaces abstrahieren, damit sie sich ersetzen lassen.
-- **GPX**: Referenz ist der echte swisstopo-Export `samples/sample_data_2.gpx`. Nur `<wpt>` auswerten, Standardname „Wegpunkt" → „Hase {Nummer}", Routen/Tracks ignorieren und nicht speichern. Nur .NET-Basisbibliothek (`XmlReader`). Limit 1000 Wegpunkte (mindestens 300 müssen gehen). DTD/XXE verboten.
+- **GPX**: Referenz ist der echte swisstopo-Export `samples/sample_data_2.gpx`. Nur `<wpt>` auswerten, Standardname „Wegpunkt" → `Name = null` (das Frontend zeigt „Hase {Nummer}" übersetzt), Routen/Tracks ignorieren und nicht speichern. Nur .NET-Basisbibliothek (`XmlReader`). Limit 1000 Wegpunkte (mindestens 300 müssen gehen). DTD/XXE verboten.
 - **Instanzen**: die Instanz kommt bei öffentlichen Endpunkten **immer aus dem Host-Header** (Subdomain oder verifizierte Custom Domain), nie aus Pfad oder Body. Links und QR-Codes nie aus dem Host-Header bauen, sondern aus der gespeicherten Adresse. Organisator-Endpunkte prüfen immer die Zuordnung zur Instanz.
 - **Identity**: Benutzer über **Issuer + Subject** zuordnen, nie nur über E-Mail. Rollen leben in der Oschterhas-DB, nicht in Keycloak. Keine Selbstregistrierung; Organisator/innen werden eingeladen.
 - **Frontend-State**: fachliches State über NgRx. Komponenten machen keine HTTP-Aufrufe; HTTP und SSE laufen in Effects.

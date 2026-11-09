@@ -1,6 +1,6 @@
-using Oschterhas.Api.Hosting;
+using Oschterhas.Core.Hosting;
 
-namespace Oschterhas.Api.Tests.Hosting;
+namespace Oschterhas.Core.Tests.Hosting;
 
 public class HostingOptionsValidatorTests
 {

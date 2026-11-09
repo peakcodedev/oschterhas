@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,scss,json}\" \"public/i18n/*.json\"",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,json}\" \"public/i18n/*.json\"",
-    "licenses:check": "license-checker-rseidelsohn --production --excludePackages \"oschterhas-web@0.0.0\" --onlyAllow \"MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;Python-2.0\""
+    "licenses:check": "license-checker-rseidelsohn --production --excludePackages \"oschterhas-web@0.0.0\" --onlyAllow \"MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;Python-2.0\"",
+    "api:types": "npx --yes openapi-typescript@7.13.0 http://localhost:5080/openapi/v1.json -o src/app/core/api/api-schema.ts && prettier --write src/app/core/api/api-schema.ts"
   },
   "private": true,
   "packageManager": "npm@11.19.1",
@@ -27,6 +28,7 @@
     "@ngrx/router-store": "^22.0.1",
     "@ngrx/store": "^22.0.1",
     "@ngrx/store-devtools": "^22.0.1",
+    "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -35,6 +37,7 @@
     "@angular/cli": "^22.2.6",
     "@angular/compiler-cli": "^22.2.0",
     "@eslint/js": "^10.0.1",
+    "@types/leaflet": "^1.9.22",
     "angular-eslint": "22.6.0",
     "eslint": "^10.12.0",
     "jsdom": "^30.0.0",

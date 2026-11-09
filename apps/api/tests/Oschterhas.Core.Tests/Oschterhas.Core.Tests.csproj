@@ -2,4 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Oschterhas.Core\Oschterhas.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\samples\*.gpx" Link="Samples\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

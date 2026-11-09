@@ -172,7 +172,6 @@ namespace Oschterhas.Data.Migrations
                         .HasColumnName("lon");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");

@@ -33,6 +33,7 @@ Alles andere (LGPL, MPL, GPL, AGPL, Dual-/Source-available-Lizenzen, „Communit
 | Npgsql.EntityFrameworkCore.PostgreSQL | PostgreSQL | PostgreSQL-Provider |
 | xunit.v3 | Apache-2.0 | Unit-Tests (Microsoft Testing Platform) |
 | Microsoft.Extensions.TimeProvider.Testing | MIT | `FakeTimeProvider` in Tests |
+| Microsoft.Extensions.Options, Microsoft.Extensions.Caching.Memory | MIT | Optionen und Cache in Core (ohne ASP.NET-Abhängigkeit) |
 | Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore | MIT | Health-Check mit DB-Prüfung |
 | NSubstitute (+ NSubstitute.Analyzers.CSharp) | BSD-3-Clause | Test-Doubles |
 
@@ -52,7 +53,8 @@ Keycloak-Admin-API: eigener schlanker `HttpClient`-Client in `Oschterhas.Core/Id
 |---|---|---|
 | Caddy (+ DNS-Modul des DNS-Anbieters, Lizenz beim Auswählen prüfen) | Apache-2.0 | Reverse Proxy, automatisches HTTPS, On-Demand TLS für Custom Domains |
 | PostgreSQL | PostgreSQL | Datenbank |
-| openapi-typescript | MIT | TS-Typen aus OpenAPI |
+| openapi-typescript 7.13.0 | MIT | TS-Typen aus OpenAPI. Nur per `npx` mit fester Version aufgerufen, nicht installiert (verlangt TypeScript 5, Angular 22 nutzt 6) |
+| @types/leaflet (dev) | MIT | Typen für Leaflet |
 | license-checker-rseidelsohn (dev) | BSD-3-Clause | Lizenzprüfung in CI |
 
 **Ausnahme Python-2.0**: `argparse` (Python Software Foundation License, freizügig, OSI-anerkannt) kommt transitiv über `@jsverse/transloco` → `transloco-utils` → `cosmiconfig` → `js-yaml`. Es ist Build-Tooling und landet nicht im ausgelieferten Bundle. Deshalb ist Python-2.0 in `npm run licenses:check` erlaubt (Stand 2026-11-09, zu bestätigen).

@@ -1,4 +1,4 @@
-namespace Oschterhas.Api.Hosting;
+namespace Oschterhas.Core.Hosting;
 
 /// <summary>Host names the platform runs on. Instances live at <c>{slug}.{BaseDomain}</c>.</summary>
 public sealed class HostingOptions

@@ -1,6 +1,44 @@
 {
-  "app": { "name": "Oschterhas" },
-  "landing": { "intro": "Die App für die Ostersuche im Gelände." },
-  "search": { "comingSoon": "Die Karte mit den Osterhasen folgt bald." },
-  "admin": { "title": "Verwaltung", "comingSoon": "Die Verwaltung folgt bald." }
+  "app": {
+    "name": "Oschterhas"
+  },
+  "landing": {
+    "intro": "Die App für die Ostersuche im Gelände."
+  },
+  "search": {
+    "progress": "{{found}} von {{total}} Hasen gefunden",
+    "notStarted": "Die Suche hat noch nicht begonnen. Schau später wieder vorbei!",
+    "ended": "Die Suche ist beendet. Danke fürs Mitmachen!",
+    "notFound": "Unter dieser Adresse gibt es keine Suche.",
+    "loadError": "Die Suche konnte nicht geladen werden."
+  },
+  "admin": {
+    "title": "Verwaltung",
+    "comingSoon": "Die Verwaltung folgt bald."
+  },
+  "common": {
+    "loading": "Wird geladen …",
+    "retry": "Nochmals versuchen"
+  },
+  "hare": {
+    "defaultName": "Hase {{number}}",
+    "hidden": "Noch versteckt",
+    "found": "Gefunden",
+    "foundBy": "Gefunden von {{name}}"
+  },
+  "map": {
+    "label": "Karte mit den versteckten Hasen",
+    "layer": {
+      "swisstopo": "Landeskarte",
+      "aerial": "Luftbild",
+      "osm": "OpenStreetMap"
+    }
+  },
+  "geolocation": {
+    "locateMe": "Meine Position",
+    "locating": "Position wird gesucht …",
+    "denied": "Der Standortzugriff wurde nicht erlaubt.",
+    "unavailable": "Die Position konnte nicht bestimmt werden.",
+    "unsupported": "Dieses Gerät kann die Position nicht bestimmen."
+  }
 }

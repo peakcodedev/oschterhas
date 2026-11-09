@@ -1,7 +1,16 @@
 :root {
   color-scheme: light;
   --color-text: #1f2937;
+  --color-muted: #4b5563;
   --color-background: #ffffff;
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+  --color-primary: #c2410c;
+  --color-primary-text: #ffffff;
+  --color-found: #9ca3af;
+  --color-error: #b91c1c;
+  --color-info-bg: #fef3c7;
+  --color-position: #2563eb;
   font-family:
     system-ui,
     -apple-system,
@@ -20,4 +29,78 @@ body {
 
 .page {
   padding: 16px;
+}
+
+.notice {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 25%);
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--color-position);
+  outline-offset: 2px;
+}
+
+/* Leaflet markers live outside Angular's view encapsulation, so they are styled globally. */
+.hare-marker {
+  display: grid;
+  place-items: center;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 40%);
+}
+
+.hare-marker--found {
+  background: var(--color-found);
+}
+
+.hare-popup__title {
+  display: block;
+  font-size: 1rem;
+}
+
+.hare-popup__description,
+.hare-popup__status {
+  margin: 4px 0 0;
+}
+
+.hare-popup__status--found {
+  color: var(--color-muted);
+}
+
+.own-position {
+  fill: var(--color-position);
+  fill-opacity: 1;
+  stroke: #ffffff;
+  stroke-width: 3;
+}
+
+.own-position__accuracy {
+  fill: var(--color-position);
+  fill-opacity: 0.12;
+  stroke: var(--color-position);
+  stroke-opacity: 0.4;
+  stroke-width: 1;
 }

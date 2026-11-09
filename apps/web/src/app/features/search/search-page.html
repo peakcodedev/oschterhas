@@ -1,0 +1,60 @@
+@switch (loadStatus()) {
+  @case ('loaded') {
+    @if (instance(); as instance) {
+      @if (haresVisible()) {
+        <div class="search">
+          <header class="search__header">
+            <h1 class="search__title">{{ instance.name }}</h1>
+            <p class="search__progress" aria-live="polite">
+              {{ 'search.progress' | transloco: progress() }}
+            </p>
+            @if (instance.status === 'Ended') {
+              <p class="search__banner">{{ 'search.ended' | transloco }}</p>
+            }
+          </header>
+
+          <app-hare-map
+            class="search__map"
+            [hares]="hares()"
+            [position]="position()"
+            [ariaLabel]="'map.label' | transloco"
+          />
+
+          <div class="search__actions">
+            @if (positionError(); as error) {
+              <p class="search__error" role="alert">{{ 'geolocation.' + error | transloco }}</p>
+            }
+            <button type="button" class="button" (click)="locateMe()" [disabled]="locating()">
+              {{ (locating() ? 'geolocation.locating' : 'geolocation.locateMe') | transloco }}
+            </button>
+          </div>
+        </div>
+      } @else {
+        <main class="page notice">
+          <h1>{{ instance.name }}</h1>
+          <p>{{ 'search.notStarted' | transloco }}</p>
+        </main>
+      }
+    }
+  }
+  @case ('notFound') {
+    <main class="page notice">
+      <h1>{{ 'app.name' | transloco }}</h1>
+      <p>{{ 'search.notFound' | transloco }}</p>
+    </main>
+  }
+  @case ('error') {
+    <main class="page notice">
+      <h1>{{ 'app.name' | transloco }}</h1>
+      <p role="alert">{{ 'search.loadError' | transloco }}</p>
+      <button type="button" class="button" (click)="retry()">
+        {{ 'common.retry' | transloco }}
+      </button>
+    </main>
+  }
+  @default {
+    <main class="page notice" aria-busy="true">
+      <p>{{ 'common.loading' | transloco }}</p>
+    </main>
+  }
+}

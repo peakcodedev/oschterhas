@@ -11,7 +11,7 @@ internal sealed class HareConfiguration : IEntityTypeConfiguration<Hare>
         builder.ToTable("hares");
         builder.HasKey(h => h.Id);
 
-        builder.Property(h => h.Name).HasMaxLength(FieldLengths.HareName);
+        builder.Property(h => h.Name).HasMaxLength(FieldLengths.HareName).IsRequired(false);
         builder.Property(h => h.Description).HasMaxLength(FieldLengths.HareDescription);
         builder.Property(h => h.SourceWaypointId).HasMaxLength(FieldLengths.SourceWaypointId);
         builder.Property(h => h.FoundBy).HasMaxLength(FieldLengths.Nickname);

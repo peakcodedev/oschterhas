@@ -136,14 +136,14 @@ Regeln:
 - Eindeutig über alle Instanzen.
 - Entfernen oder Löschen der Instanz → Domain wird sofort nicht mehr bedient, Caddy stellt keine neuen Zertifikate aus.
 
-### Host-Auflösung (Middleware `InstanceResolution`)
+### Host-Auflösung (`HostResolver` in Core, `HostResolutionMiddleware` in Api)
 1. Host = `admin.<BaseDomain>` → Verwaltung (keine Instanz).
 2. Host = `<slug>.<BaseDomain>` → Instanz per Slug.
 3. Host = `<BaseDomain>` → Info-Seite.
 4. Sonst: Instanz mit diesem `CustomDomain` **und** Status `Verified` → Instanz.
 5. Sonst → `404` (kein Hinweis darauf, ob eine Instanz existiert).
 
-Die Zuordnung Domain → Instanz wird mit `IMemoryCache` (eingebaut) zwischengespeichert und beim Ändern einer Instanz invalidiert. Die eigene Host-Auflösung ersetzt das starre `AllowedHosts`.
+Die Zuordnung Host → Instanz wird 30 Sekunden mit `IMemoryCache` zwischengespeichert (auch negative Ergebnisse). Ab M4 wird der Cache beim Ändern einer Instanz zusätzlich invalidiert. Die Middleware läuft nur für `/api`-Pfade; Controller lesen das Ergebnis mit `HttpContext.GetHostResolution()`. Die eigene Host-Auflösung ersetzt das starre `AllowedHosts`.
 
 ### Lokale Entwicklung
 - `http://tann.oschterhas.localhost:4200` (Instanz) und `http://admin.oschterhas.localhost:4200` (Verwaltung). Chrome und Firefox lösen `*.localhost` automatisch auf. Für Safari Einträge in `/etc/hosts` nötig.
@@ -177,9 +177,9 @@ Relevant ist nur `<wpt>`. Referenz ist der echte swisstopo-App-Export `samples/s
 |---|---|
 | `@lat`, `@lon` | `Lat`, `Lon` (Pflicht, `InvariantCulture`, Bereich prüfen) |
 | `<ele>` | `Elevation` (optional) |
-| `<name>` | `Name` (getrimmt). Leer **oder Standardname der App** (`Gpx:DefaultNames`, vorerst `["Wegpunkt"]`, ohne Gross-/Kleinschreibung) → „Hase {Nummer}" |
+| `<name>` | `Name` (getrimmt). Leer **oder Standardname der App** (`Gpx:DefaultNames`, vorerst `["Wegpunkt"]`, ohne Gross-/Kleinschreibung) → `null`; das Frontend zeigt dann „Hase {Nummer}" in der UI-Sprache |
 | `<desc>` (sonst `<cmt>`) | `Description` (getrimmt, leer → `null`). swisstopo füllt hier oft automatisch eine Adresse ein, z. B. ` (ZH) - Dürnten` |
-| `<extensions>/swisstopo:waypoint_id` | `SourceWaypointId`. Bevorzugt mit dem swisstopo-Namespace, ersatzweise über den lokalen Namen `waypoint_id` |
+| `<extensions>/*:waypoint_id` | `SourceWaypointId`, erkannt am lokalen Namen `waypoint_id` (unabhängig von Präfix und Namespace) |
 
 - Die Nummer ergibt sich aus der Reihenfolge in der Datei (1, 2, 3 …), nicht aus der `waypoint_id`.
 - Doppelte `waypoint_id` in einer Datei → Warnung, der zweite Wegpunkt erhält keine `SourceWaypointId`.

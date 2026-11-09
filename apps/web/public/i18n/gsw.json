@@ -1,6 +1,44 @@
 {
-  "app": { "name": "Oschterhas" },
-  "landing": { "intro": "D App für d Oschtersuechi im Gländ." },
-  "search": { "comingSoon": "D Charte mit de Oschterhase chunnt bald." },
-  "admin": { "title": "Verwaltig", "comingSoon": "D Verwaltig chunnt bald." }
+  "app": {
+    "name": "Oschterhas"
+  },
+  "landing": {
+    "intro": "D App für d Oschtersuechi im Gländ."
+  },
+  "search": {
+    "progress": "{{found}} vo {{total}} Hase gfunde",
+    "notStarted": "D Suechi het no nöd agfange. Lueg spöter nomal ine!",
+    "ended": "D Suechi isch fertig. Merci fürs Mitmache!",
+    "notFound": "Under dere Adrässe gits kei Suechi.",
+    "loadError": "D Suechi het nöd chöne glade werde."
+  },
+  "admin": {
+    "title": "Verwaltig",
+    "comingSoon": "D Verwaltig chunnt bald."
+  },
+  "common": {
+    "loading": "Wird glade …",
+    "retry": "Nomal probiere"
+  },
+  "hare": {
+    "defaultName": "Hase {{number}}",
+    "hidden": "No versteckt",
+    "found": "Gfunde",
+    "foundBy": "Gfunde vo {{name}}"
+  },
+  "map": {
+    "label": "Charte mit de versteckte Hase",
+    "layer": {
+      "swisstopo": "Landeskarte",
+      "aerial": "Luftbild",
+      "osm": "OpenStreetMap"
+    }
+  },
+  "geolocation": {
+    "locateMe": "Mini Position",
+    "locating": "Position wird gsuecht …",
+    "denied": "Dr Standortzuegriff isch nöd erlaubt worde.",
+    "unavailable": "D Position het nöd chöne bestimmt werde.",
+    "unsupported": "Das Grät cha d Position nöd bestimme."
+  }
 }

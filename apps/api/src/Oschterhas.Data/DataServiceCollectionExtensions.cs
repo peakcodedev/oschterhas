@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Oschterhas.Data.Repositories;
 
 namespace Oschterhas.Data;
 
@@ -10,6 +11,7 @@ public static class DataServiceCollectionExtensions
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddScoped<IInstanceRepository, InstanceRepository>();
         return services;
     }
 }

@@ -12,7 +12,8 @@ public class Hare
     /// <summary>Running number within the instance, starting at 1.</summary>
     public int Number { get; set; }
 
-    public required string Name { get; set; }
+    /// <summary>Null for waypoints without a real name; the app then shows "Hase {Number}" in the user's language.</summary>
+    public string? Name { get; set; }
 
     public string? Description { get; set; }
 

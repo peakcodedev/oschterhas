@@ -57,7 +57,7 @@ Organisator/innen und Plattform-Admins. Angelegt beim Erfassen durch den Plattfo
 | id | uuid | PK |
 | instanceId | uuid | FK → Instance (Cascade) |
 | number | int | laufende Nummer pro Instanz, eindeutig mit `instanceId` |
-| name | text | aus `<name>` oder „Hase {number}", max. 100 |
+| name | text? | aus `<name>`, max. 100; `null` bei fehlendem oder Standardnamen („Wegpunkt") → Anzeige „Hase {number}" in der UI-Sprache |
 | description | text? | aus `<desc>`/`<cmt>`, max. 500 |
 | lat / lon | double precision | WGS84 |
 | elevation | double precision? | aus `<ele>` |

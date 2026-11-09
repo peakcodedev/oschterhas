@@ -1,6 +1,44 @@
 {
-  "app": { "name": "Oschterhas" },
-  "landing": { "intro": "The app for the Easter hunt outdoors." },
-  "search": { "comingSoon": "The map with the Easter bunnies is coming soon." },
-  "admin": { "title": "Administration", "comingSoon": "The administration area is coming soon." }
+  "app": {
+    "name": "Oschterhas"
+  },
+  "landing": {
+    "intro": "The app for the Easter hunt outdoors."
+  },
+  "search": {
+    "progress": "{{found}} of {{total}} bunnies found",
+    "notStarted": "The hunt has not started yet. Check back later!",
+    "ended": "The hunt is over. Thanks for taking part!",
+    "notFound": "There is no hunt at this address.",
+    "loadError": "The hunt could not be loaded."
+  },
+  "admin": {
+    "title": "Administration",
+    "comingSoon": "The administration area is coming soon."
+  },
+  "common": {
+    "loading": "Loading …",
+    "retry": "Try again"
+  },
+  "hare": {
+    "defaultName": "Bunny {{number}}",
+    "hidden": "Still hidden",
+    "found": "Found",
+    "foundBy": "Found by {{name}}"
+  },
+  "map": {
+    "label": "Map of the hidden bunnies",
+    "layer": {
+      "swisstopo": "National map",
+      "aerial": "Aerial image",
+      "osm": "OpenStreetMap"
+    }
+  },
+  "geolocation": {
+    "locateMe": "My location",
+    "locating": "Finding your location …",
+    "denied": "Location access was not allowed.",
+    "unavailable": "Your location could not be determined.",
+    "unsupported": "This device cannot determine its location."
+  }
 }

@@ -19,15 +19,16 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [x] GitHub Actions: build, test, lint, format, `has-pending-model-changes`, verbotene Pakete, Schwachstellen, Lizenzprüfung (noch nicht auf GitHub gelaufen – kein Remote)
 
 ## M1 – Instanzen per Subdomain & Karte
-- [ ] Middleware `InstanceResolution` (Host → Instanz, Basis-Domain, reservierte Slugs) + Tests
-- [ ] Entwicklungs-Seed: Instanz `tann` (Status `Active`) mit Hasen aus `samples/sample_data_2.gpx`
-- [ ] `GET /api/public/instance` (PublicController, Core-Service, Mapping) + Tests
-- [ ] Angular: Host-Erkennung (admin / Instanz / Basis-Domain) und Routing
-- [ ] OpenAPI → TS-Typen, API-Service
-- [ ] NgRx-Feature `search` (Actions, Reducer mit `@ngrx/entity`, Selektoren, Effects) + Tests
-- [ ] Karten-Komponente (Leaflet, swisstopo/OSM, Attribution), Hasen-Marker offen/gefunden, Popup
-- [ ] Eigene Position + „auf mich zentrieren", Fortschritt „x von y"
-- [ ] Hinweise für Status `Draft` („noch nicht begonnen") und `Ended`
+- [x] Host-Auflösung: `HostResolver` (Core, mit 30-s-Cache) + `HostResolutionMiddleware` (Api) für Subdomain, Admin, Basis-Domain, reservierte Slugs und verifizierte Custom Domains + Tests
+- [x] Entwicklungs-Seed: `tann` (aktiv, 65 Hasen aus `samples/sample_data_2.gpx`, Custom Domain `ostern.cevi-test.localhost`), `vorschau` (Entwurf), `vorbei` (beendet)
+- [x] `GET /api/public/instance` (PublicController, `PublicInstanceService`, Mapping, Problem Details mit `code`) + Tests
+- [x] Hasenname optional (`null` → „Hase {Nummer}" übersetzt im Frontend), Migration `MakeHareNameOptional`
+- [x] Angular: Host-Erkennung und Routing (seit M0)
+- [x] OpenAPI → TS-Typen (`npm run api:types`, API muss laufen), `PublicApiService`
+- [x] NgRx-Feature `search` (Actions, Reducer mit `@ngrx/entity`, Selektoren, Effects inkl. Geolocation) + Tests
+- [x] Karten-Komponente (Leaflet, Landeskarte/Luftbild/OSM, Attribution), nummerierte Marker offen/gefunden, Popup ohne HTML-Strings
+- [x] Eigene Position + „Meine Position", Fortschritt „x von y Hasen gefunden"
+- [x] Hinweise für `Draft` („noch nicht begonnen"), `Ended` und unbekannte Adresse
 
 ## M2 – Gefunden markieren & Live-Updates
 - [ ] `POST /api/public/hares/{id}/found` mit Rate-Limit, Concurrency-Token, `409`
@@ -36,9 +37,9 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [ ] „Gefunden!"-Dialog mit optionalem Spitznamen
 
 ## M3 – GPX-Parser
-- [ ] `GpxParser` in Core mit `XmlReader`: nur `<wpt>`, Felder gemäss `docs/architektur.md`, Limit `Gpx:MaxWaypoints = 1000`, XXE-Schutz
-- [ ] Standardname „Wegpunkt" → „Hase {Nummer}" (`Gpx:DefaultNames`), swisstopo-Namespace für `waypoint_id`
-- [ ] Unit-Tests: `sample_data_2.gpx` (65 Hasen), `beispiel-hasen.gpx`, 300/1000/1001 Wegpunkte, doppelte `waypoint_id`, DTD/XXE, fehlender Name, ungültige Koordinaten, `<trk>` ignoriert, GPX 1.0, Namespace-Varianten
+- [x] `GpxParser` in Core mit `XmlReader`: nur `<wpt>`, Felder gemäss `docs/architektur.md`, Limit `Gpx:MaxWaypoints = 1000`, XXE-Schutz (in M1 vorgezogen für den Seed)
+- [x] Standardname „Wegpunkt" → kein Name (`Gpx:DefaultNames`), `waypoint_id` unabhängig vom Namespace-Präfix
+- [x] Unit-Tests: `sample_data_2.gpx` (65 Hasen), `beispiel-hasen.gpx`, 300/1000/1001 Wegpunkte, doppelte `waypoint_id`, DTD/XXE, fehlender Name, ungültige Koordinaten, `<trk>` ignoriert, GPX 1.0, Namespace-Varianten
 
 ## M4 – Peakcode Identity & Verwaltung
 - [ ] Im Repo `identity_peakcode`: Realm `oschterhas` mit `oschterhas-bff`, `oschterhas-user-admin` und Testbenutzern (feste IDs)
@@ -56,19 +57,19 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 
 ## M4b – Custom Domains
 - [ ] Domain-Normalisierung und -Validierung (IDN/Punycode, keine IPs, nicht `oschterhas.li`) in Core + Tests
-- [ ] `InstanceResolution` um verifizierte Custom Domains erweitern (mit `IMemoryCache`) + Tests
+- [x] Host-Auflösung kennt verifizierte Custom Domains (mit `IMemoryCache`) + Tests (in M1 erledigt)
 - [ ] `PUT/DELETE /instances/{id}/custom-domain`, `POST …/verify`, `/.well-known/oschterhas-verification`
 - [ ] Verifizierung per HTTP (ohne Redirects, Timeout, keine privaten IPs) + Tests mit Fake-`HttpMessageHandler`
 - [ ] `BackgroundService`: `Pending` alle 10 Min., `Verified` täglich prüfen, nach 3 Fehlern `Failed`
 - [ ] `/internal/tls/allowed` für Caddy (nur internes Netz)
 - [ ] Admin-UI: Domain eintragen, DNS-Anleitung, Status, „Jetzt prüfen", entfernen; QR-Code/Link mit `publicUrl`
-- [ ] Angular: unbekannter Host → Suchansicht, `404` → „Suche nicht gefunden"
+- [x] Angular: unbekannter Host → Suchansicht, `404` → „Suche nicht gefunden" (in M1 erledigt)
 
 ## M5 – Mehrsprachigkeit & PWA
 - [ ] Sprachwahl im Store, Browser-Sprache als Standard (Transloco ist seit M0 eingerichtet)
 - [ ] Alle UI-Texte übersetzt (Mundart gegenlesen lassen); API-Fehlercodes als Keys
 - [ ] Angular Service Worker, Manifest, App-Icons
-- [ ] Mobile-UX-Feinschliff, Barrierefreiheit
+- [ ] Mobile-UX-Feinschliff, Barrierefreiheit; dicht liegende Marker (65 Hasen in Tann überlappen bei Zoom 14): Clustering oder grösserer Start-Zoom prüfen
 
 ## M6 – OWASP-Prüfung
 - [ ] Prüfung nach `docs/owasp-checkliste.md` (OWASP Top 10:2025, ASVS 5.0 Level 1, ausgewählte L2-Punkte)
