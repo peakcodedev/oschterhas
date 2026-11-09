@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Oschterhas.Api/Oschterhas.Api.csproj" />
+    <Project Path="src/Oschterhas.Common/Oschterhas.Common.csproj" />
+    <Project Path="src/Oschterhas.Core/Oschterhas.Core.csproj" />
+    <Project Path="src/Oschterhas.Data/Oschterhas.Data.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Oschterhas.Api.Tests/Oschterhas.Api.Tests.csproj" />
+    <Project Path="tests/Oschterhas.Common.Tests/Oschterhas.Common.Tests.csproj" />
+    <Project Path="tests/Oschterhas.Core.Tests/Oschterhas.Core.Tests.csproj" />
+  </Folder>
+</Solution>

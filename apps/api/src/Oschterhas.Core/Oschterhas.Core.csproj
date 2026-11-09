@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Oschterhas.Data\Oschterhas.Data.csproj" />
+    <ProjectReference Include="..\Oschterhas.Common\Oschterhas.Common.csproj" />
+  </ItemGroup>
+</Project>
