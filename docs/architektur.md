@@ -39,7 +39,7 @@ apps/api/
 │  │  ├─ Hosting/                 Middleware: Instanz aus Host-Header, Security-Header, Fehler → Problem Details
 │  │  └─ Program.cs               DI, Pipeline
 │  ├─ Oschterhas.Core/            Geschäftslogik (ohne ASP.NET-Abhängigkeit)
-│  │  ├─ Instances/  Hares/  Users/   Services, DTOs (records), Mapping (ToDto()-Extensions)
+│  │  ├─ Instances/  Hares/  Users/   Services, DTOs (records), Mapping (ToDto()-Extensions), SlugRules
 │  │  ├─ Gpx/                     GpxParser (nur System.Xml)
 │  │  ├─ Identity/                IIdentityAdminClient + Keycloak-Implementierung (HttpClient)
 │  │  ├─ Domains/                 Normalisierung, Verifizierung, BackgroundService für Nachprüfung
@@ -53,8 +53,7 @@ apps/api/
 │  └─ Oschterhas.Common/          kleine, fachfreie Bausteine
 │     ├─ Result.cs                Result/Result<T> mit Fehlercodes
 │     ├─ Retry.cs                 Retry mit exponentiellem Backoff (statt Polly)
-│     ├─ IClock.cs                testbare Zeit
-│     └─ PublicCode/Slug-Helfer   z. B. Slug-Validierung
+│     └─ NamingConventions.cs     snake_case für DB-Namen
 └─ tests/
    ├─ Oschterhas.Common.Tests/
    ├─ Oschterhas.Core.Tests/      GPX-Parser, Services (Repositories per NSubstitute)
@@ -77,7 +76,8 @@ Ein weiteres Projekt nur, wenn ein klarer Grund besteht, und nach dem Schema `Os
 | E5 | Projekte **Api / Core / Data / Common** | Wunsch; klare Schichten, Core ohne Web- und DB-Abhängigkeit testbar |
 | E6 | **Keine Pakete mit problematischen Lizenzen** ([lizenzen.md](lizenzen.md)) | Kein MediatR, AutoMapper, Polly usw. Benötigtes selbst gebaut |
 | E7 | **GPX-Parser selbst gebaut** mit `System.Xml.XmlReader`, nur `<wpt>` | Keine Lizenz nötig; nur Wegpunkte relevant |
-| E8 | **Nur Unit-Tests** mit xUnit v3 + NSubstitute, keine Integrationstests | Wunsch; schnell, ohne Docker im Testlauf |
+| E8 | **Nur Unit-Tests** mit xUnit v3 (Microsoft Testing Platform) + NSubstitute, keine Integrationstests | Wunsch; schnell, ohne Docker im Testlauf |
+| E19 | Zeit über eingebautes `TimeProvider` statt eigenem `IClock` | In .NET enthalten; `FakeTimeProvider` für Tests |
 | E9 | **Instanzen per Subdomain** `<slug>.oschterhas.li` | Wunsch; einfache, merkbare Adresse pro Suche |
 | E10 | **Login über Peakcode Identity** (Keycloak, Realm `oschterhas`), BFF + Cookie, nur auf `admin.` | Gemeinsame Peakcode-Anmeldung; gleiches Muster wie Parokia; OWASP-Empfehlung für SPAs |
 | E11 | Organisator/innen werden **eingeladen**: Oschterhas legt das Konto über die Keycloak-Admin-API an, Keycloak schickt die Einladung | Vorgabe von Peakcode Identity (keine Selbstregistrierung) |

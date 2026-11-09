@@ -1,0 +1,6 @@
+{
+  "app": { "name": "Oschterhas" },
+  "landing": { "intro": "Die App für die Ostersuche im Gelände." },
+  "search": { "comingSoon": "Die Karte mit den Osterhasen folgt bald." },
+  "admin": { "title": "Verwaltung", "comingSoon": "Die Verwaltung folgt bald." }
+}

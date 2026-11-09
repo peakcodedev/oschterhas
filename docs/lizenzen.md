@@ -31,7 +31,9 @@ Alles andere (LGPL, MPL, GPL, AGPL, Dual-/Source-available-Lizenzen, „Communit
 | Microsoft.AspNetCore.* (OpenApi, Authentication.OpenIdConnect) | MIT | Web, OIDC, OpenAPI |
 | Microsoft.EntityFrameworkCore (+ Design, Tools) | MIT | ORM, Migrationen |
 | Npgsql.EntityFrameworkCore.PostgreSQL | PostgreSQL | PostgreSQL-Provider |
-| xunit.v3, xunit.runner.visualstudio, Microsoft.NET.Test.Sdk | Apache-2.0 / MIT | Unit-Tests |
+| xunit.v3 | Apache-2.0 | Unit-Tests (Microsoft Testing Platform) |
+| Microsoft.Extensions.TimeProvider.Testing | MIT | `FakeTimeProvider` in Tests |
+| Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore | MIT | Health-Check mit DB-Prüfung |
 | NSubstitute (+ NSubstitute.Analyzers.CSharp) | BSD-3-Clause | Test-Doubles |
 
 Keycloak-Admin-API: eigener schlanker `HttpClient`-Client in `Oschterhas.Core/Identity`, kein Keycloak-SDK-Paket.
@@ -51,9 +53,12 @@ Keycloak-Admin-API: eigener schlanker `HttpClient`-Client in `Oschterhas.Core/Id
 | Caddy (+ DNS-Modul des DNS-Anbieters, Lizenz beim Auswählen prüfen) | Apache-2.0 | Reverse Proxy, automatisches HTTPS, On-Demand TLS für Custom Domains |
 | PostgreSQL | PostgreSQL | Datenbank |
 | openapi-typescript | MIT | TS-Typen aus OpenAPI |
+| license-checker-rseidelsohn (dev) | BSD-3-Clause | Lizenzprüfung in CI |
+
+**Ausnahme Python-2.0**: `argparse` (Python Software Foundation License, freizügig, OSI-anerkannt) kommt transitiv über `@jsverse/transloco` → `transloco-utils` → `cosmiconfig` → `js-yaml`. Es ist Build-Tooling und landet nicht im ausgelieferten Bundle. Deshalb ist Python-2.0 in `npm run licenses:check` erlaubt (Stand 2026-11-09, zu bestätigen).
 
 ## Prüfen
 
 - Vor jedem neuen Paket: Lizenz auf nuget.org bzw. npmjs.com prüfen und diese Tabelle ergänzen.
-- Frontend: `npx license-checker-rseidelsohn --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD"` (in CI).
-- Backend: Lizenzen der direkten Pakete in `Directory.Packages.props` gegen diese Liste prüfen (CI-Skript in M0).
+- Frontend: `npm run licenses:check` (in CI).
+- Backend: CI bricht ab, wenn ein verbotenes Paket in einer `.csproj`/`.props` auftaucht. Lizenzen neuer Pakete vor dem Eintrag in `Directory.Packages.props` manuell prüfen.

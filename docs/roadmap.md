@@ -3,19 +3,20 @@
 Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 
 ## M0 – Projekt-Grundgerüst
-- [ ] .NET 10 SDK installieren, `dotnet-ef` auf Version 10 aktualisieren
-- [ ] Node 24 via nvm installieren
-- [ ] `apps/api`: `Oschterhas.slnx`, `global.json`, `Directory.Build.props`, `Directory.Packages.props`
-- [ ] Projekte `Oschterhas.Api`, `Oschterhas.Core`, `Oschterhas.Data`, `Oschterhas.Common` mit Referenzen `Api → Core → Data → Common`
-- [ ] Testprojekte `Oschterhas.Common.Tests`, `Oschterhas.Core.Tests`, `Oschterhas.Api.Tests` (xUnit v3 + NSubstitute)
-- [ ] Api: Controllers, OpenAPI, Problem Details, `/health`
-- [ ] Data: Entitäten gemäss `docs/datenmodell.md`, `AppDbContext`, Konfigurationen, snake_case, Migration `InitialCreate`
-- [ ] Common: `Result`, `Retry`, `IClock` + Tests
-- [ ] `apps/web` mit Angular CLI (standalone, SCSS, Routing, strict, zoneless), `allowedHosts: ['.localhost']`, Proxy `/api` mit Host-Header
-- [ ] NgRx einrichten (`store`, `effects`, `entity`, `router-store`, `store-devtools`)
-- [ ] ESLint + Prettier (Web), `dotnet format` (API)
-- [ ] `.claude/launch.json` für Dev-Server; Befehle in `CLAUDE.md` bestätigen
-- [ ] GitHub Actions: build, test, lint, `dotnet ef migrations has-pending-model-changes`, Lizenzprüfung
+- [x] .NET 10 SDK (in `~/.dotnet`) und `dotnet-ef` 10 als lokales Tool (`apps/api/dotnet-tools.json`)
+- [x] Node 24 via nvm
+- [x] `apps/api`: `Oschterhas.slnx`, `global.json`, `Directory.Build.props`, `Directory.Packages.props`
+- [x] Projekte `Oschterhas.Api`, `Oschterhas.Core`, `Oschterhas.Data`, `Oschterhas.Common` mit Referenzen `Api → Core → Data → Common`
+- [x] Testprojekte `Oschterhas.Common.Tests`, `Oschterhas.Core.Tests`, `Oschterhas.Api.Tests` (xUnit v3 auf Microsoft Testing Platform + NSubstitute)
+- [x] Api: Controllers, OpenAPI (nur Development), Problem Details, `/health` mit DB-Prüfung, Hosting-Optionen mit Validierung
+- [x] Data: Entitäten gemäss `docs/datenmodell.md` (inkl. Custom-Domain-Feldern), `AppDbContext`, Konfigurationen, snake_case, `xmin`, Migration `InitialCreate`
+- [x] Common: `Result`/`Error`, `Retry`, `NamingConventions` + Tests (Zeit über `TimeProvider`)
+- [x] Core: `SlugRules` + Tests
+- [x] `apps/web` mit Angular 22 (standalone, SCSS, Routing, strict, zoneless, Vitest), `allowedHosts: ['.localhost']`, Proxy `/api`
+- [x] NgRx (`store`, `effects`, `entity`, `router-store`, `store-devtools`), Host-Erkennung (`HOST_CONTEXT`), Transloco mit `de`/`gsw`/`en`
+- [x] ESLint (angular-eslint) + Prettier (Web), `dotnet format` + `.editorconfig` (API)
+- [x] `.claude/launch.json` für Dev-Server; Befehle in `CLAUDE.md`
+- [x] GitHub Actions: build, test, lint, format, `has-pending-model-changes`, verbotene Pakete, Schwachstellen, Lizenzprüfung (noch nicht auf GitHub gelaufen – kein Remote)
 
 ## M1 – Instanzen per Subdomain & Karte
 - [ ] Middleware `InstanceResolution` (Host → Instanz, Basis-Domain, reservierte Slugs) + Tests
@@ -55,7 +56,6 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 
 ## M4b – Custom Domains
 - [ ] Domain-Normalisierung und -Validierung (IDN/Punycode, keine IPs, nicht `oschterhas.li`) in Core + Tests
-- [ ] Felder an `Instance` + Migration `AddCustomDomain`
 - [ ] `InstanceResolution` um verifizierte Custom Domains erweitern (mit `IMemoryCache`) + Tests
 - [ ] `PUT/DELETE /instances/{id}/custom-domain`, `POST …/verify`, `/.well-known/oschterhas-verification`
 - [ ] Verifizierung per HTTP (ohne Redirects, Timeout, keine privaten IPs) + Tests mit Fake-`HttpMessageHandler`
@@ -65,7 +65,7 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [ ] Angular: unbekannter Host → Suchansicht, `404` → „Suche nicht gefunden"
 
 ## M5 – Mehrsprachigkeit & PWA
-- [ ] Transloco mit `de`, `gsw`, `en`; Sprachwahl im Store, Browser-Sprache als Standard
+- [ ] Sprachwahl im Store, Browser-Sprache als Standard (Transloco ist seit M0 eingerichtet)
 - [ ] Alle UI-Texte übersetzt (Mundart gegenlesen lassen); API-Fehlercodes als Keys
 - [ ] Angular Service Worker, Manifest, App-Icons
 - [ ] Mobile-UX-Feinschliff, Barrierefreiheit

@@ -1,0 +1,6 @@
+{
+  "app": { "name": "Oschterhas" },
+  "landing": { "intro": "The app for the Easter hunt outdoors." },
+  "search": { "comingSoon": "The map with the Easter bunnies is coming soon." },
+  "admin": { "title": "Administration", "comingSoon": "The administration area is coming soon." }
+}

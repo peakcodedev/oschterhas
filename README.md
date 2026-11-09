@@ -6,24 +6,24 @@ Deine App für die Suche vom „Oschterhas": Freiwillige verstecken Osterhasen i
 
 ## Loslegen
 
-Voraussetzungen: [.NET 10 SDK](https://dotnet.microsoft.com/download), [nvm](https://github.com/nvm-sh/nvm), Docker.
+Voraussetzungen: .NET 10 SDK, [nvm](https://github.com/nvm-sh/nvm), Docker.
 
 ```bash
-docker compose up -d db
-docker compose -f ../../identity_peakcode/docker-compose.yml up -d   # Keycloak + Mailpit
+docker compose up -d db                     # PostgreSQL auf Port 5434
 
 cd apps/api
-dotnet tool update -g dotnet-ef
-dotnet ef database update --project src/Oschterhas.Data --startup-project src/Oschterhas.Api
-dotnet run --project src/Oschterhas.Api
+dotnet tool restore
+dotnet run --project src/Oschterhas.Api     # http://localhost:5080, wendet Migrationen an
 
 cd ../web
 nvm install && nvm use
 npm ci
-npm start                     # http://tann.oschterhas.localhost:4200 und http://admin.oschterhas.localhost:4200
+npm start                                   # http://tann.oschterhas.localhost:4200
 ```
 
-> Das App-Grundgerüst wird in Meilenstein M0 erstellt – siehe [docs/roadmap.md](docs/roadmap.md).
+Lokale Adressen: `tann.oschterhas.localhost:4200` (Suche), `admin.oschterhas.localhost:4200` (Verwaltung), `oschterhas.localhost:4200` (Info-Seite). Chrome und Firefox lösen `*.localhost` selbst auf, für Safari braucht es Einträge in `/etc/hosts`.
+
+Details und alle Befehle: [CLAUDE.md](CLAUDE.md).
 
 ## Dokumentation
 

@@ -18,7 +18,7 @@ Web-App (PWA) für die Oster-Suche im Gelände. Ein Plattform-Admin legt **Insta
   - `Oschterhas.Api` – Controllers, Auth, Middleware, `Program.cs`
   - `Oschterhas.Core` – Geschäftslogik, DTOs, Mapping, GPX-Parser, Keycloak-Admin-Client
   - `Oschterhas.Data` – Entitäten, `AppDbContext`, Configurations, Repositories, Migrations
-  - `Oschterhas.Common` – kleine wiederverwendbare Bausteine (`Result`, `Retry`, `IClock`)
+  - `Oschterhas.Common` – kleine wiederverwendbare Bausteine (`Result`/`Error`, `Retry`, `NamingConventions`); Zeit immer über das eingebaute `TimeProvider` (Tests: `FakeTimeProvider`)
   - Abhängigkeiten nur `Api → Core → Data → Common`. Neue Projekte nur mit klarem Grund, Schema `Oschterhas.<Name>`.
 - **Login**: Peakcode Identity = Keycloak aus `/Users/ufo/CODE/identity_peakcode`, Realm `oschterhas`, BFF mit httpOnly-Cookie, nur auf `admin.`-Host
 - **Frontend** `apps/web`: Angular, Standalone Components, Signals, TypeScript strict, **NgRx**, Leaflet, Transloco, Service Worker
@@ -28,27 +28,31 @@ Web-App (PWA) für die Oster-Suche im Gelände. Ein Plattform-Admin legt **Insta
 
 ## Befehle
 
-> Werden in Meilenstein M0 eingerichtet. Diese Liste aktuell halten.
-
 ```bash
-docker compose up -d db                                   # PostgreSQL (dieses Repo)
-docker compose -f /Users/ufo/CODE/identity_peakcode/docker-compose.yml up -d   # Keycloak + Mailpit
+docker compose up -d db                                   # PostgreSQL auf Port 5434 (5432/5433 belegen andere Projekte)
+docker compose -f /Users/ufo/CODE/identity_peakcode/docker-compose.yml up -d   # Keycloak + Mailpit (ab M4)
 
-# Backend (in apps/api)
+# Backend (in apps/api). .NET 10 liegt in ~/.dotnet, nicht im System-dotnet (8.0):
+export DOTNET_ROOT=$HOME/.dotnet PATH=$HOME/.dotnet:$PATH
+dotnet tool restore                                       # dotnet-ef aus dotnet-tools.json
 dotnet build
-dotnet test
-dotnet run --project src/Oschterhas.Api
+dotnet test                                               # xUnit v3 über Microsoft Testing Platform
+dotnet run --project src/Oschterhas.Api                   # http://localhost:5080, wendet Migrationen an (Development)
 dotnet ef migrations add <Name> --project src/Oschterhas.Data --startup-project src/Oschterhas.Api --output-dir Migrations
-dotnet ef database update --project src/Oschterhas.Data --startup-project src/Oschterhas.Api
+dotnet ef migrations has-pending-model-changes --project src/Oschterhas.Data --startup-project src/Oschterhas.Api
 dotnet format --verify-no-changes
 
 # Frontend (in apps/web)
 nvm use && npm ci
-npm start
+npm start                                                 # http://tann.oschterhas.localhost:4200, Proxy /api → :5080
 npm test
 npm run lint
-npm run api:types                                         # TS-Typen aus OpenAPI
+npm run format:check
+npm run build
+npm run licenses:check
 ```
+
+Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). CI: `.github/workflows/ci.yml` führt dieselben Prüfungen aus.
 
 ## Harte Regeln
 
@@ -64,11 +68,11 @@ npm run api:types                                         # TS-Typen aus OpenAPI
 
 ## Konventionen
 
-- **Sprache**: Code, Bezeichner, Commits (Conventional Commits) auf Englisch. Doku in `docs/` auf Deutsch. UI-Texte nur über Transloco-Keys, immer in `de`, `gsw` **und** `en`.
+- **Sprache**: Code, Bezeichner, Commits (Conventional Commits) auf Englisch. Doku in `docs/` auf Deutsch. UI-Texte nur über Transloco-Keys, immer in `de`, `gsw` **und** `en` (`apps/web/public/i18n/`).
 - **Begriffe im Code**: `Instance` (Instanz), `Hare` (Hase), `Organizer`, `PlatformAdmin`, `Slug`, `CustomDomain`.
 - **C#**: Nullable an, Warnungen als Fehler, file-scoped namespaces, `record` für DTOs, primäre Konstruktoren. Controllers dünn: Eingabe prüfen → Core-Service → `ActionResult`/Problem Details. Mapping als `ToDto()`-Extension in Core. `CancellationToken` überall durchreichen.
 - **EF Core**: Konfiguration per `IEntityTypeConfiguration<T>`, keine Attribute an Entitäten. Lesen mit `AsNoTracking()` und Projektion.
-- **Angular**: `inject()`, neue Control-Flow-Syntax, `store.selectSignal()`. NgRx mit `createFeature`, `createActionGroup`, funktionalen Effects, `@ngrx/entity`. Mobile-first, Touch-Ziele ≥ 44 px.
+- **Angular**: Host-Erkennung über `HOST_CONTEXT` (`core/host`), Routen per `canMatch: [hostIs(...)]`. `inject()`, neue Control-Flow-Syntax, `store.selectSignal()`. NgRx mit `createFeature`, `createActionGroup`, funktionalen Effects, `@ngrx/entity`. Mobile-first, Touch-Ziele ≥ 44 px.
 - **Koordinaten**: intern WGS84 (`lat`, `lon`). Leaflet `[lat, lon]`.
 - **Kleine Schritte**: ein Roadmap-Punkt pro Commit/PR, danach in `docs/roadmap.md` abhaken.
 - **Datenschutz**: Suchende ohne Konto, keine IP-Speicherung, Spitzname freiwillig. Hosting und Backups in der Schweiz.
