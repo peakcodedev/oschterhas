@@ -7,6 +7,7 @@ import {
   ElementRef,
   inject,
   input,
+  output,
   signal,
   viewChild,
 } from '@angular/core';
@@ -20,7 +21,15 @@ import { createBaseLayers } from './map-layers';
 
 const SWITZERLAND: L.LatLngTuple = [46.8, 8.23];
 
-/** Leaflet map with one numbered marker per hare and the own position. */
+interface MarkerEntry {
+  marker: L.Marker;
+  hare: PublicHare;
+}
+
+/**
+ * Leaflet map with one numbered marker per hare and the own position.
+ * Markers are updated in place, so an open popup stays open when a live update arrives.
+ */
 @Component({
   selector: 'app-hare-map',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +48,9 @@ const SWITZERLAND: L.LatLngTuple = [46.8, 8.23];
 export class HareMap {
   readonly hares = input.required<PublicHare[]>();
   readonly position = input<GeoPosition | null>(null);
+  readonly canMarkFound = input(false);
   readonly ariaLabel = input('');
+  readonly foundRequested = output<string>();
 
   private readonly element = viewChild.required<ElementRef<HTMLDivElement>>('map');
   private readonly transloco = inject(TranslocoService);
@@ -51,25 +62,31 @@ export class HareMap {
   private layersControl?: L.Control.Layers;
   private readonly hareLayer = L.layerGroup();
   private readonly positionLayer = L.layerGroup();
+  private readonly markers = new Map<string, MarkerEntry>();
   private fitted = false;
 
   constructor() {
     afterNextRender(() => {
-      const map = L.map(this.element().nativeElement, {
-        center: SWITZERLAND,
-        zoom: 8,
-        zoomControl: true,
-      });
+      const element = this.element().nativeElement;
+      const map = L.map(element, { center: SWITZERLAND, zoom: 8, zoomControl: true });
       this.hareLayer.addTo(map);
       this.positionLayer.addTo(map);
       this.map = map;
+
+      // The container gets its final size from the page layout; let Leaflet re-measure on every change.
+      const resizeObserver = new ResizeObserver(() => map.invalidateSize());
+      resizeObserver.observe(element);
+      this.destroyRef.onDestroy(() => resizeObserver.disconnect());
+
       this.ready.set(true);
     });
 
     effect(() => {
       const translation = this.translation();
+      const hares = this.hares();
+      this.canMarkFound();
       if (this.ready() && translation && Object.keys(translation).length > 0) {
-        this.renderHares(this.hares());
+        this.syncMarkers(hares);
         this.ensureLayersControl();
       }
     });
@@ -104,16 +121,58 @@ export class HareMap {
       .addTo(this.map);
   }
 
-  private renderHares(hares: PublicHare[]): void {
-    this.hareLayer.clearLayers();
+  private popupContent(entry: MarkerEntry): () => HTMLElement {
+    return () =>
+      buildHarePopup(
+        entry.hare,
+        this.t,
+        this.canMarkFound()
+          ? () => {
+              entry.marker.closePopup();
+              this.foundRequested.emit(entry.hare.id);
+            }
+          : undefined,
+      );
+  }
+
+  private syncMarkers(hares: PublicHare[]): void {
+    const seen = new Set<string>();
     for (const hare of hares) {
-      L.marker([hare.lat, hare.lon], {
-        icon: hareIcon(hare),
-        keyboard: true,
-        title: String(hare.number),
-      })
-        .bindPopup(() => buildHarePopup(hare, this.t))
-        .addTo(this.hareLayer);
+      seen.add(hare.id);
+      const existing = this.markers.get(hare.id);
+      if (!existing) {
+        const entry: MarkerEntry = {
+          hare,
+          marker: L.marker([hare.lat, hare.lon], {
+            icon: hareIcon(hare),
+            keyboard: true,
+            title: String(hare.number),
+          }),
+        };
+        entry.marker.bindPopup(this.popupContent(entry)).addTo(this.hareLayer);
+        this.markers.set(hare.id, entry);
+        continue;
+      }
+
+      const previous = existing.hare;
+      existing.hare = hare;
+      if (previous.lat !== hare.lat || previous.lon !== hare.lon) {
+        existing.marker.setLatLng([hare.lat, hare.lon]);
+      }
+      if (previous.foundAt !== hare.foundAt || previous.number !== hare.number) {
+        existing.marker.setIcon(hareIcon(hare));
+      }
+      if (existing.marker.isPopupOpen()) {
+        // Re-evaluates the content function with the latest hare.
+        existing.marker.getPopup()?.setContent(this.popupContent(existing));
+      }
+    }
+
+    for (const [id, entry] of this.markers) {
+      if (!seen.has(id)) {
+        entry.marker.remove();
+        this.markers.delete(id);
+      }
     }
 
     if (!this.fitted && hares.length > 0 && this.map) {

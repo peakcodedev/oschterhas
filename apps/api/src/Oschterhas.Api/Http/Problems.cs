@@ -34,3 +34,10 @@ internal static class Problems
         };
     }
 }
+
+internal static class ObjectResultExtensions
+{
+    /// <summary>For actions that return <see cref="IResult"/> (e.g. the SSE endpoint).</summary>
+    public static IResult ToResult(this ObjectResult result) =>
+        TypedResults.Json(result.Value, (System.Text.Json.JsonSerializerOptions?)null, "application/problem+json", result.StatusCode);
+}

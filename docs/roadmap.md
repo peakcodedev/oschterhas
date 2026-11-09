@@ -31,10 +31,12 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [x] Hinweise für `Draft` („noch nicht begonnen"), `Ended` und unbekannte Adresse
 
 ## M2 – Gefunden markieren & Live-Updates
-- [ ] `POST /api/public/hares/{id}/found` mit Rate-Limit, Concurrency-Token, `409`
-- [ ] `IInstanceEventBroadcaster` + `GET /api/public/events` (SSE)
-- [ ] NgRx-Effect für `EventSource`, Reconnect mit Backoff
-- [ ] „Gefunden!"-Dialog mit optionalem Spitznamen
+- [x] `POST /api/public/hares/{id}/found`: `FoundService` (Core) mit Verlauf (`found_event`), Concurrency über `xmin`, `409` bei bereits gefunden oder nicht aktiver Suche, `422` bei ungültigem Spitznamen
+- [x] Rate-Limits (eingebaut): 30 Markierungen/Minute und 50 offene Live-Verbindungen pro IP (`RateLimits` in appsettings), `429` mit `Retry-After`
+- [x] `IInstanceEventBroadcaster` (in-memory, ein Kanal pro Verbindung, älteste Ereignisse fallen bei Überlauf weg) + `GET /api/public/events` (SSE mit `ready` zu Beginn und `ping` alle 25 s)
+- [x] NgRx-Effect für `EventSource`: Ereignisse → Actions, Nachladen nach jedem Wiederverbinden, Backoff 1 s → 30 s, Wächter bei 60 s Funkstille
+- [x] „Gefunden!"-Knopf im Popup (nur bei aktiver Suche), Dialog mit optionalem Spitznamen, Fehlermeldungen in drei Sprachen
+- [x] Marker werden gezielt aktualisiert; offene Popups bleiben bei Live-Updates offen
 
 ## M3 – GPX-Parser
 - [x] `GpxParser` in Core mit `XmlReader`: nur `<wpt>`, Felder gemäss `docs/architektur.md`, Limit `Gpx:MaxWaypoints = 1000`, XXE-Schutz (in M1 vorgezogen für den Seed)

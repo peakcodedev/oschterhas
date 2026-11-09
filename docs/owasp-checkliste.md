@@ -48,7 +48,9 @@ Status: `[ ]` offen · `[x]` erfüllt und geprüft · `[~]` teilweise / bewusst 
 - [ ] Längenbegrenzung aller Textfelder (Name, Hinweis, Spitzname) serverseitig
 
 ## A06 – Insecure Design
-- [ ] Missbrauch „Gefunden" ohne Login: Rate-Limit pro IP und pro Instanz, Rücksetzen durch Organisator/in, Verlauf in `found_event`
+- [ ] Missbrauch „Gefunden" ohne Login: Rate-Limit pro IP (30/min, umgesetzt in M2), Rücksetzen durch Organisator/in (M4), Verlauf in `found_event` (umgesetzt). Grosszügig wegen Mobilfunk-NAT; bei Missbrauch zusätzlich Limit pro Instanz prüfen
+- [ ] Live-Verbindungen: max. 50 pro IP, Heartbeat, Aufräumen bei Abbruch (umgesetzt in M2); Gesamtzahl offener Verbindungen pro Server im Betrieb beobachten
+- [ ] Produktion: `ForwardedHeaders` nur vom bekannten Reverse Proxy akzeptieren, sonst teilen sich alle Clients das Rate-Limit der Proxy-IP bzw. Clients können ihre IP fälschen
 - [ ] Bedrohungsmodell kurz dokumentiert (wer kann was missbrauchen, z. B. alle Hasen als gefunden markieren, Positionen abgreifen vor Start, Subdomain einer fremden Instanz)
 - [ ] Hasen von Instanzen im Status `Draft` sind öffentlich nicht abrufbar
 

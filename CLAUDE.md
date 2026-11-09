@@ -63,7 +63,8 @@ Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed 
 - **GPX**: Referenz ist der echte swisstopo-Export `samples/sample_data_2.gpx`. Nur `<wpt>` auswerten, Standardname „Wegpunkt" → `Name = null` (das Frontend zeigt „Hase {Nummer}" übersetzt), Routen/Tracks ignorieren und nicht speichern. Nur .NET-Basisbibliothek (`XmlReader`). Limit 1000 Wegpunkte (mindestens 300 müssen gehen). DTD/XXE verboten.
 - **Instanzen**: die Instanz kommt bei öffentlichen Endpunkten **immer aus dem Host-Header** (Subdomain oder verifizierte Custom Domain), nie aus Pfad oder Body. Links und QR-Codes nie aus dem Host-Header bauen, sondern aus der gespeicherten Adresse. Organisator-Endpunkte prüfen immer die Zuordnung zur Instanz.
 - **Identity**: Benutzer über **Issuer + Subject** zuordnen, nie nur über E-Mail. Rollen leben in der Oschterhas-DB, nicht in Keycloak. Keine Selbstregistrierung; Organisator/innen werden eingeladen.
-- **Frontend-State**: fachliches State über NgRx. Komponenten machen keine HTTP-Aufrufe; HTTP und SSE laufen in Effects.
+- **Frontend-State**: fachliches State über NgRx. Komponenten machen keine HTTP-Aufrufe; HTTP und SSE laufen in Effects. Effects-Dateien exportieren **nur Effects** (die Routen geben das ganze Modul an `provideEffects`); Hilfsfunktionen in eigene Dateien.
+- **Nach Frontend-Änderungen** neben `npm test` immer `npx tsc -p tsconfig.app.json --noEmit` oder `npm run build`: Vitest findet nicht jeden Typfehler, und der Dev-Server zeigt dann still die alte Version.
 - **Sicherheit**: neue Endpunkte gegen `docs/owasp-checkliste.md` prüfen.
 - **Secrets**: nie ins Repo. Lokal `dotnet user-secrets`, in Produktion Umgebungsvariablen. `.env` im Identity-Repo nicht lesen.
 

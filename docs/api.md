@@ -75,12 +75,21 @@ Upload max. 5 MB, max. 1000 Wegpunkte (`413`/`422` mit Problem Details).
 | Methode | Pfad | Beschreibung |
 |---|---|---|
 | GET | `/public/instance` | Instanz (Name, Beschreibung, Status, Fortschritt); bei `Active`/`Ended` inkl. Hasen; unbekannter Slug → `404` |
-| POST | `/public/hares/{hareId}/found` | `{ nickname? }`; nur bei `Active`; rate-limitiert; `409` wenn bereits gefunden |
-| GET | `/public/events` | SSE-Stream der Instanz |
+| POST | `/public/hares/{hareId}/found` | `{ nickname? }` → `{ hareId, foundAt, foundBy }`. `404` wenn der Hase nicht zur Instanz des Hosts gehört, `409` mit `code` `hare.already_found` oder `instance.not_active`, `422` bei Spitzname > 40 Zeichen oder Steuerzeichen, `429` (`rate_limited`) bei mehr als 30 Anfragen/Minute pro IP |
+| GET | `/public/events` | SSE-Stream der Instanz (max. 50 offene Verbindungen pro IP) |
 
 ### SSE-Events
 
+Der Stream beginnt sofort mit `ready` (inkl. `retry: 3000`) und sendet alle 25 s `ping`, wenn sonst nichts passiert. Bleibt der Client 60 s ohne Nachricht, baut er die Verbindung neu auf. Nach jedem erneuten `ready` lädt er die Instanz vollständig nach.
+
 ```
+event: ready
+data: {}
+retry: 3000
+
+event: ping
+data: {}
+
 event: hare.found
 data: {"hareId":"…","foundAt":"2027-03-28T10:12:00Z","foundBy":"Lina"}
 

@@ -18,13 +18,15 @@
   },
   "common": {
     "loading": "Wird glade …",
-    "retry": "Nomal probiere"
+    "retry": "Nomal probiere",
+    "cancel": "Abbräche"
   },
   "hare": {
     "defaultName": "Hase {{number}}",
     "hidden": "No versteckt",
     "found": "Gfunde",
-    "foundBy": "Gfunde vo {{name}}"
+    "foundBy": "Gfunde vo {{name}}",
+    "markFound": "Gfunde!"
   },
   "map": {
     "label": "Charte mit de versteckte Hase",
@@ -40,5 +42,22 @@
     "denied": "Dr Standortzuegriff isch nöd erlaubt worde.",
     "unavailable": "D Position het nöd chöne bestimmt werde.",
     "unsupported": "Das Grät cha d Position nöd bestimme."
+  },
+  "foundDialog": {
+    "title": "{{name}} gfunde?",
+    "text": "Markier dä Hase als gfunde, dass anderi nöd vergäbe sueched.",
+    "nickname": "Din Name (freiwillig)",
+    "nicknameHint": "Isch für alli sichtbar.",
+    "submitting": "Wird gspeicheret …",
+    "error": {
+      "alreadyFound": "Dä Hase isch scho gfunde worde.",
+      "notActive": "D Suechi lauft grad nöd.",
+      "rateLimited": "Z vill Versüech. Bitte wart en Moment.",
+      "invalidName": "Dä Name isch z lang oder het ungültigi Zeiche.",
+      "error": "Das het nöd klappet. Bitte probier nomal."
+    }
+  },
+  "live": {
+    "disconnected": "Verbindig unterbroche – es wird nomal probiert …"
   }
 }

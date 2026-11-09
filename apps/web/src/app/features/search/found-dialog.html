@@ -1,0 +1,46 @@
+<dialog #dialog class="found-dialog" (cancel)="cancel($event)" aria-labelledby="found-dialog-title">
+  @if (hare(); as hare) {
+    <form class="found-dialog__form" (submit)="submit($event)">
+      <h2 id="found-dialog-title" class="found-dialog__title">{{ title(hare) }}</h2>
+      <p class="found-dialog__text">{{ 'foundDialog.text' | transloco }}</p>
+
+      <label class="found-dialog__label" for="found-dialog-nickname">
+        {{ 'foundDialog.nickname' | transloco }}
+      </label>
+      <input
+        id="found-dialog-nickname"
+        class="found-dialog__input"
+        type="text"
+        name="nickname"
+        autocomplete="nickname"
+        [attr.maxlength]="maxNicknameLength"
+        [value]="nickname()"
+        (input)="onInput($event)"
+        aria-describedby="found-dialog-hint"
+      />
+      <p id="found-dialog-hint" class="found-dialog__hint">
+        {{ 'foundDialog.nicknameHint' | transloco }}
+      </p>
+
+      @if (state().error; as error) {
+        <p class="found-dialog__error" role="alert">
+          {{ 'foundDialog.error.' + error | transloco }}
+        </p>
+      }
+
+      <div class="found-dialog__actions">
+        <button type="button" class="button button--secondary" (click)="cancel()">
+          {{ 'common.cancel' | transloco }}
+        </button>
+        @if (state().error !== 'alreadyFound' && state().error !== 'notActive') {
+          <button type="submit" class="button" [disabled]="state().status === 'submitting'">
+            {{
+              (state().status === 'submitting' ? 'foundDialog.submitting' : 'hare.markFound')
+                | transloco
+            }}
+          </button>
+        }
+      </div>
+    </form>
+  }
+</dialog>

@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Oschterhas.Core.Events;
 using Oschterhas.Core.Gpx;
+using Oschterhas.Core.Hares;
 using Oschterhas.Core.Hosting;
 using Oschterhas.Core.Public;
 
@@ -18,6 +20,9 @@ public static class CoreServiceCollectionExtensions
         services.AddOptions<GpxParserOptions>();
         services.AddScoped<IHostResolver, HostResolver>();
         services.AddScoped<IPublicInstanceService, PublicInstanceService>();
+        services.AddScoped<IFoundService, FoundService>();
+        services.AddOptions<EventStreamOptions>();
+        services.AddSingleton<IInstanceEventBroadcaster, InMemoryInstanceEventBroadcaster>();
         return services;
     }
 }

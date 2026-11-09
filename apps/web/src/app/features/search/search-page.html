@@ -11,13 +11,26 @@
             @if (instance.status === 'Ended') {
               <p class="search__banner">{{ 'search.ended' | transloco }}</p>
             }
+            @if (live() === 'disconnected') {
+              <p class="search__live" role="status">{{ 'live.disconnected' | transloco }}</p>
+            }
           </header>
 
           <app-hare-map
             class="search__map"
             [hares]="hares()"
             [position]="position()"
+            [canMarkFound]="canMarkFound()"
             [ariaLabel]="'map.label' | transloco"
+            (foundRequested)="openFoundDialog($event)"
+          />
+
+          <app-found-dialog
+            [hare]="dialogHare()"
+            [state]="foundDialog()"
+            [lastNickname]="lastNickname()"
+            (submitted)="submitFound($event)"
+            (closed)="closeFoundDialog()"
           />
 
           <div class="search__actions">

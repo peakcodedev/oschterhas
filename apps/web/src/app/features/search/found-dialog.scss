@@ -1,0 +1,63 @@
+.found-dialog {
+  width: min(28rem, calc(100vw - 32px));
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+}
+
+.found-dialog::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+
+.found-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+}
+
+.found-dialog__title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.found-dialog__text,
+.found-dialog__hint {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.found-dialog__hint {
+  font-size: 0.875rem;
+}
+
+.found-dialog__label {
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.found-dialog__input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.found-dialog__input:focus-visible {
+  outline: 3px solid var(--color-position);
+  outline-offset: 1px;
+}
+
+.found-dialog__error {
+  margin: 0;
+  color: var(--color-error);
+}
+
+.found-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

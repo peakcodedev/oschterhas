@@ -6,3 +6,12 @@ type Schemas = components['schemas'];
 export type InstanceStatus = Schemas['InstanceStatus'];
 export type PublicInstance = Schemas['PublicInstanceDto'];
 export type PublicHare = Schemas['PublicHareDto'];
+export type HareFound = Schemas['HareFoundDto'];
+export type MarkFoundRequest = Schemas['MarkFoundRequest'];
+
+/** RFC 9457 problem with the API's stable error code. */
+export interface ApiProblem {
+  status?: number;
+  title?: string;
+  code?: string;
+}

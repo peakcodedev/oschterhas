@@ -1,5 +1,10 @@
 import { PublicHare, PublicInstance } from '../../../core/api/api-types';
-import { geolocationActions, publicInstanceApiActions, searchPageActions } from './search.actions';
+import {
+  geolocationActions,
+  instanceEventsActions,
+  publicInstanceApiActions,
+  searchPageActions,
+} from './search.actions';
 import { initialSearchState, searchFeature, SearchState } from './search.reducer';
 
 const hare = (number: number, found = false): PublicHare => ({
@@ -93,5 +98,99 @@ describe('search reducer', () => {
     );
 
     expect(state).toEqual(initialSearchState);
+  });
+
+  describe('found dialog', () => {
+    const loaded = publicInstanceApiActions.loadSucceeded({ instance: instance() });
+    const found = { hareId: 'h2', foundAt: '2027-03-28T11:00:00Z', foundBy: 'Urs' };
+
+    it('opens for a hare and selects it', () => {
+      const state = reduce(loaded, searchPageActions.foundDialogOpened({ hareId: 'h2' }));
+
+      expect(state.foundDialog).toEqual({ hareId: 'h2', status: 'open', error: null });
+      expect(searchFeature.selectDialogHare(select(state))?.number).toBe(2);
+    });
+
+    it('remembers the nickname while submitting', () => {
+      const state = reduce(
+        loaded,
+        searchPageActions.foundDialogOpened({ hareId: 'h2' }),
+        searchPageActions.markFoundSubmitted({ hareId: 'h2', nickname: 'Urs' }),
+      );
+
+      expect(state.foundDialog.status).toBe('submitting');
+      expect(state.nickname).toBe('Urs');
+    });
+
+    it('marks the hare and closes after success', () => {
+      const state = reduce(
+        loaded,
+        searchPageActions.markFoundSubmitted({ hareId: 'h2', nickname: 'Urs' }),
+        publicInstanceApiActions.markFoundSucceeded({ found }),
+      );
+
+      expect(state.foundDialog.status).toBe('closed');
+      expect(state.entities['h2']).toMatchObject({ foundAt: found.foundAt, foundBy: 'Urs' });
+      expect(searchFeature.selectProgress(select(state))).toEqual({ found: 2, total: 3 });
+    });
+
+    it('shows the failure reason', () => {
+      const state = reduce(
+        loaded,
+        searchPageActions.markFoundSubmitted({ hareId: 'h2', nickname: null }),
+        publicInstanceApiActions.markFoundFailed({ hareId: 'h2', reason: 'alreadyFound' }),
+      );
+
+      expect(state.foundDialog).toEqual({ hareId: 'h2', status: 'failed', error: 'alreadyFound' });
+    });
+
+    it('closes on cancel', () => {
+      const state = reduce(
+        loaded,
+        searchPageActions.foundDialogOpened({ hareId: 'h2' }),
+        searchPageActions.foundDialogClosed(),
+      );
+
+      expect(state.foundDialog.status).toBe('closed');
+    });
+  });
+
+  describe('live updates', () => {
+    const loaded = publicInstanceApiActions.loadSucceeded({ instance: instance() });
+
+    it('applies found and reset events', () => {
+      const found = reduce(
+        loaded,
+        instanceEventsActions.hareFound({
+          found: { hareId: 'h3', foundAt: '2027-03-28T12:00:00Z', foundBy: null },
+        }),
+      );
+      const reset = reduce(loaded, instanceEventsActions.hareReset({ hareId: 'h1' }));
+
+      expect(found.entities['h3']?.foundAt).toBe('2027-03-28T12:00:00Z');
+      expect(reset.entities['h1']).toMatchObject({ foundAt: null, foundBy: null });
+    });
+
+    it('ignores events for unknown hares', () => {
+      const state = reduce(loaded, instanceEventsActions.hareReset({ hareId: 'unknown' }));
+
+      expect(state.ids).toEqual(['h1', 'h2', 'h3']);
+    });
+
+    it('tracks the connection', () => {
+      expect(reduce().live).toBe('connecting');
+      expect(reduce(instanceEventsActions.connected()).live).toBe('connected');
+      expect(reduce(instanceEventsActions.disconnected()).live).toBe('disconnected');
+    });
+
+    it('allows marking only while the search is active', () => {
+      const active = reduce(loaded);
+      const ended = reduce(
+        publicInstanceApiActions.loadSucceeded({ instance: instance({ status: 'Ended' }) }),
+      );
+
+      expect(searchFeature.selectCanMarkFound(select(active))).toBe(true);
+      expect(searchFeature.selectCanMarkFound(select(ended))).toBe(false);
+    });
   });
 });

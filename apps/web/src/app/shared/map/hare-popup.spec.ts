@@ -54,4 +54,21 @@ describe('buildHarePopup', () => {
       '<img src=x onerror=alert(1)>',
     );
   });
+
+  it('offers a found button for hidden hares when marking is allowed', () => {
+    const onMarkFound = vi.fn();
+    const popup = buildHarePopup(hare(), t, onMarkFound);
+
+    const button = popup.querySelector<HTMLButtonElement>('button.hare-popup__found');
+    expect(button?.textContent).toBe('hare.markFound');
+    button?.click();
+    expect(onMarkFound).toHaveBeenCalledOnce();
+  });
+
+  it('offers no found button for found hares or without permission', () => {
+    expect(
+      buildHarePopup(hare({ foundAt: '2027-03-28T10:00:00Z' }), t, vi.fn()).querySelector('button'),
+    ).toBeNull();
+    expect(buildHarePopup(hare(), t).querySelector('button')).toBeNull();
+  });
 });

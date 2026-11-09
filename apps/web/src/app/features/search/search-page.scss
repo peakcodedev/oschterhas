@@ -28,6 +28,12 @@
   background: var(--color-info-bg);
 }
 
+.search__live {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
 .search__map {
   min-height: 0;
 }

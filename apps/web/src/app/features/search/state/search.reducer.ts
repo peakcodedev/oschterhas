@@ -1,8 +1,21 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
-import { PublicHare } from '../../../core/api/api-types';
-import { geolocationActions, publicInstanceApiActions, searchPageActions } from './search.actions';
-import { GeoPosition, InstanceInfo, LoadStatus, PositionFailure, Progress } from './search.models';
+import { HareFound, PublicHare } from '../../../core/api/api-types';
+import {
+  geolocationActions,
+  instanceEventsActions,
+  publicInstanceApiActions,
+  searchPageActions,
+} from './search.actions';
+import {
+  FoundDialogState,
+  GeoPosition,
+  InstanceInfo,
+  LiveStatus,
+  LoadStatus,
+  PositionFailure,
+  Progress,
+} from './search.models';
 
 export interface SearchState extends EntityState<PublicHare> {
   loadStatus: LoadStatus;
@@ -12,11 +25,17 @@ export interface SearchState extends EntityState<PublicHare> {
   locating: boolean;
   position: GeoPosition | null;
   positionError: PositionFailure | null;
+  foundDialog: FoundDialogState;
+  /** Last nickname entered, offered again in the next dialog. */
+  nickname: string | null;
+  live: LiveStatus;
 }
 
 export const hareAdapter = createEntityAdapter<PublicHare>({
   sortComparer: (a, b) => a.number - b.number,
 });
+
+const closedDialog: FoundDialogState = { hareId: null, status: 'closed', error: null };
 
 export const initialSearchState: SearchState = hareAdapter.getInitialState({
   loadStatus: 'idle',
@@ -25,7 +44,13 @@ export const initialSearchState: SearchState = hareAdapter.getInitialState({
   locating: false,
   position: null,
   positionError: null,
+  foundDialog: closedDialog,
+  nickname: null,
+  live: 'connecting',
 });
+
+const applyFound = (state: SearchState, { hareId, foundAt, foundBy }: HareFound): SearchState =>
+  hareAdapter.updateOne({ id: hareId, changes: { foundAt, foundBy } }, state);
 
 export const searchFeature = createFeature({
   name: 'search',
@@ -52,6 +77,38 @@ export const searchFeature = createFeature({
       ...state,
       loadStatus: reason,
     })),
+    on(searchPageActions.foundDialogOpened, (state, { hareId }): SearchState => ({
+      ...state,
+      foundDialog: { hareId, status: 'open', error: null },
+    })),
+    on(searchPageActions.foundDialogClosed, (state): SearchState => ({
+      ...state,
+      foundDialog: closedDialog,
+    })),
+    on(searchPageActions.markFoundSubmitted, (state, { hareId, nickname }): SearchState => ({
+      ...state,
+      nickname,
+      foundDialog: { hareId, status: 'submitting', error: null },
+    })),
+    on(publicInstanceApiActions.markFoundSucceeded, (state, { found }): SearchState => ({
+      ...applyFound(state, found),
+      foundDialog: closedDialog,
+    })),
+    on(publicInstanceApiActions.markFoundFailed, (state, { hareId, reason }): SearchState => ({
+      ...state,
+      foundDialog: { hareId, status: 'failed', error: reason },
+    })),
+    on(instanceEventsActions.hareFound, (state, { found }): SearchState =>
+      applyFound(state, found),
+    ),
+    on(instanceEventsActions.hareReset, (state, { hareId }): SearchState =>
+      hareAdapter.updateOne({ id: hareId, changes: { foundAt: null, foundBy: null } }, state),
+    ),
+    on(instanceEventsActions.connected, (state): SearchState => ({ ...state, live: 'connected' })),
+    on(instanceEventsActions.disconnected, (state): SearchState => ({
+      ...state,
+      live: 'disconnected',
+    })),
     on(searchPageActions.locateMeClicked, (state): SearchState => ({
       ...state,
       locating: true,
@@ -70,14 +127,23 @@ export const searchFeature = createFeature({
     })),
     on(searchPageActions.closed, (): SearchState => initialSearchState),
   ),
-  extraSelectors: ({ selectSearchState, selectServerProgress, selectInstance }) => {
-    const { selectAll } = hareAdapter.getSelectors(selectSearchState);
+  extraSelectors: ({
+    selectSearchState,
+    selectServerProgress,
+    selectInstance,
+    selectFoundDialog,
+  }) => {
+    const { selectAll, selectEntities } = hareAdapter.getSelectors(selectSearchState);
     const selectHares = createSelector(selectAll, (hares) => hares);
     return {
       selectHares,
       selectHaresVisible: createSelector(
         selectInstance,
         (instance) => instance !== null && instance.status !== 'Draft',
+      ),
+      selectCanMarkFound: createSelector(
+        selectInstance,
+        (instance) => instance?.status === 'Active',
       ),
       /** Counted from the loaded hares, so live updates are reflected; server counts as fallback. */
       selectProgress: createSelector(
@@ -87,6 +153,9 @@ export const searchFeature = createFeature({
           hares.length > 0
             ? { found: hares.filter((h) => h.foundAt !== null).length, total: hares.length }
             : server,
+      ),
+      selectDialogHare: createSelector(selectFoundDialog, selectEntities, (dialog, entities) =>
+        dialog.hareId ? (entities[dialog.hareId] ?? null) : null,
       ),
     };
   },

@@ -18,13 +18,15 @@
   },
   "common": {
     "loading": "Wird geladen …",
-    "retry": "Nochmals versuchen"
+    "retry": "Nochmals versuchen",
+    "cancel": "Abbrechen"
   },
   "hare": {
     "defaultName": "Hase {{number}}",
     "hidden": "Noch versteckt",
     "found": "Gefunden",
-    "foundBy": "Gefunden von {{name}}"
+    "foundBy": "Gefunden von {{name}}",
+    "markFound": "Gefunden!"
   },
   "map": {
     "label": "Karte mit den versteckten Hasen",
@@ -40,5 +42,22 @@
     "denied": "Der Standortzugriff wurde nicht erlaubt.",
     "unavailable": "Die Position konnte nicht bestimmt werden.",
     "unsupported": "Dieses Gerät kann die Position nicht bestimmen."
+  },
+  "foundDialog": {
+    "title": "{{name}} gefunden?",
+    "text": "Markiere den Hasen als gefunden, damit andere nicht umsonst suchen.",
+    "nickname": "Dein Name (freiwillig)",
+    "nicknameHint": "Ist für alle sichtbar.",
+    "submitting": "Wird gespeichert …",
+    "error": {
+      "alreadyFound": "Dieser Hase wurde schon gefunden.",
+      "notActive": "Die Suche läuft gerade nicht.",
+      "rateLimited": "Zu viele Versuche. Bitte warte einen Moment.",
+      "invalidName": "Der Name ist zu lang oder enthält ungültige Zeichen.",
+      "error": "Das hat nicht geklappt. Bitte versuche es nochmals."
+    }
+  },
+  "live": {
+    "disconnected": "Verbindung unterbrochen – neuer Versuch läuft …"
   }
 }

@@ -230,7 +230,9 @@ Relevant ist nur `<wpt>`. Referenz ist der echte swisstopo-App-Export `samples/s
 
 - `GET /api/public/events` auf der Instanz-Subdomain liefert SSE.
 - `IInstanceEventBroadcaster` (Core) mit In-Memory-Kanälen pro Instanz. Bei mehreren API-Instanzen später PostgreSQL `LISTEN/NOTIFY`.
-- Events: `hare.found`, `hare.reset`, `hares.changed` (nach Import/Bearbeitung → neu laden), `instance.status`.
+- Events: `ready` (sofort, damit Header gesendet werden), `hare.found`, `hare.reset`, `hares.changed` (nach Import/Bearbeitung → neu laden), `instance.status`, `ping` (alle 25 s).
+- Pro Verbindung ein begrenzter Kanal (100 Ereignisse, älteste fallen weg). Verpasste Ereignisse sind unkritisch, weil der Client nach jedem Wiederverbinden alles neu lädt.
+- Client: `EventSource` in einem NgRx-Effect. Der Browser verbindet sich bei kurzen Unterbrüchen selbst neu; bei endgültig geschlossener Verbindung Neuversuch mit Backoff (1 s, 2 s, 4 s … max. 30 s). Ein Wächter erkennt „halboffene" Verbindungen (z. B. Netzwechsel am Handy, oder der Dev-Proxy nach einem API-Neustart) an 60 s Funkstille.
 
 ## Sicherheit
 

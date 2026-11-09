@@ -10,10 +10,12 @@ export function hareDisplayName(hare: PublicHare, t: Translate): string {
 /**
  * Popup content as DOM nodes. Texts are set via textContent only (never innerHTML),
  * so names and descriptions from GPX files cannot inject markup.
+ * The "found" button appears only when `onMarkFound` is given and the hare is still hidden.
  */
 export function buildHarePopup(
   hare: PublicHare,
   t: Translate,
+  onMarkFound?: () => void,
   doc: Document = document,
 ): HTMLElement {
   const root = doc.createElement('div');
@@ -41,6 +43,15 @@ export function buildHarePopup(
       : t('hare.found')
     : t('hare.hidden');
   root.append(status);
+
+  if (onMarkFound && !hare.foundAt) {
+    const button = doc.createElement('button');
+    button.type = 'button';
+    button.className = 'button hare-popup__found';
+    button.textContent = t('hare.markFound');
+    button.addEventListener('click', onMarkFound);
+    root.append(button);
+  }
 
   return root;
 }

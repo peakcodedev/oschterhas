@@ -73,7 +73,7 @@ Gespeichert werden nur **einzelne Wegpunkte**, keine Routen. Den Weg suchen sich
 
 1. Sollen Suchende die **exakte Position** sehen oder nur einen Umkreis? (Annahme: exakt)
 2. Darf ein gefundener Hase von Suchenden wieder auf „versteckt" gesetzt werden? (Annahme: nein, nur Organisator/innen)
-3. Missbrauchsschutz beim Markieren ohne Login? (Annahme: Rate-Limit pro IP + Rücksetzen durch Organisator/in)
+3. Missbrauchsschutz beim Markieren ohne Login? (Umgesetzt: 30 Markierungen pro Minute und IP, grosszügig wegen Mobilfunk-NAT; Rücksetzen durch Organisator/in folgt in M4)
 4. Hosting in der Schweiz: welcher Anbieter? Der DNS-Anbieter von `oschterhas.li` muss Wildcard-Einträge und eine API für DNS-01 (Caddy-Modul) unterstützen.
 5. Was zeigt `oschterhas.li` selbst? (Annahme: kurze Info-Seite ohne Liste der Instanzen)
 6. Sprache der Keycloak-Einladungsmail: Realm `parokia` ist nur Deutsch. Für Oschterhas auch Englisch? (Annahme: nur Deutsch, Standardvorlage)

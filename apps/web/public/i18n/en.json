@@ -18,13 +18,15 @@
   },
   "common": {
     "loading": "Loading …",
-    "retry": "Try again"
+    "retry": "Try again",
+    "cancel": "Cancel"
   },
   "hare": {
     "defaultName": "Bunny {{number}}",
     "hidden": "Still hidden",
     "found": "Found",
-    "foundBy": "Found by {{name}}"
+    "foundBy": "Found by {{name}}",
+    "markFound": "Found it!"
   },
   "map": {
     "label": "Map of the hidden bunnies",
@@ -40,5 +42,22 @@
     "denied": "Location access was not allowed.",
     "unavailable": "Your location could not be determined.",
     "unsupported": "This device cannot determine its location."
+  },
+  "foundDialog": {
+    "title": "Found {{name}}?",
+    "text": "Mark the bunny as found so others don't search in vain.",
+    "nickname": "Your name (optional)",
+    "nicknameHint": "Visible to everyone.",
+    "submitting": "Saving …",
+    "error": {
+      "alreadyFound": "This bunny has already been found.",
+      "notActive": "The hunt is not running right now.",
+      "rateLimited": "Too many attempts. Please wait a moment.",
+      "invalidName": "The name is too long or contains invalid characters.",
+      "error": "That didn't work. Please try again."
+    }
+  },
+  "live": {
+    "disconnected": "Connection lost – reconnecting …"
   }
 }

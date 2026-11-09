@@ -12,6 +12,7 @@ public static class DataServiceCollectionExtensions
 
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IInstanceRepository, InstanceRepository>();
+        services.AddScoped<IHareRepository, HareRepository>();
         return services;
     }
 }
