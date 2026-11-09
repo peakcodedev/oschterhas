@@ -21,6 +21,8 @@ export const routes: Routes = [
     loadComponent: () => import('./features/admin/admin-shell').then((m) => m.AdminShell),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'instanzen' },
+      // Target of the invitation link (registered redirect URI at Peakcode Identity).
+      { path: 'login', redirectTo: 'instanzen' },
       {
         path: 'instanzen',
         loadComponent: () =>

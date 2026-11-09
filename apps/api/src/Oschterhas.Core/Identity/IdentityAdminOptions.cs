@@ -17,7 +17,10 @@ public sealed class IdentityAdminOptions
     /// <summary>Issuer stored for invited users; must equal the <c>iss</c> claim of logins (Oidc:Authority).</summary>
     public string Issuer { get; set; } = string.Empty;
 
-    /// <summary>Client and redirect of the "set your password" link in the invitation e-mail.</summary>
+    /// <summary>
+    /// Client and redirect of the "set your password" link in the invitation e-mail. The redirect must be a
+    /// registered redirect URI of that client (Oschterhas: <c>{admin URL}/login</c>), otherwise Keycloak answers 400.
+    /// </summary>
     public string InvitationClientId { get; set; } = "oschterhas-bff";
 
     public string InvitationRedirectUri { get; set; } = string.Empty;

@@ -230,7 +230,8 @@
     "user": {
       "cannot_demote_self": "Du kannst dich nicht selbst sperren oder herabstufen.",
       "not_found": "Diesen Benutzer gibt es nicht."
-    }
+    },
+    "csrf_invalid": "Das Sicherheits-Token fehlt oder ist abgelaufen. Bitte lade die Seite neu."
   },
   "gpxWarnings": {
     "gpx": {

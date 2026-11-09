@@ -51,7 +51,7 @@ public sealed class AuthController(IAntiforgery antiforgery) : ControllerBase
     /// </summary>
     [HttpPost("logout")]
     [Authorize]
-    [ValidateAntiForgeryToken]
+    [ValidateCsrfToken]
     [ProducesResponseType(StatusCodes.Status302Found)]
     public IActionResult Logout() =>
         SignOut(

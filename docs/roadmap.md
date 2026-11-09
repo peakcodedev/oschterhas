@@ -56,7 +56,8 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [x] Hasen bearbeiten (Drag, umbenennen, löschen, hinzufügen), Gefunden zurücksetzen
 - [x] Suche starten/beenden, Adresse + QR-Code (druckbar), Liste „nur nicht gefundene"
 - [x] Konten-Übersicht (sperren, Plattform-Admin setzen)
-- [ ] Im Browser mit echtem Keycloak-Login durchgespielt (Login-Seite und Weiterleitung geprüft; Anmeldung selbst steht aus)
+- [x] Im Browser mit echtem Keycloak-Login durchgespielt: Login als Plattform-Admin, Suche anlegen, GPX-Import (Zusammenführen/Ersetzen), Hase umbenennen, Suche starten, Organisatorin einladen (Mail in Mailpit), Gefunden zurücksetzen (live auf der Suchseite), Benutzerseite
+- [ ] Noch von Hand prüfen: Hase per Drag verschieben, QR-Code drucken, Login als Organisator/in (Otto) und Ablehnung ohne Zugang (Nina), Abmelden
 
 ## M4b – Custom Domains
 - [ ] Domain-Normalisierung und -Validierung (IDN/Punycode, keine IPs, nicht `oschterhas.li`) in Core + Tests

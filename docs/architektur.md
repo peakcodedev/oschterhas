@@ -205,7 +205,9 @@ Relevant ist nur `<wpt>`. Referenz ist der echte swisstopo-App-Export `samples/s
 - Berechtigungen prüfen die Core-Services (`InstanceAccess`), nicht Controller-Attribute: so sind sie mit Unit-Tests abgedeckt.
 - **Organisator/in erfassen** (durch Plattform-Admin): E-Mail + Name eingeben → Core ruft `IIdentityAdminClient` → Keycloak-Benutzer anlegen (oder vorhandenen per E-Mail finden) → `execute-actions-email` (`UPDATE_PASSWORD`) → `AppUser` mit Issuer + Subject anlegen → Zuordnung `InstanceOrganizer`.
 - **Plattform-Admin**: Flag `IsPlatformAdmin` am `AppUser`. Erster Admin per Entwicklungs-Seed (fester Testbenutzer) bzw. in Produktion per Konfiguration `Auth:InitialPlatformAdmins` (Liste von Subjects).
-- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax`, **ohne `Domain`-Attribut** (gilt nur für `admin.`, nicht für Instanz-Subdomains). Antiforgery-Token als Header `X-XSRF-TOKEN`.
+- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax`, **ohne `Domain`-Attribut** (gilt nur für `admin.`, nicht für Instanz-Subdomains). Antiforgery-Token als Header `X-XSRF-TOKEN`, geprüft vom eigenen Filter `ValidateCsrfToken` (MVCs `[AutoValidateAntiforgeryToken]` braucht die Views-Dienste).
+- OIDC mit `ResponseMode = query` und `SameSite=Lax` für die Correlation-/Nonce-Cookies. Der .NET-Standard `form_post` führt zu einem Cross-Site-POST, bei dem der Browser diese Cookies nicht mitschickt.
+- Einladungslink: Keycloak akzeptiert als `redirect_uri` nur registrierte Adressen; Oschterhas nutzt `{Admin-URL}/login` (im Realm registriert, Angular leitet auf `/instanzen` weiter).
 - Autorisierung: Fallback-Policy „angemeldet" für alles ausser `[AllowAnonymous]` (öffentliche Endpunkte, Login, Health). Plattform-Admin und Zuordnung zur Instanz prüft Core bei jeder Operation.
 
 ## Frontend: Aufbau & NgRx

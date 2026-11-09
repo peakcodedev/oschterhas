@@ -54,6 +54,9 @@ internal static class AuthenticationSetup
                 options.ClientId = oidc.ClientId;
                 options.ClientSecret = oidc.ClientSecret;
                 options.ResponseType = "code";
+                // Code in the query of a normal redirect (default would be form_post: a cross-site POST that does
+                // not carry the SameSite=Lax correlation and nonce cookies).
+                options.ResponseMode = "query";
                 options.UsePkce = true;
                 options.CallbackPath = CallbackPath;
                 options.SignedOutCallbackPath = "/api/auth/signout-callback";
@@ -64,7 +67,11 @@ internal static class AuthenticationSetup
                 options.SaveTokens = true;
                 options.Scope.Add("email");
                 options.TokenValidationParameters.NameClaimType = "name";
+                // ASP.NET sets these helper cookies to SameSite=None, which browsers reject without Secure
+                // (local HTTP). With ResponseMode "query" the callback is a top-level GET, so Lax is enough.
+                options.CorrelationCookie.SameSite = SameSiteMode.Lax;
                 options.CorrelationCookie.SecurePolicy = securePolicy;
+                options.NonceCookie.SameSite = SameSiteMode.Lax;
                 options.NonceCookie.SecurePolicy = securePolicy;
                 options.Events.OnTokenValidated = OnTokenValidatedAsync;
                 options.Events.OnRemoteFailure = context =>

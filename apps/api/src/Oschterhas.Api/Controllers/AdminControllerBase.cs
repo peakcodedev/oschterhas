@@ -14,7 +14,7 @@ namespace Oschterhas.Api.Controllers;
 [ApiController]
 [Authorize]
 [RequireAdminHost]
-[AutoValidateAntiforgeryToken]
+[ValidateCsrfToken]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized, "application/problem+json")]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden, "application/problem+json")]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]

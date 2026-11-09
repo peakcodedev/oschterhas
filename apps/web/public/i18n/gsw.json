@@ -230,7 +230,8 @@
     "user": {
       "cannot_demote_self": "Du chasch di nöd sälber sperre oder abestufe.",
       "not_found": "Dä Benutzer gits nöd."
-    }
+    },
+    "csrf_invalid": "S Sicherheits-Token fehlt oder isch abgloffe. Bitte lad d Siite neu."
   },
   "gpxWarnings": {
     "gpx": {

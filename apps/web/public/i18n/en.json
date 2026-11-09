@@ -230,7 +230,8 @@
     "user": {
       "cannot_demote_self": "You cannot disable or demote yourself.",
       "not_found": "This user does not exist."
-    }
+    },
+    "csrf_invalid": "The security token is missing or expired. Please reload the page."
   },
   "gpxWarnings": {
     "gpx": {

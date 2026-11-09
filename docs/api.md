@@ -18,7 +18,7 @@ Rollen: **PA** = Plattform-Admin, **ORG** = der Instanz zugeordnete Organisator/
 | GET | `/auth/me` | 🔒 `{ id, email, displayName, isPlatformAdmin }`; setzt das Cookie `XSRF-TOKEN` für Angular; ohne Session `401` |
 | POST | `/auth/logout` | 🔒 als **Formular-POST** mit Feld `__RequestVerificationToken`, damit der Browser dem Redirect zum Keycloak-Logout folgen kann |
 
-Alle Verwaltungs-Endpunkte antworten ohne Session mit `401` (nie mit Redirect), auf anderen Hosts mit `404` (`admin.not_available`).
+Alle Verwaltungs-Endpunkte antworten ohne Session mit `401` (nie mit Redirect). Mit Session, aber auf einem anderen Host als `admin.` → `404` (`admin.not_available`); da das Session-Cookie nur für den Admin-Host gilt, kommt auf Instanz-Adressen in der Praxis immer `401`. Ändernde Requests ohne gültiges CSRF-Token → `403` (`csrf_invalid`).
 
 ## Instanzen (Admin-Host)
 

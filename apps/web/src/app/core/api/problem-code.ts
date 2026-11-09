@@ -37,6 +37,7 @@ const KNOWN_CODES = new Set([
   'user.cannot_demote_self',
   'user.not_found',
   'rate_limited',
+  'csrf_invalid',
   'unauthorized',
   'network',
 ]);
