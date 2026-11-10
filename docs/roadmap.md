@@ -68,7 +68,7 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [x] `/internal/tls/allowed` für Caddy (nur aus `InternalNetwork:AllowedNetworks`, sonst `404`)
 - [x] Admin-UI: Domain eintragen, DNS-Anleitung, Status, „Jetzt prüfen", entfernen; QR-Code/Link mit `publicUrl` (seit M4)
 - [x] Angular: unbekannter Host → Suchansicht, `404` → „Suche nicht gefunden" (in M1 erledigt)
-- [ ] Im Browser mit lokaler Custom Domain durchgespielt
+- [x] Im Browser mit lokaler Custom Domain durchgespielt: Domain als URL eingegeben (normalisiert), „Jetzt prüfen" mit echter HTTP-Prüfung → aktiv, Suche unter der Domain erreichbar, QR-Code wechselt, Fehlermeldungen (vergeben, Plattform-Domain, IP), Entfernen wirkt sofort
 
 ## M5 – Mehrsprachigkeit & PWA
 - [ ] Sprachwahl im Store, Browser-Sprache als Standard (Transloco ist seit M0 eingerichtet); Datumsformate (`DatePipe`) in der gewählten Sprache (Locale-Daten de-CH/en registrieren)
