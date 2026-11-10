@@ -14,7 +14,7 @@ namespace Oschterhas.Api.Controllers;
 [ApiController]
 [Route("api/auth")]
 [RequireAdminHost]
-public sealed class AuthController(IAntiforgery antiforgery) : ControllerBase
+public sealed class AuthController(IAntiforgery antiforgery, ILogger<AuthController> logger) : ControllerBase
 {
     /// <summary>Starts the login at Peakcode Identity. <paramref name="returnUrl"/> must be a local path.</summary>
     [HttpGet("login")]
@@ -53,11 +53,14 @@ public sealed class AuthController(IAntiforgery antiforgery) : ControllerBase
     [Authorize]
     [ValidateCsrfToken]
     [ProducesResponseType(StatusCodes.Status302Found)]
-    public IActionResult Logout() =>
-        SignOut(
+    public IActionResult Logout()
+    {
+        logger.LogInformation("Logout: user {UserId}", HttpContext.GetCurrentUser().Id);
+        return SignOut(
             new AuthenticationProperties { RedirectUri = "/" },
             CookieAuthenticationDefaults.AuthenticationScheme,
             OpenIdConnectDefaults.AuthenticationScheme);
+    }
 }
 
 internal static class MeMapping

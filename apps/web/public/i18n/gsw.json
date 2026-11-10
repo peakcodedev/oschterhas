@@ -287,5 +287,28 @@
   "update": {
     "ready": "E neui Version isch da.",
     "reload": "Neu lade"
+  },
+  "privacy": {
+    "title": "Dateschutz",
+    "back": "Zrugg",
+    "intro": "Oschterhas isch e App für Oschtersuechene im Gländ. Mir speichered so wenig Date wie möglich.",
+    "searchers": {
+      "title": "Für Suechendi",
+      "noAccount": "Du bruuchsch kei Konto.",
+      "found": "Wänn du en Hase als gfunde markiersch, speichered mir de Ziitpunkt und – nur wänn du ihn agisch – din Spitzname. De Spitzname gsehnd alli, wo die Suechi öffned.",
+      "noIp": "Dini IP-Adrässe speichered mir nöd. Si wird nur churz im Arbetsspeicher bruucht, zum Missbruuch bremse.",
+      "location": "Din Standort bruucht nur din Browser, zum ihn uf de Charte zeige. Er wird nie an Oschterhas übertreit.",
+      "tiles": "D Chartebilder ladet din Browser diräkt vo swisstopo (Bundesamt für Landestopografie) oder OpenStreetMap. Die Dienscht gsehnd debii dini IP-Adrässe.",
+      "storage": "Di gwählti Sprach merkt sich din Browser lokal."
+    },
+    "organizers": {
+      "title": "Für Organisatorinne und Organisatore",
+      "login": "S Amelde lauft über Peakcode Identity. Oschterhas überchunnt debii kei Passwörter.",
+      "data": "Gspeicheret werded Name, E-Mail-Adrässe, di zueteilte Suechene, de Ziitpunkt vo de letschte Amäldig und Protokolliiträg zu Änderige (z. B. Import, Zruggsetze)."
+    },
+    "hosting": {
+      "title": "Speicherort",
+      "text": "Date und Backups werded i de Schwiiz gspeicheret."
+    }
   }
 }

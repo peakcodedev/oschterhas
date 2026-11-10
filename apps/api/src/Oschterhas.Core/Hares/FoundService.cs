@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Oschterhas.Common.Results;
 using Oschterhas.Core.Events;
 using Oschterhas.Data;
@@ -9,7 +10,8 @@ namespace Oschterhas.Core.Hares;
 internal sealed class FoundService(
     IHareRepository hares,
     IInstanceEventBroadcaster events,
-    TimeProvider timeProvider) : IFoundService
+    TimeProvider timeProvider,
+    ILogger<FoundService> logger) : IFoundService
 {
     public async Task<Result<HareFoundDto>> MarkFoundAsync(
         Guid instanceId,
@@ -62,6 +64,8 @@ internal sealed class FoundService(
             return Error.Conflict("hare.already_found", "This hare has already been found.");
         }
 
+        // No nickname in the log: it is optional personal data and only needed in the database.
+        logger.LogInformation("Hare {HareId} of instance {InstanceId} marked as found", hare.Id, instanceId);
         events.Publish(instanceId, new InstanceEvent(
             InstanceEvent.HareFound,
             new HareFoundEventData(hare.Id, now, cleanNickname.Value)));

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Oschterhas.Common.Results;
@@ -25,7 +26,7 @@ public class OrganizerServiceTests
             _users,
             _identity,
             Options.Create(new IdentityAdminOptions { Issuer = "http://kc/realms/oschterhas" }),
-            new FakeTimeProvider());
+            new FakeTimeProvider(), NullLogger<OrganizerService>.Instance);
     }
 
     [Fact]

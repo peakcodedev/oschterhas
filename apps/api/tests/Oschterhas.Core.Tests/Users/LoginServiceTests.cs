@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Oschterhas.Core.Users;
@@ -14,7 +15,7 @@ public class LoginServiceTests
     private readonly LoginService _service;
 
     public LoginServiceTests() =>
-        _service = new LoginService(_users, Options.Create(_options), new FakeTimeProvider(Now));
+        _service = new LoginService(_users, Options.Create(_options), new FakeTimeProvider(Now), NullLogger<LoginService>.Instance);
 
     [Fact]
     public async Task KnownActiveUser_SignsIn_AndDisplayDataIsUpdated()

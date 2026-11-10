@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Oschterhas.Common.Results;
 using Oschterhas.Core.Events;
@@ -15,7 +16,8 @@ internal sealed class InstanceAdminService(
     IHostCacheInvalidator hostCache,
     IInstanceEventBroadcaster events,
     IOptions<HostingOptions> hosting,
-    TimeProvider timeProvider) : IInstanceAdminService
+    TimeProvider timeProvider,
+    ILogger<InstanceAdminService> logger) : IInstanceAdminService
 {
     private static readonly Error SlugTaken = Error.Conflict("instance.slug_taken", "This address is already taken.");
 
@@ -79,6 +81,7 @@ internal sealed class InstanceAdminService(
         }
 
         hostCache.Invalidate();
+        logger.LogInformation("Instance {InstanceId} ({Slug}) created by {ActorId}", instance.Id, instance.Slug, actor.Id);
         return instance.ToDetailDto(Hosting);
     }
 
@@ -139,6 +142,8 @@ internal sealed class InstanceAdminService(
             hostCache.Invalidate();
         }
 
+        logger.LogInformation("Instance {InstanceId} updated by {ActorId} (slug {Slug})", instance.Id, actor.Id, instance.Slug);
+
         // Searchers reload and see the new name and description.
         events.Publish(instance.Id, new InstanceEvent(InstanceEvent.InstanceStatus, new { status = instance.Status }));
         return instance.ToDetailDto(Hosting);
@@ -177,6 +182,7 @@ internal sealed class InstanceAdminService(
         }
 
         events.Publish(instance.Id, new InstanceEvent(InstanceEvent.InstanceStatus, new { status = instance.Status }));
+        logger.LogInformation("Instance {InstanceId} status set to {Status} by {ActorId}", instance.Id, instance.Status, actor.Id);
         return instance.ToDetailDto(Hosting);
     }
 
@@ -197,6 +203,7 @@ internal sealed class InstanceAdminService(
         await instances.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         hostCache.Invalidate();
         events.Publish(instance.Id, new InstanceEvent(InstanceEvent.InstanceStatus, new { status = "Deleted" }));
+        logger.LogWarning("Instance {InstanceId} ({Slug}) deleted by {ActorId}", instance.Id, instance.Slug, actor.Id);
         return Result.Success();
     }
 

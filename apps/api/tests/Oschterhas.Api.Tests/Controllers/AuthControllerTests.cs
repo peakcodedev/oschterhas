@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging.Abstractions;
 using Oschterhas.Api.Controllers;
 
 namespace Oschterhas.Api.Tests.Controllers;
@@ -18,7 +19,7 @@ public class AuthControllerTests
     [InlineData("/\\evil.example", "/")]
     public void Login_OnlyRedirectsToLocalPaths(string? returnUrl, string expected)
     {
-        var controller = new AuthController(Substitute.For<IAntiforgery>())
+        var controller = new AuthController(Substitute.For<IAntiforgery>(), NullLogger<AuthController>.Instance)
         {
             ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() },
         };

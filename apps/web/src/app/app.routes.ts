@@ -11,6 +11,11 @@ import { searchFeature } from './features/search/state/search.reducer';
 
 export const routes: Routes = [
   {
+    // Privacy notice on every host (search, administration, landing page).
+    path: 'datenschutz',
+    loadComponent: () => import('./features/privacy/privacy-page').then((m) => m.PrivacyPage),
+  },
+  {
     path: '',
     canMatch: [hostIs('admin')],
     providers: [

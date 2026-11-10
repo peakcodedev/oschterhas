@@ -52,7 +52,7 @@ npm run lint
 npm run format:check
 npm run build
 npm run licenses:check
-npm run api:types                                         # TS-Typen aus OpenAPI neu erzeugen (API muss laufen)
+npm run api:types                                         # TS-Typen aus OpenAPI 3.0 neu erzeugen (API muss laufen)
 ```
 
 Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed (leere DB): `tann` (aktiv, Custom Domain `ostern.cevi-test.localhost`), `vorschau` (Entwurf), `vorbei` (beendet). DB zurücksetzen: `docker compose down -v && docker compose up -d db`. CI: `.github/workflows/ci.yml` führt dieselben Prüfungen aus.
@@ -67,7 +67,9 @@ Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed 
 - **Identity**: Benutzer über **Issuer + Subject** zuordnen, nie nur über E-Mail. Rollen leben in der Oschterhas-DB, nicht in Keycloak. Keine Selbstregistrierung; Organisator/innen werden eingeladen.
 - **Frontend-State**: fachliches State über NgRx. Komponenten machen keine HTTP-Aufrufe; HTTP und SSE laufen in Effects. Effects-Dateien exportieren **nur Effects** (die Routen geben das ganze Modul an `provideEffects`); Hilfsfunktionen in eigene Dateien.
 - **Nach Frontend-Änderungen** neben `npm test` immer `npx tsc -p tsconfig.app.json --noEmit` oder `npm run build`: Vitest findet nicht jeden Typfehler, und der Dev-Server zeigt dann still die alte Version.
-- **Sicherheit**: neue Endpunkte gegen `docs/owasp-checkliste.md` prüfen.
+- **Sicherheit**: neue Endpunkte gegen `docs/owasp-checkliste.md` prüfen. Prüfstand und Funde: `docs/owasp-bericht.md`.
+- **CSP**: keine Inline-Skripte und keine Inline-Event-Handler (`onclick=` usw.), kein `eval`. Neue externe Quellen (Kacheln, Schriften) in `SecurityHeaders.cs` **und** in den Dev-Server-Headern (`angular.json`) eintragen; der Dev-Server nutzt dieselbe CSP, damit Verstösse sofort auffallen.
+- **Logging**: Sicherheits- und Audit-Einträge mit IDs, nie mit IP-Adressen, Spitznamen, E-Mails, Tokens oder Cookies.
 - **Secrets**: nie ins Repo. Lokal `dotnet user-secrets`, in Produktion Umgebungsvariablen. `.env` im Identity-Repo nicht lesen.
 
 ## Konventionen

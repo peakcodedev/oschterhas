@@ -81,6 +81,7 @@ Gespeichert werden nur **einzelne Wegpunkte**, keine Routen. Den Weg suchen sich
 8. Wer darf die Custom Domain eintragen? (Annahme: nur Plattform-Admin)
 9. Soll `duernten.oschterhas.li` auf die Custom Domain weiterleiten, sobald diese verifiziert ist? (Annahme: nein, beide Adressen funktionieren)
 10. Die automatisch von swisstopo ergänzten Adressen in `<desc>` (z. B. „(ZH) - Dürnten"): übernehmen oder verwerfen? (Annahme: übernehmen; Organisator/innen können sie in der Vorschau löschen)
+11. Wer betreibt Oschterhas (Verantwortliche Stelle und Kontakt für den Datenschutzhinweis)?
 
 ## Geklärt
 

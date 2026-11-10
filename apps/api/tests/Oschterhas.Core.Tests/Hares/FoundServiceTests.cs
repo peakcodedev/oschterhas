@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Time.Testing;
 using NSubstitute.ExceptionExtensions;
 using Oschterhas.Core.Events;
@@ -21,7 +22,7 @@ public class FoundServiceTests
     {
         _hare = new Hare { Id = Guid.NewGuid(), InstanceId = _instance.Id, Instance = _instance, Number = 1, Lat = 47, Lon = 8 };
         _hares.FindForUpdateAsync(_instance.Id, _hare.Id, Arg.Any<CancellationToken>()).Returns(_hare);
-        _service = new FoundService(_hares, _events, new FakeTimeProvider(Now));
+        _service = new FoundService(_hares, _events, new FakeTimeProvider(Now), NullLogger<FoundService>.Instance);
     }
 
     [Fact]

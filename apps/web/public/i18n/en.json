@@ -287,5 +287,28 @@
   "update": {
     "ready": "A new version is available.",
     "reload": "Reload"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "back": "Back",
+    "intro": "Oschterhas is an app for Easter hunts outdoors. We store as little data as possible.",
+    "searchers": {
+      "title": "For searchers",
+      "noAccount": "You don't need an account.",
+      "found": "When you mark a bunny as found, we store the time and – only if you enter it – your nickname. The nickname is visible to everyone who opens this hunt.",
+      "noIp": "We do not store your IP address. It is only used briefly in memory to slow down misuse.",
+      "location": "Your location is only used by your browser to show it on the map. It is never sent to Oschterhas.",
+      "tiles": "Your browser loads the map images directly from swisstopo (Swiss Federal Office of Topography) or OpenStreetMap. These services see your IP address.",
+      "storage": "Your browser remembers the chosen language locally."
+    },
+    "organizers": {
+      "title": "For organizers",
+      "login": "Sign-in runs through Peakcode Identity. Oschterhas never receives passwords.",
+      "data": "We store name, e-mail address, the assigned hunts, the time of the last sign-in and log entries about changes (e.g. import, reset)."
+    },
+    "hosting": {
+      "title": "Storage location",
+      "text": "Data and backups are stored in Switzerland."
+    }
   }
 }

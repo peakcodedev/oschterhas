@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Oschterhas.Common.Results;
 using Oschterhas.Core.Events;
 using Oschterhas.Core.Users;
@@ -11,7 +12,8 @@ internal sealed class HareAdminService(
     InstanceAccess access,
     IHareRepository hares,
     IInstanceEventBroadcaster events,
-    TimeProvider timeProvider) : IHareAdminService
+    TimeProvider timeProvider,
+    ILogger<HareAdminService> logger) : IHareAdminService
 {
     private static readonly Error HareNotFound = Error.NotFound("hare.not_found", "Hare not found.");
     private static readonly Error Changed = Error.Conflict("hare.changed", "Someone else changed this hare in the meantime. Please reload.");
@@ -106,6 +108,8 @@ internal sealed class HareAdminService(
             return Changed;
         }
 
+        logger.LogInformation("Hare {HareId} of instance {InstanceId} deleted by {ActorId}", hareId, instanceId, actor.Id);
+
         PublishChanged(instanceId);
         return Result.Success();
     }
@@ -142,6 +146,7 @@ internal sealed class HareAdminService(
         }
 
         events.Publish(instanceId, new InstanceEvent(InstanceEvent.HareReset, new { hareId = hare.Id }));
+        logger.LogInformation("Hare {HareId} of instance {InstanceId} reset by {ActorId}", hare.Id, instanceId, actor.Id);
         return hare.ToAdminDto();
     }
 

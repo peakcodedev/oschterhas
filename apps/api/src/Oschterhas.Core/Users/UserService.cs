@@ -1,9 +1,10 @@
+using Microsoft.Extensions.Logging;
 using Oschterhas.Common.Results;
 using Oschterhas.Data.Repositories;
 
 namespace Oschterhas.Core.Users;
 
-internal sealed class UserService(IUserRepository users) : IUserService
+internal sealed class UserService(IUserRepository users, ILogger<UserService> logger) : IUserService
 {
     internal static readonly Error NotPlatformAdmin = Error.Forbidden("auth.platform_admin_required", "Only platform admins may do this.");
 
@@ -45,6 +46,12 @@ internal sealed class UserService(IUserRepository users) : IUserService
         user.IsActive = request.IsActive ?? user.IsActive;
         user.IsPlatformAdmin = request.IsPlatformAdmin ?? user.IsPlatformAdmin;
         await users.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        logger.LogWarning(
+            "User {UserId} changed by {ActorId}: active {IsActive}, platform admin {IsPlatformAdmin}",
+            user.Id,
+            actor.Id,
+            user.IsActive,
+            user.IsPlatformAdmin);
         return user.ToDto();
     }
 }

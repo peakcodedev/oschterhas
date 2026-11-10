@@ -1901,25 +1901,25 @@ export interface components {
       id: string;
       /** Format: int32 */
       number: number;
-      name: null | string;
-      description: null | string;
+      name: string | null;
+      description: string | null;
       /** Format: double */
       lat: number;
       /** Format: double */
       lon: number;
       /** Format: double */
-      elevation: null | number;
-      sourceWaypointId: null | string;
+      elevation: number | null;
+      sourceWaypointId: string | null;
       /** Format: date-time */
-      foundAt: null | string;
-      foundBy: null | string;
+      foundAt: string | null;
+      foundBy: string | null;
     };
     CreateInstanceRequest: {
       slug: string;
       name: string;
-      description: null | string;
+      description: string | null;
       /** Format: date */
-      eventDate: null | string;
+      eventDate: string | null;
     };
     CustomDomainCheckDto: {
       instance: components['schemas']['InstanceDetailDto'];
@@ -1963,17 +1963,17 @@ export interface components {
       /** Format: double */
       lon: number;
       /** Format: double */
-      elevation: null | number;
-      name: null | string;
-      description: null | string;
-      sourceWaypointId: null | string;
+      elevation: number | null;
+      name: string | null;
+      description: string | null;
+      sourceWaypointId: string | null;
     };
     HareFoundDto: {
       /** Format: uuid */
       hareId: string;
       /** Format: date-time */
       foundAt: string;
-      foundBy: null | string;
+      foundBy: string | null;
     };
     /** Format: binary */
     IFormFile: string;
@@ -1982,9 +1982,9 @@ export interface components {
       id: string;
       slug: string;
       name: string;
-      description: null | string;
+      description: string | null;
       /** Format: date */
-      eventDate: null | string;
+      eventDate: string | null;
       status: components['schemas']['InstanceStatus'];
       /** Format: int32 */
       totalHares: number;
@@ -1992,12 +1992,12 @@ export interface components {
       foundHares: number;
       publicUrl: string;
       subdomainUrl: string;
-      customDomain: null | string;
+      customDomain: string | null;
       customDomainStatus: components['schemas']['CustomDomainStatus'];
       /** Format: date-time */
-      customDomainVerifiedAt: null | string;
+      customDomainVerifiedAt: string | null;
       /** Format: date-time */
-      customDomainLastCheckAt: null | string;
+      customDomainLastCheckAt: string | null;
       /** Format: int32 */
       customDomainFailedChecks: number;
       organizers: components['schemas']['OrganizerDto'][];
@@ -2011,7 +2011,7 @@ export interface components {
       name: string;
       status: components['schemas']['InstanceStatus'];
       /** Format: date */
-      eventDate: null | string;
+      eventDate: string | null;
       /** Format: int32 */
       totalHares: number;
       /** Format: int32 */
@@ -2019,7 +2019,7 @@ export interface components {
       publicUrl: string;
     };
     MarkFoundRequest: {
-      nickname: null | string;
+      nickname: string | null;
     };
     MeDto: {
       /** Format: uuid */
@@ -2036,43 +2036,43 @@ export interface components {
       invitationPending: boolean;
     };
     ProblemDetails: {
-      type?: null | string;
-      title?: null | string;
+      type?: string | null;
+      title?: string | null;
       /** Format: int32 */
-      status?: null | number;
-      detail?: null | string;
-      instance?: null | string;
+      status?: number | null;
+      detail?: string | null;
+      instance?: string | null;
     };
     PublicHareDto: {
       /** Format: uuid */
       id: string;
       /** Format: int32 */
       number: number;
-      name: null | string;
-      description: null | string;
+      name: string | null;
+      description: string | null;
       /** Format: double */
       lat: number;
       /** Format: double */
       lon: number;
       /** Format: date-time */
-      foundAt: null | string;
-      foundBy: null | string;
+      foundAt: string | null;
+      foundBy: string | null;
     };
     PublicInstanceDto: {
       name: string;
-      description: null | string;
+      description: string | null;
       /** Format: date */
-      eventDate: null | string;
+      eventDate: string | null;
       status: components['schemas']['InstanceStatus'];
       /** Format: int32 */
       totalHares: number;
       /** Format: int32 */
       foundHares: number;
-      hares: null | components['schemas']['PublicHareDto'][];
+      hares: components['schemas']['PublicHareDto'][] | null;
     };
     SaveHareRequest: {
-      name: null | string;
-      description: null | string;
+      name: string | null;
+      description: string | null;
       /** Format: double */
       lat: number;
       /** Format: double */
@@ -2087,18 +2087,18 @@ export interface components {
     SlugCheckDto: {
       slug: string;
       available: boolean;
-      reason: null | string;
+      reason: string | null;
     };
     UpdateInstanceRequest: {
       slug: string;
       name: string;
-      description: null | string;
+      description: string | null;
       /** Format: date */
-      eventDate: null | string;
+      eventDate: string | null;
     };
     UpdateUserRequest: {
-      isActive: null | boolean;
-      isPlatformAdmin: null | boolean;
+      isActive: boolean | null;
+      isPlatformAdmin: boolean | null;
     };
     UserDto: {
       /** Format: uuid */
@@ -2109,7 +2109,7 @@ export interface components {
       isActive: boolean;
       invitationPending: boolean;
       /** Format: date-time */
-      lastLoginAt: null | string;
+      lastLoginAt: string | null;
       instanceIds: string[];
     };
   };

@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Oschterhas.Core.Admin;
@@ -39,7 +40,7 @@ public class GpxImportServiceTests
         _hares.ListForUpdateAsync(_instanceId, Arg.Any<CancellationToken>()).Returns(_existing);
         _hares.When(h => h.Add(Arg.Any<Hare>())).Do(c => _added.Add(c.Arg<Hare>()));
         _hares.When(h => h.Remove(Arg.Any<Hare>())).Do(c => _removed.Add(c.Arg<Hare>()));
-        _service = new GpxImportService(new InstanceAccess(_instances), _hares, _events, Options.Create(new GpxParserOptions()), new FakeTimeProvider());
+        _service = new GpxImportService(new InstanceAccess(_instances), _hares, _events, Options.Create(new GpxParserOptions()), new FakeTimeProvider(), NullLogger<GpxImportService>.Instance);
     }
 
     [Fact]

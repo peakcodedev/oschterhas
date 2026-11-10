@@ -1,5 +1,6 @@
 using System.Buffers.Text;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Oschterhas.Common.Results;
 using Oschterhas.Core.Admin;
@@ -35,7 +36,8 @@ internal sealed class CustomDomainService(
     IHostCacheInvalidator hostCache,
     IOptions<CustomDomainOptions> options,
     IOptions<HostingOptions> hosting,
-    TimeProvider timeProvider) : ICustomDomainService
+    TimeProvider timeProvider,
+    ILogger<CustomDomainService> logger) : ICustomDomainService
 {
     private static readonly Error Taken = Error.Conflict("customdomain.taken", "This domain is already used by another search.");
     private static readonly Error NotSet = Error.Validation("customdomain.not_set", "This search has no custom domain.");
@@ -88,6 +90,7 @@ internal sealed class CustomDomainService(
         }
 
         hostCache.Invalidate();
+        logger.LogInformation("Custom domain {Domain} set for instance {InstanceId} by {ActorId}", current.CustomDomain, current.Id, actor.Id);
         return current.ToDetailDto(hosting.Value);
     }
 
@@ -125,6 +128,7 @@ internal sealed class CustomDomainService(
         }
 
         var instance = loaded.Value;
+        logger.LogInformation("Custom domain {Domain} removed from instance {InstanceId} by {ActorId}", instance.CustomDomain, instance.Id, actor.Id);
         instance.CustomDomain = null;
         instance.CustomDomainStatus = CustomDomainStatus.None;
         instance.CustomDomainToken = null;
@@ -219,6 +223,17 @@ internal sealed class CustomDomainService(
             {
                 instance.CustomDomainStatus = CustomDomainStatus.Failed;
             }
+        }
+
+        if (before != instance.CustomDomainStatus)
+        {
+            logger.LogWarning(
+                "Custom domain {Domain} of instance {InstanceId}: {Before} → {After} ({Outcome})",
+                instance.CustomDomain,
+                instance.Id,
+                before,
+                instance.CustomDomainStatus,
+                outcome);
         }
 
         return before != instance.CustomDomainStatus;

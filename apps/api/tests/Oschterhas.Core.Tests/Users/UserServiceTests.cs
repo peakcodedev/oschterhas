@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Oschterhas.Core.Users;
 using Oschterhas.Data.Entities;
 using Oschterhas.Data.Repositories;
@@ -9,7 +10,7 @@ public class UserServiceTests
     private readonly IUserRepository _users = Substitute.For<IUserRepository>();
     private readonly UserService _service;
 
-    public UserServiceTests() => _service = new UserService(_users);
+    public UserServiceTests() => _service = new UserService(_users, NullLogger<UserService>.Instance);
 
     [Fact]
     public async Task OnlyPlatformAdminsMayListOrChangeUsers()

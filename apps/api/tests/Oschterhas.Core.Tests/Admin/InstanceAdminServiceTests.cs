@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Oschterhas.Core.Admin;
@@ -21,7 +22,7 @@ public class InstanceAdminServiceTests
         _instances.FindForUpdateAsync(_tann.Id, Arg.Any<CancellationToken>()).Returns(_tann);
         _instances.SlugExistsAsync("tann", Arg.Any<CancellationToken>()).Returns(true);
         var hosting = Options.Create(new HostingOptions { BaseDomain = "oschterhas.li", PublicScheme = "https" });
-        _service = new InstanceAdminService(_instances, _hostCache, _events, hosting, new FakeTimeProvider());
+        _service = new InstanceAdminService(_instances, _hostCache, _events, hosting, new FakeTimeProvider(), NullLogger<InstanceAdminService>.Instance);
     }
 
     [Fact]

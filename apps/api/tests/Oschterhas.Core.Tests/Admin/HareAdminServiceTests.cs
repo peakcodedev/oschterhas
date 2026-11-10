@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Time.Testing;
 using NSubstitute.ExceptionExtensions;
 using Oschterhas.Core.Admin;
@@ -24,7 +25,7 @@ public class HareAdminServiceTests
         _hare = new Hare { Id = Guid.NewGuid(), InstanceId = _instanceId, Number = 4, Lat = 47, Lon = 8, FoundAt = Now.AddHours(-1), FoundBy = "Lina" };
         _hares.FindForUpdateAsync(_instanceId, _hare.Id, Arg.Any<CancellationToken>()).Returns(_hare);
         _hares.ListForUpdateAsync(_instanceId, Arg.Any<CancellationToken>()).Returns([_hare]);
-        _service = new HareAdminService(new InstanceAccess(_instances), _hares, _events, new FakeTimeProvider(Now));
+        _service = new HareAdminService(new InstanceAccess(_instances), _hares, _events, new FakeTimeProvider(Now), NullLogger<HareAdminService>.Instance);
     }
 
     [Fact]

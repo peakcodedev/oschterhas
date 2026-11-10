@@ -287,5 +287,28 @@
   "update": {
     "ready": "Eine neue Version ist da.",
     "reload": "Neu laden"
+  },
+  "privacy": {
+    "title": "Datenschutz",
+    "back": "Zurück",
+    "intro": "Oschterhas ist eine App für Ostersuchen im Gelände. Wir speichern so wenig Daten wie möglich.",
+    "searchers": {
+      "title": "Für Suchende",
+      "noAccount": "Du brauchst kein Konto.",
+      "found": "Wenn du einen Hasen als gefunden markierst, speichern wir den Zeitpunkt und – nur wenn du ihn angibst – deinen Spitznamen. Der Spitzname ist für alle sichtbar, die diese Suche öffnen.",
+      "noIp": "Deine IP-Adresse speichern wir nicht. Sie wird nur kurz im Arbeitsspeicher verwendet, um Missbrauch zu bremsen.",
+      "location": "Deinen Standort verwendet nur dein Browser, um ihn auf der Karte zu zeigen. Er wird nie an Oschterhas übertragen.",
+      "tiles": "Die Kartenbilder lädt dein Browser direkt von swisstopo (Bundesamt für Landestopografie) bzw. OpenStreetMap. Diese Dienste sehen dabei deine IP-Adresse.",
+      "storage": "Die gewählte Sprache merkt sich dein Browser lokal."
+    },
+    "organizers": {
+      "title": "Für Organisatorinnen und Organisatoren",
+      "login": "Die Anmeldung läuft über Peakcode Identity. Oschterhas erhält dabei keine Passwörter.",
+      "data": "Gespeichert werden Name, E-Mail-Adresse, die zugeordneten Suchen, der Zeitpunkt der letzten Anmeldung sowie Protokolleinträge zu Änderungen (z. B. Import, Zurücksetzen)."
+    },
+    "hosting": {
+      "title": "Speicherort",
+      "text": "Daten und Backups werden in der Schweiz gespeichert."
+    }
   }
 }

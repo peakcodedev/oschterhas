@@ -13,6 +13,7 @@ using Oschterhas.Core.Users;
 using Oschterhas.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(kestrel => kestrel.AddServerHeader = false);
 
 builder.Services.AddOptions<HostingOptions>()
     .Bind(builder.Configuration.GetSection(HostingOptions.SectionName))
@@ -40,6 +41,7 @@ builder.Services.AddOschterhasAuthentication(builder.Configuration, builder.Envi
 builder.Services.AddOptions<CustomDomainOptions>().Bind(builder.Configuration.GetSection(CustomDomainOptions.SectionName));
 builder.Services.AddOptions<InternalNetworkOptions>().Bind(builder.Configuration.GetSection(InternalNetworkOptions.SectionName));
 builder.Services.AddHostedService<CustomDomainMonitor>();
+builder.Services.AddReverseProxySupport(builder.Configuration);
 
 // Same JSON settings for MVC and for the OpenAPI generator (which reads the HTTP JSON options).
 static void ConfigureJson(JsonSerializerOptions json)
@@ -48,13 +50,26 @@ static void ConfigureJson(JsonSerializerOptions json)
     json.NumberHandling = JsonNumberHandling.Strict;
 }
 
-builder.Services.AddControllers().AddJsonOptions(o => ConfigureJson(o.JsonSerializerOptions));
+builder.Services.AddControllers().AddJsonOptions(o =>
+{
+    ConfigureJson(o.JsonSerializerOptions);
+    // Invalid JSON gets a generic 400 without parser internals (positions, expected tokens).
+    o.AllowInputFormatterExceptionMessages = false;
+});
 builder.Services.ConfigureHttpJsonOptions(o => ConfigureJson(o.SerializerOptions));
 builder.Services.AddProblemDetails();
-builder.Services.AddOpenApi();
+// OpenAPI 3.0: understood by openapi-typescript and by OWASP ZAP's importer (3.1 is only partly supported there).
+builder.Services.AddOpenApi(o => o.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0);
 builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
+app.UseSecurityHeaders(IdentityOrigin(app.Configuration), app.Environment.IsDevelopment());
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
 
 app.UseExceptionHandler();
 app.UseStatusCodePages();
@@ -71,9 +86,16 @@ app.UseWhen(
     branch => branch.UseMiddleware<HostResolutionMiddleware>());
 
 app.UseAuthentication();
+app.UseMiddleware<SecurityEventLogging>();
 app.UseAuthorization();
 app.UseRateLimiter();
 app.MapControllers();
 app.MapHealthChecks("/health").AllowAnonymous();
 
 await app.RunAsync();
+
+// Origin of Peakcode Identity (for the CSP form-action of the logout redirect).
+static string? IdentityOrigin(IConfiguration configuration) =>
+    Uri.TryCreate(configuration["Oidc:Authority"], UriKind.Absolute, out var authority)
+        ? authority.GetLeftPart(UriPartial.Authority)
+        : null;

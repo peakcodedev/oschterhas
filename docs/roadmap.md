@@ -80,10 +80,12 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [x] Barrierefreiheit: Kontrast der gefundenen Marker (#6b7280), Fokus-Rahmen für Marker und Tabelle, alle Formularfelder beschriftet, `prefers-reduced-motion`, keine seitliche Scrollbar bei 375 px (Hasen-Tabelle scrollt in eigenem Bereich)
 
 ## M6 – OWASP-Prüfung
-- [ ] Prüfung nach `docs/owasp-checkliste.md` (OWASP Top 10:2025, ASVS 5.0 Level 1, ausgewählte L2-Punkte)
-- [ ] OWASP ZAP: Baseline- und API-Scan (OpenAPI) gegen lokale/Staging-Instanz, Admin- und Instanz-Host
-- [ ] `dotnet list package --vulnerable --include-transitive` und `npm audit` ohne kritische Funde
-- [ ] Funde beheben, Ergebnis in `docs/owasp-bericht.md`
+- [x] Prüfung nach `docs/owasp-checkliste.md` (OWASP Top 10:2025, ASVS 5.0 Level 1, ausgewählte L2-Punkte)
+- [x] OWASP ZAP: API-Scan mit aktiven Angriffen gegen alle Operationen aus dem OpenAPI-Dokument (Instanz-Host) – 0 Fehler
+- [x] `dotnet list package --vulnerable --include-transitive` und `npm audit --omit=dev` ohne Funde
+- [x] Funde behoben (Security-Header/CSP, Server-Header, Inline-Skript im Build, Parser-Details, Sicherheits-Logging, Proxy/Data-Protection-Konfiguration, Datenschutzseite, Dependabot/SHA-Pinning, CORP), Ergebnis in `docs/owasp-bericht.md`
+- [ ] Von Hand: Login als Otto (nur Tann) und Nina (kein Zugang), Abmelden unter CSP
+- [ ] Optional: authentifizierter ZAP-Scan der Verwaltung
 
 ## M7 – Betrieb
 - [ ] Dockerfile (API liefert Web-Build aus), `docker-compose.prod.yml`
@@ -94,4 +96,5 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [ ] `InternalNetwork:AllowedNetworks` auf das Docker-Netz von Caddy setzen; `CustomDomains:DnsTarget` und DNS-Eintrag `custom.oschterhas.li`
 - [ ] Produktions-Realm bei Peakcode Identity (Redirect-URIs, SMTP)
 - [ ] Datenbank-Backup
+- [ ] Offene Punkte aus `docs/owasp-bericht.md` (HTTPS/HSTS live, Proxy-Netze, Data-Protection-Verzeichnis, Container ohne root, DB-Benutzer, Log-Aufbewahrung, Header-Check auf Staging)
 - [ ] Testlauf mit echten Freiwilligen und echter GPX-Datei

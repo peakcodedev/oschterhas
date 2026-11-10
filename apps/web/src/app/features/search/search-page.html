@@ -10,6 +10,10 @@
             </div>
             <p class="search__progress" aria-live="polite">
               {{ 'search.progress' | transloco: progress() }}
+              ·
+              <a class="search__privacy" routerLink="/datenschutz">{{
+                'privacy.title' | transloco
+              }}</a>
             </p>
             @if (instance.status === 'Ended') {
               <p class="search__banner">{{ 'search.ended' | transloco }}</p>
@@ -50,6 +54,9 @@
           <app-language-picker />
           <h1>{{ instance.name }}</h1>
           <p>{{ 'search.notStarted' | transloco }}</p>
+          <p>
+            <a routerLink="/datenschutz">{{ 'privacy.title' | transloco }}</a>
+          </p>
         </main>
       }
     }

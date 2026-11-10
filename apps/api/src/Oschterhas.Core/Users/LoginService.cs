@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Oschterhas.Common.Results;
 using Oschterhas.Data.Entities;
@@ -8,7 +9,8 @@ namespace Oschterhas.Core.Users;
 internal sealed class LoginService(
     IUserRepository users,
     IOptions<AuthOptions> options,
-    TimeProvider timeProvider) : ILoginService
+    TimeProvider timeProvider,
+    ILogger<LoginService> logger) : ILoginService
 {
     public async Task<Result<CurrentUser>> SignInAsync(ExternalIdentity identity, CancellationToken cancellationToken)
     {
@@ -20,6 +22,7 @@ internal sealed class LoginService(
         {
             if (!options.Value.InitialPlatformAdmins.Contains(identity.Subject))
             {
+                logger.LogWarning("Login rejected: no Oschterhas account for subject {Subject} ({Issuer})", identity.Subject, identity.Issuer);
                 return Error.Forbidden("auth.no_access", "This account has no access to Oschterhas.");
             }
 
@@ -34,10 +37,12 @@ internal sealed class LoginService(
                 CreatedAt = now,
             };
             users.Add(user);
+            logger.LogWarning("Initial platform admin created for subject {Subject}", identity.Subject);
         }
 
         if (!user.IsActive)
         {
+            logger.LogWarning("Login rejected: account {UserId} is disabled", user.Id);
             return Error.Forbidden("auth.disabled", "This account has been disabled.");
         }
 
@@ -54,6 +59,7 @@ internal sealed class LoginService(
 
         user.LastLoginAt = now;
         await users.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        logger.LogInformation("Login: user {UserId} (platform admin: {IsPlatformAdmin})", user.Id, user.IsPlatformAdmin);
         return user.ToCurrentUser();
     }
 

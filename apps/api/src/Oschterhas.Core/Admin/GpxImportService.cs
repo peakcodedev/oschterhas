@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Oschterhas.Common.Results;
 using Oschterhas.Core.Events;
@@ -13,7 +14,8 @@ internal sealed class GpxImportService(
     IHareRepository hares,
     IInstanceEventBroadcaster events,
     IOptions<GpxParserOptions> parserOptions,
-    TimeProvider timeProvider) : IGpxImportService
+    TimeProvider timeProvider,
+    ILogger<GpxImportService> logger) : IGpxImportService
 {
     public async Task<Result<GpxPreviewDto>> PreviewAsync(CurrentUser actor, Guid instanceId, Stream gpx, CancellationToken cancellationToken)
     {
@@ -118,6 +120,14 @@ internal sealed class GpxImportService(
         }
 
         events.Publish(instanceId, new InstanceEvent(InstanceEvent.HaresChanged, new { }));
+        logger.LogInformation(
+            "GPX import ({Mode}) into instance {InstanceId} by {ActorId}: {Created} created, {Updated} updated, {Deleted} deleted",
+            mode,
+            instanceId,
+            actor.Id,
+            created,
+            updated,
+            deleted);
         return new GpxImportResultDto(created, updated, deleted, parsed.Value.Warnings);
     }
 

@@ -1,4 +1,5 @@
 using System.Net.Mail;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Oschterhas.Common.Results;
 using Oschterhas.Core.Identity;
@@ -14,7 +15,8 @@ internal sealed class OrganizerService(
     IUserRepository users,
     IIdentityAdminClient identity,
     IOptions<IdentityAdminOptions> identityOptions,
-    TimeProvider timeProvider) : IOrganizerService
+    TimeProvider timeProvider,
+    ILogger<OrganizerService> logger) : IOrganizerService
 {
     private static readonly Error OrganizerNotFound = Error.NotFound("organizer.not_found", "Organizer not found.");
 
@@ -73,12 +75,19 @@ internal sealed class OrganizerService(
 
         instance.Organizers.Add(new InstanceOrganizer { InstanceId = instance.Id, UserId = user.Id, User = user, CreatedAt = now });
         await instances.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        logger.LogInformation(
+            "Organizer {UserId} assigned to instance {InstanceId} by {ActorId} (new account: {Created})",
+            user.Id,
+            instance.Id,
+            actor.Id,
+            account.Value.Created);
 
         if (account.Value.Created)
         {
             var invited = await identity.SendInvitationAsync(account.Value.Subject, cancellationToken).ConfigureAwait(false);
             if (invited.IsFailure)
             {
+                logger.LogWarning("Invitation for organizer {UserId} could not be sent", user.Id);
                 // The organizer is assigned; the invitation can be sent again later.
                 return Error.Unexpected("organizer.invitation_failed", "The organizer was added, but the invitation could not be sent. Please try again.");
             }
@@ -108,6 +117,7 @@ internal sealed class OrganizerService(
 
         instance.Organizers.Remove(organizer);
         await instances.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        logger.LogInformation("Organizer {UserId} removed from instance {InstanceId} by {ActorId}", userId, instanceId, actor.Id);
         return Result.Success();
     }
 

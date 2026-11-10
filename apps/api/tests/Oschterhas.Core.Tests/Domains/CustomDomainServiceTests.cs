@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Oschterhas.Core.Domains;
@@ -27,7 +28,7 @@ public class CustomDomainServiceTests
             _hostCache,
             Options.Create(new CustomDomainOptions()),
             Options.Create(new HostingOptions { BaseDomain = "oschterhas.li", PublicScheme = "https" }),
-            _time);
+            _time, NullLogger<CustomDomainService>.Instance);
     }
 
     [Fact]
