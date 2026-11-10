@@ -71,10 +71,13 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [x] Im Browser mit lokaler Custom Domain durchgespielt: Domain als URL eingegeben (normalisiert), „Jetzt prüfen" mit echter HTTP-Prüfung → aktiv, Suche unter der Domain erreichbar, QR-Code wechselt, Fehlermeldungen (vergeben, Plattform-Domain, IP), Entfernen wirkt sofort
 
 ## M5 – Mehrsprachigkeit & PWA
-- [ ] Sprachwahl im Store, Browser-Sprache als Standard (Transloco ist seit M0 eingerichtet); Datumsformate (`DatePipe`) in der gewählten Sprache (Locale-Daten de-CH/en registrieren)
-- [ ] Alle UI-Texte übersetzt (Mundart gegenlesen lassen); API-Fehlercodes als Keys
-- [ ] Angular Service Worker, Manifest, App-Icons
-- [ ] Mobile-UX-Feinschliff, Barrierefreiheit; dicht liegende Marker (65 Hasen in Tann überlappen bei Zoom 14): Clustering oder grösserer Start-Zoom prüfen
+- [x] Sprachwahl im Root-Store (`ui`), Auswahlfeld auf Suche, Verwaltung und Info-Seite; Start: gespeicherte Wahl, sonst Browser-Sprache (`de-CH` → Hochdeutsch, Mundart nur bei `gsw`); `<html lang>` folgt; Datumsformate mit Locale `de-CH` / `gsw` / `en-CH`
+- [x] Alle UI-Texte in `de`, `gsw`, `en`; API-Fehlercodes als Keys (seit M4)
+- [ ] **Mundart-Texte von einer Person mit Schweizerdeutsch als Muttersprache gegenlesen lassen** (`apps/web/public/i18n/gsw.json`)
+- [x] Angular Service Worker (nur Production-Build; `/api`, `/.well-known`, `/internal`, `/health` ausgenommen, SSE mit `ngsw-bypass`), Manifest, App-Icons (SVG + PNG 192/512, maskable, Apple Touch), Hinweis „Neue Version – neu laden"
+- [ ] PWA-Installation auf echtem Handy bzw. in Chrome prüfen (das Browser-Panel von Claude unterstützt keine Service Worker)
+- [x] Dicht liegende Marker: in der Übersicht (Zoom < 16) kleine Punkte mit 32-px-Tippfläche, Tippen zoomt hinein; nah nummerierte Marker mit Popup (Karte für Suchende und Verwaltung)
+- [x] Barrierefreiheit: Kontrast der gefundenen Marker (#6b7280), Fokus-Rahmen für Marker und Tabelle, alle Formularfelder beschriftet, `prefers-reduced-motion`, keine seitliche Scrollbar bei 375 px (Hasen-Tabelle scrollt in eigenem Bereich)
 
 ## M6 – OWASP-Prüfung
 - [ ] Prüfung nach `docs/owasp-checkliste.md` (OWASP Top 10:2025, ASVS 5.0 Level 1, ausgewählte L2-Punkte)

@@ -18,6 +18,7 @@ import { PublicHare } from '../../core/api/api-types';
 import { GeoPosition } from '../../features/search/state/search.models';
 import { buildHarePopup, Translate } from './hare-popup';
 import { createBaseLayers } from './map-layers';
+import { DETAIL_ZOOM, trackZoomLevel, zoomLevel } from './zoom-level';
 
 const SWITZERLAND: L.LatLngTuple = [46.8, 8.23];
 
@@ -72,6 +73,7 @@ export class HareMap {
       this.hareLayer.addTo(map);
       this.positionLayer.addTo(map);
       this.map = map;
+      trackZoomLevel(map);
 
       // The container gets its final size from the page layout; let Leaflet re-measure on every change.
       const resizeObserver = new ResizeObserver(() => map.invalidateSize());
@@ -149,7 +151,11 @@ export class HareMap {
             title: String(hare.number),
           }),
         };
-        entry.marker.bindPopup(this.popupContent(entry)).addTo(this.hareLayer);
+        entry.marker.bindPopup(this.popupContent(entry));
+        // Replace Leaflet's click-to-open: in the overview a tap zooms in instead (dots are too dense).
+        entry.marker.off('click');
+        entry.marker.on('click', () => this.onMarkerClick(entry));
+        entry.marker.addTo(this.hareLayer);
         this.markers.set(hare.id, entry);
         continue;
       }
@@ -182,6 +188,14 @@ export class HareMap {
         maxZoom: 17,
       });
       this.fitted = true;
+    }
+  }
+
+  private onMarkerClick(entry: MarkerEntry): void {
+    if (this.map && zoomLevel(this.map.getZoom()) === 'far') {
+      this.map.setView(entry.marker.getLatLng(), DETAIL_ZOOM + 1);
+    } else {
+      entry.marker.openPopup();
     }
   }
 

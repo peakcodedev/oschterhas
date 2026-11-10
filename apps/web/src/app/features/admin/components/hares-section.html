@@ -62,64 +62,66 @@
     {{ 'admin.hares.onlyHidden' | transloco }}
   </label>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">{{ 'admin.hares.name' | transloco }}</th>
-        <th scope="col">{{ 'admin.hares.status' | transloco }}</th>
-        <th scope="col">
-          <span class="visually-hidden">{{ 'admin.hares.actions' | transloco }}</span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (hare of visibleHares(); track hare.id) {
-        <tr [class.table__row--selected]="hare.id === selected()?.id">
-          <td>{{ hare.number }}</td>
-          <td>
-            <button type="button" class="link-button" (click)="select(hare.id)">
-              {{ displayName(hare) }}
-            </button>
-            @if (hare.description) {
-              <span class="list__meta">{{ hare.description }}</span>
-            }
-          </td>
-          <td>
-            @if (hare.foundAt) {
-              {{
-                (hare.foundBy ? 'hare.foundBy' : 'hare.found') | transloco: { name: hare.foundBy }
-              }}
-            } @else {
-              {{ 'hare.hidden' | transloco }}
-            }
-          </td>
-          <td class="table__actions">
-            @if (hare.foundAt) {
+  <div class="table-scroll" tabindex="0" [attr.aria-label]="'admin.hares.title' | transloco">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">{{ 'admin.hares.name' | transloco }}</th>
+          <th scope="col">{{ 'admin.hares.status' | transloco }}</th>
+          <th scope="col">
+            <span class="visually-hidden">{{ 'admin.hares.actions' | transloco }}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (hare of visibleHares(); track hare.id) {
+          <tr [class.table__row--selected]="hare.id === selected()?.id">
+            <td>{{ hare.number }}</td>
+            <td>
+              <button type="button" class="link-button" (click)="select(hare.id)">
+                {{ displayName(hare) }}
+              </button>
+              @if (hare.description) {
+                <span class="list__meta">{{ hare.description }}</span>
+              }
+            </td>
+            <td>
+              @if (hare.foundAt) {
+                {{
+                  (hare.foundBy ? 'hare.foundBy' : 'hare.found') | transloco: { name: hare.foundBy }
+                }}
+              } @else {
+                {{ 'hare.hidden' | transloco }}
+              }
+            </td>
+            <td class="table__actions">
+              @if (hare.foundAt) {
+                <button
+                  type="button"
+                  class="button button--secondary button--small"
+                  [disabled]="saving()"
+                  (click)="reset(hare)"
+                >
+                  {{ 'admin.hares.reset' | transloco }}
+                </button>
+              }
               <button
                 type="button"
-                class="button button--secondary button--small"
+                class="button button--danger button--small"
                 [disabled]="saving()"
-                (click)="reset(hare)"
+                (click)="remove(hare)"
               >
-                {{ 'admin.hares.reset' | transloco }}
+                {{ 'admin.hares.delete' | transloco }}
               </button>
-            }
-            <button
-              type="button"
-              class="button button--danger button--small"
-              [disabled]="saving()"
-              (click)="remove(hare)"
-            >
-              {{ 'admin.hares.delete' | transloco }}
-            </button>
-          </td>
-        </tr>
-      } @empty {
-        <tr>
-          <td colspan="4">{{ 'admin.hares.empty' | transloco }}</td>
-        </tr>
-      }
-    </tbody>
-  </table>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4">{{ 'admin.hares.empty' | transloco }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </section>

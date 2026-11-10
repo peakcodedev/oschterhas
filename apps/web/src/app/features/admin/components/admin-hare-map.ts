@@ -16,6 +16,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import * as L from 'leaflet';
 import { AdminHare, GpxWaypoint } from '../../../core/api/api-types';
 import { createBaseLayers } from '../../../shared/map/map-layers';
+import { trackZoomLevel } from '../../../shared/map/zoom-level';
 
 export interface HareMove {
   hareId: string;
@@ -66,6 +67,7 @@ export class AdminHareMap {
       this.hareLayer.addTo(map);
       this.previewLayer.addTo(map);
       this.map = map;
+      trackZoomLevel(map);
       const resizeObserver = new ResizeObserver(() => map.invalidateSize());
       resizeObserver.observe(element);
       this.destroyRef.onDestroy(() => resizeObserver.disconnect());
@@ -111,6 +113,7 @@ export class AdminHareMap {
     this.hareLayer.clearLayers();
     for (const hare of hares) {
       const label = document.createElement('span');
+      label.className = 'hare-marker__label';
       label.textContent = String(hare.number);
       const marker = L.marker([hare.lat, hare.lon], {
         draggable: true,

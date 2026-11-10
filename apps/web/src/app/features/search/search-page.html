@@ -4,7 +4,10 @@
       @if (haresVisible()) {
         <div class="search">
           <header class="search__header">
-            <h1 class="search__title">{{ instance.name }}</h1>
+            <div class="search__title-row">
+              <h1 class="search__title">{{ instance.name }}</h1>
+              <app-language-picker />
+            </div>
             <p class="search__progress" aria-live="polite">
               {{ 'search.progress' | transloco: progress() }}
             </p>
@@ -44,6 +47,7 @@
         </div>
       } @else {
         <main class="page notice">
+          <app-language-picker />
           <h1>{{ instance.name }}</h1>
           <p>{{ 'search.notStarted' | transloco }}</p>
         </main>

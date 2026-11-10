@@ -76,10 +76,11 @@ Gespeichert werden nur **einzelne Wegpunkte**, keine Routen. Den Weg suchen sich
 3. Missbrauchsschutz beim Markieren ohne Login? (Umgesetzt: 30 Markierungen pro Minute und IP, grosszügig wegen Mobilfunk-NAT; Rücksetzen durch Organisator/in folgt in M4)
 4. Hosting in der Schweiz: welcher Anbieter? Der DNS-Anbieter von `oschterhas.li` muss Wildcard-Einträge und eine API für DNS-01 (Caddy-Modul) unterstützen.
 5. Was zeigt `oschterhas.li` selbst? (Annahme: kurze Info-Seite ohne Liste der Instanzen)
-6. Sprache der Keycloak-Einladungsmail: Realm `parokia` ist nur Deutsch. Für Oschterhas auch Englisch? (Annahme: nur Deutsch, Standardvorlage)
-7. Wer darf die Custom Domain eintragen? (Annahme: nur Plattform-Admin)
-8. Soll `duernten.oschterhas.li` auf die Custom Domain weiterleiten, sobald diese verifiziert ist? (Annahme: nein, beide Adressen funktionieren)
-9. Die automatisch von swisstopo ergänzten Adressen in `<desc>` (z. B. „(ZH) - Dürnten"): übernehmen oder verwerfen? (Annahme: übernehmen; Organisator/innen können sie in der Vorschau löschen)
+6. Standard-Sprache für Schweizer Browser (`de-CH`): umgesetzt ist Hochdeutsch, Mundart nur auf Wunsch. Soll stattdessen Mundart der Standard sein?
+7. Sprache der Keycloak-Einladungsmail: Realm `parokia` ist nur Deutsch. Für Oschterhas auch Englisch? (Annahme: nur Deutsch, Standardvorlage)
+8. Wer darf die Custom Domain eintragen? (Annahme: nur Plattform-Admin)
+9. Soll `duernten.oschterhas.li` auf die Custom Domain weiterleiten, sobald diese verifiziert ist? (Annahme: nein, beide Adressen funktionieren)
+10. Die automatisch von swisstopo ergänzten Adressen in `<desc>` (z. B. „(ZH) - Dürnten"): übernehmen oder verwerfen? (Annahme: übernehmen; Organisator/innen können sie in der Vorschau löschen)
 
 ## Geklärt
 

@@ -269,6 +269,13 @@ Relevant ist nur `<wpt>`. Referenz ist der echte swisstopo-App-Export `samples/s
   - `admin`: Instanzen (`EntityState`), Organisator/innen, Hasen der gewählten Instanz, GPX-Vorschau.
 - `createFeature`, `createActionGroup`, funktionale Effects. HTTP und SSE (`EventSource`) nur in Effects; Komponenten lesen per `store.selectSignal()`. Reconnect mit Backoff, danach vollständiges Nachladen.
 - Store-Devtools nur im Dev-Build. Reducer, Selektoren und Effects mit Unit-Tests.
+- Root-Slice `ui`: Sprache (`de`, `gsw`, `en`). Beim Start gespeicherte Wahl (`localStorage`, nur Komfort) oder Browser-Sprache; ein Effect setzt Transloco und `<html lang>`. `DatePipe` bekommt die Locale aus dem Store (`de-CH`, `gsw`, `en-CH`, registriert in `main.ts`).
+
+### PWA
+- Angular Service Worker nur im Production-Build (`ngsw-config.json`): App-Shell vorab, Icons und Übersetzungen bei Bedarf. **Keine** API-Daten im Cache: Suche und Fund-Status sind live.
+- Navigation unter `/api`, `/.well-known`, `/internal` und `/health` geht nie an den Service Worker (sonst würden Login/Logout-Redirects die gecachte App bekommen). Der SSE-Stream läuft mit `?ngsw-bypass=true` am Service Worker vorbei.
+- Jede Instanz-Adresse ist eine eigene Origin und bekommt ihren eigenen Service Worker.
+- Kartenkacheln werden nicht offline gespeichert (siehe Konzept „Später").
 
 ## Karten
 

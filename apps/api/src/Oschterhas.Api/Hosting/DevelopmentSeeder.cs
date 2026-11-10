@@ -86,6 +86,9 @@ internal static class DevelopmentSeeder
         tann.Description = "Beispieldaten aus einem swisstopo-Export.";
         tann.CustomDomain = "ostern.cevi-test.localhost";
         tann.CustomDomainStatus = CustomDomainStatus.Verified;
+        // A real token, so the periodic re-check (via the dev server on port 4300) succeeds.
+        tann.CustomDomainToken = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
+            .TrimEnd('=').Replace('+', '-').Replace('/', '_');
         tann.CustomDomainVerifiedAt = now;
 
         db.Instances.AddRange(

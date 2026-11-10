@@ -75,7 +75,7 @@ function setup(options: {
       {
         provide: EVENT_SOURCE_FACTORY,
         useValue: (url: string) => {
-          expect(url).toBe('/api/public/events');
+          expect(url).toBe('/api/public/events?ngsw-bypass=true');
           const source = new FakeEventSource();
           options.sources?.push(source);
           return source as unknown as EventSource;

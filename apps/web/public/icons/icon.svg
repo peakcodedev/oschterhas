@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Oschterhas app icon: hare head on the app's orange; kept inside the maskable safe zone (inner 80 %). -->
+  <rect width="512" height="512" rx="96" fill="#c2410c"/>
+  <g fill="#ffffff">
+    <ellipse cx="206" cy="170" rx="38" ry="104" transform="rotate(-12 206 170)"/>
+    <ellipse cx="306" cy="170" rx="38" ry="104" transform="rotate(12 306 170)"/>
+    <ellipse cx="256" cy="318" rx="118" ry="104"/>
+  </g>
+  <g fill="#fbcfe8">
+    <ellipse cx="206" cy="176" rx="16" ry="70" transform="rotate(-12 206 176)"/>
+    <ellipse cx="306" cy="176" rx="16" ry="70" transform="rotate(12 306 176)"/>
+  </g>
+  <g fill="#1f2937">
+    <circle cx="214" cy="300" r="13"/>
+    <circle cx="298" cy="300" r="13"/>
+    <ellipse cx="256" cy="342" rx="15" ry="11"/>
+  </g>
+</svg>

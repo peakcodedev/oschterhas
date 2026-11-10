@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { InstanceDetail } from '../../../core/api/api-types';
 import { environment } from '../../../../environments/environment';
 import { adminPageActions } from '../state/admin.actions';
+import { uiFeature } from '../../../store/ui/ui.reducer';
 
 /**
  * Own domain of a search (e.g. ostern.ceviduernten.ch): platform admins set, check and remove it;
@@ -24,6 +25,7 @@ export class CustomDomainSection {
   private readonly store = inject(Store);
   private readonly transloco = inject(TranslocoService);
   protected readonly dnsTarget = environment.customDomainTarget;
+  protected readonly locale = this.store.selectSignal(uiFeature.selectLocale);
   protected readonly domain = linkedSignal(() => this.instance().customDomain ?? '');
 
   protected value(event: Event): string {

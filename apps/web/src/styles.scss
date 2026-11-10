@@ -11,7 +11,8 @@
   --color-border-strong: #6b7280;
   --color-primary: #c2410c;
   --color-primary-text: #ffffff;
-  --color-found: #9ca3af;
+  /* Dark enough for white numbers (contrast > 4.5:1). */
+  --color-found: #6b7280;
   --color-error: #b91c1c;
   --color-info-bg: #fef3c7;
   --color-position: #2563eb;
@@ -69,10 +70,19 @@ body {
   outline-offset: 2px;
 }
 
-/* Leaflet markers live outside Angular's view encapsulation, so they are styled globally. */
+/* Leaflet markers live outside Angular's view encapsulation, so they are styled globally.
+   The marker element is the 32 px tap area (Leaflet positions it); the visible circle is the label inside,
+   so it can shrink to a dot at overview zoom without making it harder to tap. */
 .hare-marker {
   display: grid;
   place-items: center;
+}
+
+.hare-marker__label {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
   border: 2px solid #ffffff;
   border-radius: 50%;
   background: var(--color-primary);
@@ -80,10 +90,40 @@ body {
   font-size: 0.8rem;
   font-weight: 700;
   box-shadow: 0 1px 3px rgb(0 0 0 / 40%);
+  transition:
+    width 0.15s,
+    height 0.15s;
 }
 
-.hare-marker--found {
+.hare-marker--found .hare-marker__label {
   background: var(--color-found);
+}
+
+.hare-marker--selected .hare-marker__label {
+  outline: 3px solid var(--color-position);
+  outline-offset: 2px;
+}
+
+.hare-marker:focus-visible {
+  outline: none;
+}
+
+.hare-marker:focus-visible .hare-marker__label {
+  outline: 3px solid var(--color-position);
+  outline-offset: 2px;
+}
+
+[data-zoom-level='far'] .hare-marker__label {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+  font-size: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hare-marker__label {
+    transition: none;
+  }
 }
 
 .hare-popup__title {
@@ -180,6 +220,7 @@ body {
 .list__actions,
 .table__actions {
   display: flex;
+  white-space: nowrap;
   flex-wrap: wrap;
   gap: 6px;
   justify-content: flex-end;
@@ -337,6 +378,16 @@ a.button {
   cursor: pointer;
 }
 
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid var(--color-position);
+  outline-offset: 2px;
+}
+
 .table {
   width: 100%;
   margin-top: 12px;
@@ -367,11 +418,6 @@ a.button {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-
-.hare-marker--selected {
-  outline: 3px solid var(--color-position);
-  outline-offset: 2px;
 }
 
 .preview-marker {

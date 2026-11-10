@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { LanguagePicker } from '../../shared/language/language-picker';
 import { HareMap } from '../../shared/map/hare-map';
 import { FoundDialog } from './found-dialog';
 import { searchPageActions } from './state/search.actions';
@@ -17,7 +18,7 @@ import { searchFeature } from './state/search.reducer';
 /** Public search view of an instance: map with all hares, progress and own position. */
 @Component({
   selector: 'app-search-page',
-  imports: [TranslocoPipe, HareMap, FoundDialog],
+  imports: [TranslocoPipe, HareMap, FoundDialog, LanguagePicker],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './search-page.html',
   styleUrl: './search-page.scss',

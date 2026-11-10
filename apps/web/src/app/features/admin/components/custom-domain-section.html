@@ -14,13 +14,19 @@
     </p>
     <p class="form__hint">
       @if (instance().customDomainVerifiedAt; as verifiedAt) {
-        {{ 'admin.customDomain.verifiedAt' | transloco: { date: (verifiedAt | date: 'short') } }}
+        {{
+          'admin.customDomain.verifiedAt'
+            | transloco: { date: (verifiedAt | date: 'short' : undefined : locale()) }
+        }}
       }
       @if (instance().customDomainLastCheckAt; as checkedAt) {
         {{
           'admin.customDomain.lastCheck'
             | transloco
-              : { date: (checkedAt | date: 'short'), failed: instance().customDomainFailedChecks }
+              : {
+                  date: (checkedAt | date: 'short' : undefined : locale()),
+                  failed: instance().customDomainFailedChecks,
+                }
         }}
       }
     </p>

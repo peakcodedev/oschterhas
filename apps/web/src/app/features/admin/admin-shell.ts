@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { authActions } from '../../core/auth/auth.actions';
 import { authFeature } from '../../core/auth/auth.reducer';
+import { LanguagePicker } from '../../shared/language/language-picker';
 import { MessageBanner } from './components/message-banner';
 
 const LOGIN_REASONS = new Set(['no_access', 'disabled', 'failed']);
@@ -13,7 +14,14 @@ const LOGIN_REASONS = new Set(['no_access', 'disabled', 'failed']);
 /** Frame of the administration: login screen for anonymous visitors, navigation and pages for signed-in users. */
 @Component({
   selector: 'app-admin-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslocoPipe, MessageBanner],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    TranslocoPipe,
+    MessageBanner,
+    LanguagePicker,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-shell.html',
   styleUrl: './admin-shell.scss',

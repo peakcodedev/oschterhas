@@ -1,6 +1,7 @@
 import { provideHttpClient, withFetch, withXsrfConfiguration } from '@angular/common/http';
 import { ApplicationConfig, isDevMode, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 import { provideTransloco } from '@jsverse/transloco';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
@@ -10,6 +11,7 @@ import { routes } from './app.routes';
 import { DEFAULT_LANGUAGE, LANGUAGES } from './core/i18n/languages';
 import { TranslocoHttpLoader } from './core/i18n/transloco-loader';
 import { reducers } from './store';
+import * as uiEffects from './store/ui/ui.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,9 +29,14 @@ export const appConfig: ApplicationConfig = {
         strictActionSerializability: true,
       },
     }),
-    provideEffects(),
+    provideEffects(uiEffects),
     provideRouterStore(),
     ...(isDevMode() ? [provideStoreDevtools({ maxAge: 50, connectInZone: false })] : []),
+    // Offline shell and installable app; only in production builds (the dev server has no ngsw.json).
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
     provideTransloco({
       config: {
         availableLangs: [...LANGUAGES],

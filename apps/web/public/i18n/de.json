@@ -275,5 +275,17 @@
       "description_truncated": "Beschreibung gekürzt.",
       "waypoint_id_truncated": "swisstopo-ID gekürzt."
     }
+  },
+  "language": {
+    "label": "Sprache",
+    "names": {
+      "de": "Deutsch",
+      "gsw": "Schwiizerdütsch",
+      "en": "English"
+    }
+  },
+  "update": {
+    "ready": "Eine neue Version ist da.",
+    "reload": "Neu laden"
   }
 }
