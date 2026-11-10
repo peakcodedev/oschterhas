@@ -33,19 +33,21 @@ import { adminFeature } from '../state/admin.reducer';
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: var(--color-success-bg);
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+      padding: var(--space-1) var(--space-1) var(--space-1) var(--space-4);
+      border-radius: var(--radius-md);
+      background: var(--color-success);
+      color: var(--color-success-text);
+      font-weight: 700;
     }
     .banner--error {
-      background: var(--color-error-bg);
-      color: var(--color-error);
+      background: var(--color-error);
+      color: var(--color-error-text);
     }
     .banner__close {
-      min-width: 44px;
-      min-height: 44px;
+      min-width: 48px;
+      min-height: 48px;
       border: 0;
       background: transparent;
       font-size: 1.4rem;

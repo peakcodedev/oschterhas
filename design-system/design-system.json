@@ -1,0 +1,115 @@
+{
+ "v": 3,
+ "layout": "files",
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-10T20:25:00Z"
+ },
+ "title": "Oschterhas",
+ "namespace": "Oschterhas",
+ "libraries": [],
+ "sections": {},
+ "groups": [
+  "Logos",
+  "App-Icons"
+ ],
+ "assetGroups": {
+  "Logos": {
+   "name": "Logos",
+   "tile": "l",
+   "order": [
+    "oschterhas-logo-quer.svg",
+    "oschterhas-logo-hoch.svg",
+    "oschterhas-signet.svg",
+    "oschterhas-logo-quer-negativ.svg",
+    "oschterhas-signet-negativ.svg"
+   ],
+   "files": {
+    "oschterhas-logo-quer.svg": {
+     "name": "oschterhas-logo-quer.svg",
+     "blob": "edcdecdcc21f39e93be3dd8d288906b9",
+     "size": 10436,
+     "type": "image/svg+xml"
+    },
+    "oschterhas-logo-hoch.svg": {
+     "name": "oschterhas-logo-hoch.svg",
+     "blob": "e5127ac60c54980b82c8cd31acddb328",
+     "size": 9703,
+     "type": "image/svg+xml"
+    },
+    "oschterhas-signet.svg": {
+     "name": "oschterhas-signet.svg",
+     "blob": "33f74031a40c5b726ac48d41d22ed142",
+     "size": 1564,
+     "type": "image/svg+xml"
+    },
+    "oschterhas-logo-quer-negativ.svg": {
+     "name": "oschterhas-logo-quer-negativ.svg",
+     "blob": "a0fed2755d70446a9bc7e27a5a66aee1",
+     "size": 10436,
+     "type": "image/svg+xml"
+    },
+    "oschterhas-signet-negativ.svg": {
+     "name": "oschterhas-signet-negativ.svg",
+     "blob": "6663173c35170b74430cd1d0ae69cba7",
+     "size": 1564,
+     "type": "image/svg+xml"
+    }
+   }
+  },
+  "App-Icons": {
+   "name": "App-Icons",
+   "tile": "m",
+   "order": [
+    "oschterhas-app-icon.svg",
+    "oschterhas-app-icon-maskable.svg",
+    "oschterhas-app-icon-512.png",
+    "oschterhas-app-icon-maskable-512.png",
+    "apple-touch-icon.png"
+   ],
+   "files": {
+    "oschterhas-app-icon.svg": {
+     "name": "oschterhas-app-icon.svg",
+     "blob": "acee992e91f041aca0a2d69f540e9280",
+     "size": 1673,
+     "type": "image/svg+xml"
+    },
+    "oschterhas-app-icon-maskable.svg": {
+     "name": "oschterhas-app-icon-maskable.svg",
+     "blob": "2bc972818fb3cd05168a8a0bac2e2069",
+     "size": 1665,
+     "type": "image/svg+xml"
+    },
+    "oschterhas-app-icon-512.png": {
+     "name": "oschterhas-app-icon-512.png",
+     "blob": "235a253ea9e986288da47260742abf7c",
+     "size": 24215,
+     "type": "image/png"
+    },
+    "oschterhas-app-icon-maskable-512.png": {
+     "name": "oschterhas-app-icon-maskable-512.png",
+     "blob": "038ef26d3108833bf6a408d114efa6f8",
+     "size": 15824,
+     "type": "image/png"
+    },
+    "apple-touch-icon.png": {
+     "name": "apple-touch-icon.png",
+     "blob": "bda47c99138809a5b2744b2d300b0ca6",
+     "size": 5255,
+     "type": "image/png"
+    }
+   }
+  }
+ },
+ "blobs": {},
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "lastChange": {
+  "by": "Roman Braun",
+  "at": "2026-11-10T20:25:00Z",
+  "via": "Claude",
+  "note": "Logo (Hase in der Lupe), Farben und Schriften angelegt"
+ }
+}

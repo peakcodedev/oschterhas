@@ -277,6 +277,16 @@ Relevant ist nur `<wpt>`. Referenz ist der echte swisstopo-App-Export `samples/s
 - Jede Instanz-Adresse ist eine eigene Origin und bekommt ihren eigenen Service Worker.
 - Kartenkacheln werden nicht offline gespeichert (siehe Konzept „Später").
 
+## Designsystem
+
+Quelle ist das Designsystem „Oschterhas" im Ordner [`design-system/`](../design-system/README.md) (Kopie des Claude-Artefakts): Farben, Schriften, Abstände, Radien in `tokens.json`, Logos und App-Icons unter `assets/`, Regeln im README.
+
+- `npm run tokens` (in `apps/web`) erzeugt daraus `src/styles/tokens.css` (CSS-Variablen wie `--rueebli`, `--titel-1-size`, `--space-4`). Die Datei nie von Hand ändern.
+- `styles.scss` ordnet die Rohwerte App-Rollen zu (`--color-primary`, `--color-found`, `--color-error` …). Komponenten verwenden Rollen oder Tokens, keine festen Farb- oder Pixelwerte für Radien/Abstände.
+- Wichtige Regeln: Hauptknopf `rueebli` mit `ink`-Text (nie Weiss auf Rüebli), Pillenform, mindestens 48 px hoch; „gefunden"/Erfolg `wiese` mit weissem Text; Fehler `fehler`; Info `himmel` mit `ink`; Links `rueebli-text`; Titel in Poppins, Text in Atkinson Hyperlegible Next (Hinweise in `text-gross`).
+- Schriften kommen als `@fontsource`-Pakete (nur Latin-Subset) und werden selbst ausgeliefert.
+- Logos liegen unter `public/brand/` (Querformat in der Verwaltung, Hochformat auf der Startseite, Signet unter 120 px Breite, z. B. im Kopf der Suche). App-Icons und Favicon unter `public/icons/` stammen aus `design-system/assets/App-Icons`; Theme-Farbe `eierschale`.
+
 ## Karten
 
 - **swisstopo Landeskarte farbig**: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`

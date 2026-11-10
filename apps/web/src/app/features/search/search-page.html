@@ -5,7 +5,16 @@
         <div class="search">
           <header class="search__header">
             <div class="search__title-row">
-              <h1 class="search__title">{{ instance.name }}</h1>
+              <div class="search__brand">
+                <img
+                  class="brand-signet"
+                  src="brand/oschterhas-signet.svg"
+                  width="40"
+                  height="40"
+                  alt=""
+                />
+                <h1 class="search__title">{{ instance.name }}</h1>
+              </div>
               <app-language-picker />
             </div>
             <p class="search__progress" aria-live="polite">

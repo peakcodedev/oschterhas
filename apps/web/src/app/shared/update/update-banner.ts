@@ -29,13 +29,13 @@ import { filter, map, of } from 'rxjs';
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: var(--space-2);
       max-width: 32rem;
       margin: 0 auto;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: var(--color-text);
-      color: #ffffff;
+      padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+      border-radius: var(--radius-md);
+      background: var(--ink);
+      color: var(--weiss);
       box-shadow: 0 4px 16px rgb(0 0 0 / 30%);
     }
   `,

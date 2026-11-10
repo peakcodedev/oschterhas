@@ -24,10 +24,10 @@ import { uiFeature } from '../../store/ui/ui.reducer';
   `,
   styles: `
     .language-picker__select {
-      min-height: 44px;
-      padding: 0 8px;
+      min-height: 48px;
+      padding: 0 var(--space-2);
       border: 1px solid var(--color-border-strong);
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       background: var(--color-surface);
       font: inherit;
       color: var(--color-text);

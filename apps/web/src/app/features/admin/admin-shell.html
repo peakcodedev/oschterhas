@@ -1,8 +1,14 @@
 <div class="admin">
   <header class="admin__header">
-    <a class="admin__brand" routerLink="/"
-      >{{ 'app.name' | transloco }} · {{ 'admin.title' | transloco }}</a
-    >
+    <a class="admin__brand" routerLink="/">
+      <img
+        class="admin__logo"
+        src="brand/oschterhas-logo-quer.svg"
+        width="160"
+        height="42"
+        [alt]="('app.name' | transloco) + ' · ' + ('admin.title' | transloco)"
+      />
+    </a>
     <app-language-picker />
     @if (user(); as user) {
       <nav class="admin__nav" [attr.aria-label]="'admin.nav.label' | transloco">

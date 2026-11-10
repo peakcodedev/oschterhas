@@ -11,6 +11,7 @@ Web-App (PWA) für die Oster-Suche im Gelände. Ein Plattform-Admin legt **Insta
 - [docs/lizenzen.md](docs/lizenzen.md) – erlaubte und verbotene Pakete
 - [docs/owasp-checkliste.md](docs/owasp-checkliste.md) – Sicherheitsanforderungen
 - [docs/roadmap.md](docs/roadmap.md) – Meilensteine; **Fortschritt dort abhaken**
+- [design-system/README.md](design-system/README.md) – Designsystem (Farben, Schriften, Logos, Regeln); `npm run tokens` erzeugt daraus `apps/web/src/styles/tokens.css`
 
 ## Tech-Stack (Kurzfassung)
 
@@ -78,7 +79,7 @@ Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed 
 - **Begriffe im Code**: `Instance` (Instanz), `Hare` (Hase), `Organizer`, `PlatformAdmin`, `Slug`, `CustomDomain`.
 - **C#**: Nullable an, Warnungen als Fehler, file-scoped namespaces, `record` für DTOs, primäre Konstruktoren. Controllers dünn: Eingabe prüfen → Core-Service → `ActionResult`/Problem Details. Mapping als `ToDto()`-Extension in Core. `CancellationToken` überall durchreichen.
 - **EF Core**: Konfiguration per `IEntityTypeConfiguration<T>`, keine Attribute an Entitäten. Lesen mit `AsNoTracking()` und Projektion.
-- **Angular**: Host-Erkennung über `HOST_CONTEXT` (`core/host`), Routen per `canMatch: [hostIs(...)]`. `inject()`, neue Control-Flow-Syntax, `store.selectSignal()`. NgRx mit `createFeature`, `createActionGroup`, funktionalen Effects, `@ngrx/entity`. Mobile-first, Touch-Ziele ≥ 44 px.
+- **Angular**: Host-Erkennung über `HOST_CONTEXT` (`core/host`), Routen per `canMatch: [hostIs(...)]`. `inject()`, neue Control-Flow-Syntax, `store.selectSignal()`. NgRx mit `createFeature`, `createActionGroup`, funktionalen Effects, `@ngrx/entity`. Mobile-first, Touch-Ziele ≥ 48 px. Gestaltung nur über Tokens und Rollen-Variablen aus dem Designsystem (keine festen Farben).
 - **Koordinaten**: intern WGS84 (`lat`, `lon`). Leaflet `[lat, lon]`.
 - **Kleine Schritte**: ein Roadmap-Punkt pro Commit/PR, danach in `docs/roadmap.md` abhaken.
 - **Datenschutz**: Suchende ohne Konto, keine IP-Speicherung, Spitzname freiwillig. Hosting und Backups in der Schweiz.

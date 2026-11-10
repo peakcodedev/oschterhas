@@ -38,7 +38,7 @@ export interface HareMove {
     }
     .admin-map {
       height: min(60vh, 480px);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
     }
   `,
 })

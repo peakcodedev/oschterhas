@@ -1,0 +1,47 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: var(--eierschale); }
+  .cover { position: relative; width: 960px; height: 288px; overflow: hidden; background: var(--eierschale); }
+  .cover svg { position: absolute; inset: 0; }
+  .eigelb { fill: var(--eigelb); }
+  .rueebli { fill: var(--rueebli); }
+  .ink { fill: var(--ink); }
+  .himmel { fill: var(--himmel); }
+  .karamell { fill: var(--karamell); }
+  .ring { fill: none; stroke: var(--eierschale); stroke-width: 16px; }
+  .slab { rx: var(--radius-lg); }
+  .text { position: absolute; left: 48px; bottom: 44px; max-width: 440px; }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 72px; line-height: .95; letter-spacing: -1px; color: var(--ink); margin: 0; }
+  .tag { font-family: var(--font-text); font-size: 14px; line-height: 20px; color: var(--ink-muted); margin: 16px 0 0; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <svg viewBox="0 0 960 288" width="960" height="288" aria-hidden="true">
+    <!--
+      blocks: eigelb slab 200×336 (radius-lg, bleeds top+bottom), rueebli disc r=104, himmel slab 120×336 bleeding right, ink + karamell pills 32 wide (radius-pill).
+      arrangement: one tall slab with satellites — the disc overlaps slab and himmel slab, pills stand above like a pair of ears.
+      pattern: discs and pills from radius-pill — README: "runde, weiche Formen, Buttons als Pillen wie die Hasenohren"; one eierschale ring cut into the disc echoes the Lupe.
+      scales: space-4 (16) ring stroke and gaps, space-8 (32) pill width, radius-lg slab corners, radius-pill pills.
+    -->
+    <rect class="eigelb slab" x="512" y="-24" width="200" height="336"/>
+    <rect class="himmel slab" x="864" y="-24" width="120" height="336"/>
+    <circle class="rueebli" cx="760" cy="176" r="104"/>
+    <circle class="ring" cx="760" cy="176" r="56"/>
+    <rect class="karamell" x="704" y="-40" width="32" height="112" rx="16" transform="rotate(-12 720 72)"/>
+    <rect class="ink" x="768" y="-36" width="32" height="104" rx="16" transform="rotate(16 784 68)"/>
+    <circle class="ink" cx="560" cy="240" r="16"/>
+    <circle class="karamell" cx="608" cy="240" r="16"/>
+  </svg>
+  <div class="text">
+    <h1 class="name">Oschterhas</h1>
+    <p class="tag">Fröhlich, warm und klar – das Erscheinungsbild der Osterhasensuche.</p>
+  </div>
+</div>
+</body>
+</html>

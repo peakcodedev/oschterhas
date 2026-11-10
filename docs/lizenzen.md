@@ -47,6 +47,8 @@ Keycloak-Admin-API: eigener schlanker `HttpClient`-Client in `Oschterhas.Core/Id
 | @jsverse/transloco | MIT | i18n |
 | leaflet | BSD-2-Clause | Karte |
 | qrcode (+ @types/qrcode, dev) | MIT | QR-Code für die Instanz-Adresse |
+| @fontsource/poppins 5.3.0 | OFL-1.1 (Schrift), MIT (Paket) | Titelschrift des Designsystems, selbst gehostet |
+| @fontsource/atkinson-hyperlegible-next 5.3.0 | OFL-1.1 (Schrift), MIT (Paket) | Textschrift des Designsystems, selbst gehostet |
 
 ### Betrieb
 | Software | Lizenz | Zweck |
@@ -56,6 +58,8 @@ Keycloak-Admin-API: eigener schlanker `HttpClient`-Client in `Oschterhas.Core/Id
 | openapi-typescript 7.13.0 | MIT | TS-Typen aus OpenAPI. Nur per `npx` mit fester Version aufgerufen, nicht installiert (verlangt TypeScript 5, Angular 22 nutzt 6) |
 | @types/leaflet (dev) | MIT | Typen für Leaflet |
 | license-checker-rseidelsohn (dev) | BSD-3-Clause | Lizenzprüfung in CI |
+
+**Ausnahme OFL-1.1 (nur Schriften)**: Die SIL Open Font License ist die übliche freie Lizenz für Schriften: Nutzung, Einbetten und Weitergabe sind frei, auch kommerziell; nur die Schrift selbst darf nicht allein verkauft werden. Das Designsystem (`design-system/`) schreibt Poppins und Atkinson Hyperlegible Next vor. Die Schriften werden selbst ausgeliefert (kein Google-Fonts-CDN, keine Daten an Dritte, CSP `font-src 'self'`). OFL-1.1 ist deshalb in `npm run licenses:check` erlaubt, aber nur für Schriften (Stand 2026-11-10).
 
 **Ausnahme Python-2.0**: `argparse` (Python Software Foundation License, freizügig, OSI-anerkannt) kommt transitiv über `@jsverse/transloco` → `transloco-utils` → `cosmiconfig` → `js-yaml`. Es ist Build-Tooling und landet nicht im ausgelieferten Bundle. Deshalb ist Python-2.0 in `npm run licenses:check` erlaubt (Stand 2026-11-09, zu bestätigen).
 

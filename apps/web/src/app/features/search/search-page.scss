@@ -5,7 +5,7 @@
 }
 
 .search__header {
-  padding: 8px 16px;
+  padding: var(--space-2) var(--space-4);
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   z-index: 1;
@@ -15,12 +15,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--space-2);
+}
+
+.search__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .search__title {
   margin: 0;
-  font-size: 1.1rem;
+  /* Map space matters more than a big title on a phone: one step below titel-2. */
+  font-size: var(--text-gross-size);
+  line-height: var(--text-gross-line);
 }
 
 .search__progress {
@@ -33,15 +42,17 @@
 }
 
 .search__banner {
-  margin: 6px 0 0;
-  padding: 6px 10px;
-  border-radius: 8px;
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
   background: var(--color-info-bg);
+  color: var(--ink);
 }
 
 .search__live {
-  margin: 6px 0 0;
-  font-size: 0.875rem;
+  margin: var(--space-1) 0 0;
+  font-size: var(--klein-size);
+  line-height: var(--klein-line);
   color: var(--color-muted);
 }
 
@@ -62,9 +73,10 @@
 
 .search__error {
   margin: 0;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: var(--color-surface);
-  color: var(--color-error);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-error);
+  color: var(--color-error-text);
+  font-weight: 700;
   box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
 }

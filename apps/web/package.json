@@ -10,8 +10,9 @@
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,scss,json}\" \"public/i18n/*.json\"",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,json}\" \"public/i18n/*.json\"",
-    "licenses:check": "license-checker-rseidelsohn --production --excludePackages \"oschterhas-web@0.0.0\" --onlyAllow \"MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;Python-2.0\"",
-    "api:types": "npx --yes openapi-typescript@7.13.0 http://localhost:5080/openapi/v1.json -o src/app/core/api/api-schema.ts && prettier --write src/app/core/api/api-schema.ts"
+    "licenses:check": "license-checker-rseidelsohn --production --excludePackages \"oschterhas-web@0.0.0\" --onlyAllow \"MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;Python-2.0;OFL-1.1\"",
+    "api:types": "npx --yes openapi-typescript@7.13.0 http://localhost:5080/openapi/v1.json -o src/app/core/api/api-schema.ts && prettier --write src/app/core/api/api-schema.ts",
+    "tokens": "node scripts/generate-tokens.mjs && prettier --write src/styles/tokens.css"
   },
   "private": true,
   "packageManager": "npm@11.19.1",
@@ -23,6 +24,8 @@
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
     "@angular/service-worker": "^22.2.5",
+    "@fontsource/atkinson-hyperlegible-next": "5.3.0",
+    "@fontsource/poppins": "5.3.0",
     "@jsverse/transloco": "^8.4.0",
     "@ngrx/effects": "^22.0.1",
     "@ngrx/entity": "^22.0.1",

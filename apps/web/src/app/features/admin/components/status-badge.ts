@@ -12,17 +12,21 @@ import { InstanceStatus } from '../../../core/api/api-types';
   styles: `
     .badge {
       display: inline-block;
-      padding: 2px 10px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      background: var(--color-info-bg);
+      padding: 2px var(--space-2);
+      border-radius: var(--radius-pill);
+      font-size: var(--klein-size);
+      line-height: var(--klein-line);
+      font-weight: 700;
+      background: var(--color-highlight);
+      color: var(--ink);
     }
     .badge--active {
-      background: var(--color-success-bg);
+      background: var(--color-success);
+      color: var(--color-success-text);
     }
     .badge--ended {
       background: var(--color-border);
+      color: var(--ink);
     }
   `,
 })
