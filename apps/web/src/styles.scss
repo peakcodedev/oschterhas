@@ -88,6 +88,9 @@ a:focus-visible {
   width: 40px;
   height: 40px;
   flex: none;
+  /* The magnifier circle sits below the middle of the signet's box (centre at 57 %);
+     shift it so text next to it looks centred on the circle. */
+  translate: 0 -7%;
 }
 
 /* Buttons: pill shape like the hare's ears, at least 48 px high (easy to hit, even with gloves). */

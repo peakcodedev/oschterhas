@@ -286,6 +286,7 @@ Quelle ist das Designsystem „Oschterhas" im Ordner [`design-system/`](../desig
 - Wichtige Regeln: Hauptknopf `rueebli` mit `ink`-Text (nie Weiss auf Rüebli), Pillenform, mindestens 48 px hoch; „gefunden"/Erfolg `wiese` mit weissem Text; Fehler `fehler`; Info `himmel` mit `ink`; Links `rueebli-text`; Titel in Poppins, Text in Atkinson Hyperlegible Next (Hinweise in `text-gross`).
 - Schriften kommen als `@fontsource`-Pakete (nur Latin-Subset) und werden selbst ausgeliefert.
 - Logos liegen unter `public/brand/` (Querformat in der Verwaltung, Hochformat auf der Startseite, Signet unter 120 px Breite, z. B. im Kopf der Suche). App-Icons und Favicon unter `public/icons/` stammen aus `design-system/assets/App-Icons`; Theme-Farbe `eierschale`.
+- Sprachwahl: Pille mit runder Flagge und Kürzel (DE, CH = Mundart, EN; Flaggen unter `public/flags/`), darüber unsichtbar das native `<select>` (barrierefrei, Liste mit vollen Namen).
 
 ## Karten
 
