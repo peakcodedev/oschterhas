@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { CreateInstanceRequest, InstanceStatus } from '../../../core/api/api-types';
 import { authFeature } from '../../../core/auth/auth.reducer';
 import { environment } from '../../../../environments/environment';
+import { CustomDomainSection } from '../components/custom-domain-section';
 import { GpxImportSection } from '../components/gpx-import-section';
 import { HaresSection } from '../components/hares-section';
 import { InstanceForm } from '../components/instance-form';
@@ -25,6 +26,7 @@ import { adminFeature } from '../state/admin.reducer';
 @Component({
   selector: 'app-instance-detail-page',
   imports: [
+    CustomDomainSection,
     RouterLink,
     TranslocoPipe,
     StatusBadge,

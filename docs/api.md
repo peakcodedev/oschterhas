@@ -38,18 +38,18 @@ Organisator/innen sehen fremde Instanzen nicht: `404` statt `403`.
 
 | Methode | Pfad | Rolle | Beschreibung |
 |---|---|---|---|
-| PUT | `/instances/{id}/custom-domain` | 🔒 PA | `{ domain }` → Status `Pending`; Antwort enthält DNS-Anleitung (`CNAME` → `custom.oschterhas.li`); `409` wenn vergeben, `422` wenn ungültig |
-| POST | `/instances/{id}/custom-domain/verify` | 🔒 PA | sofort prüfen → `{ status, checkedAt, error? }`; rate-limitiert |
-| DELETE | `/instances/{id}/custom-domain` | 🔒 PA | Domain entfernen, wird sofort nicht mehr bedient |
+| PUT | `/instances/{id}/custom-domain` | 🔒 PA | `{ domain }` (auch eine eingefügte URL) → Instanz mit Status `Pending` und neuem Token; `409 customdomain.taken`, `422 customdomain.invalid` / `platform_domain` |
+| POST | `/instances/{id}/custom-domain/verify` | 🔒 PA | sofort prüfen → `{ instance, outcome }` mit `outcome` = `Verified`, `Unreachable`, `WrongResponse`, `Redirect`, `PrivateAddress`, `Timeout`; max. 10/Minute |
+| DELETE | `/instances/{id}/custom-domain` | 🔒 PA | Domain entfernen → Instanz; wird sofort nicht mehr bedient |
 
-Die Instanz-Antworten (`GET /instances/{id}`) enthalten `customDomain`, `customDomainStatus` und `publicUrl` (Custom Domain, falls verifiziert, sonst Subdomain).
+Die Instanz-Antworten (`GET /instances/{id}`) enthalten `customDomain`, `customDomainStatus`, `customDomainVerifiedAt`, `customDomainLastCheckAt`, `customDomainFailedChecks` und `publicUrl` (Custom Domain, falls verifiziert, sonst Subdomain).
 
 ## Domain-Verifizierung & TLS (ohne `/api`-Präfix)
 
 | Methode | Pfad | Host | Beschreibung |
 |---|---|---|---|
-| GET | `/.well-known/oschterhas-verification` | jede Custom Domain mit Status `Pending`/`Verified` | antwortet mit dem Token dieser Domain (`text/plain`), sonst `404` |
-| GET | `/internal/tls/allowed?domain=…` | nur internes Netz (Caddy) | `200`, wenn die Domain zu einer Instanz gehört und `Verified` ist, oder wenn sie eine gültige Subdomain der Basis-Domain ist; sonst `404`. Von aussen nicht erreichbar (Caddy blockiert den Pfad, die API prüft zusätzlich die Quell-IP) |
+| GET | `/.well-known/oschterhas-verification` | jede eingetragene Custom Domain (`Pending`, `Verified`, `Failed`) | `text/plain` mit dem Token dieser Domain, sonst `404`; `Cache-Control: no-store` |
+| GET | `/internal/tls/allowed?domain=…` | nur aus `InternalNetwork:AllowedNetworks` (Standard: Loopback) | `200` für Basis-Domain, Admin-Host, bestehende Instanz-Subdomains und verifizierte Custom Domains, sonst `404`. Andere Aufrufer erhalten immer `404`. Nicht im OpenAPI-Dokument |
 
 ## Organisator/innen (Admin-Host)
 

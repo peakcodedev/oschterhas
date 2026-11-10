@@ -120,6 +120,12 @@
       </section>
 
       <div class="no-print">
+        <app-custom-domain-section
+          [instance]="instance"
+          [canEdit]="user()?.isPlatformAdmin ?? false"
+          [saving]="saving()"
+        />
+
         @if (user()?.isPlatformAdmin) {
           <app-organizers-section [instance]="instance" [saving]="saving()" />
         }

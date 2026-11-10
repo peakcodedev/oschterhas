@@ -28,7 +28,7 @@ public class InstancesControllerTests
     [Fact]
     public async Task Create_Returns201WithLocation()
     {
-        var dto = new InstanceDetailDto(Guid.NewGuid(), "neu", "Neu", null, null, InstanceStatus.Draft, 0, 0, "u", "u", null, CustomDomainStatus.None, []);
+        var dto = new InstanceDetailDto(Guid.NewGuid(), "neu", "Neu", null, null, InstanceStatus.Draft, 0, 0, "u", "u", null, CustomDomainStatus.None, null, null, 0, []);
         _service.CreateAsync(Pia, Arg.Any<CreateInstanceRequest>(), Arg.Any<CancellationToken>()).Returns(Result<InstanceDetailDto>.Success(dto));
 
         var response = await CreateController().Create(new("neu", "Neu", null, null), TestContext.Current.CancellationToken);

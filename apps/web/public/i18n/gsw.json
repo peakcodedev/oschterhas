@@ -130,6 +130,33 @@
       "invitationSent": "Iladig nomal verschickt.",
       "hareDeleted": "Hase glöscht.",
       "gpxImported": "GPX importiert."
+    },
+    "customDomain": {
+      "title": "Eigeni Domain",
+      "none": "Kei eigeni Domain. D Suechi isch under de Oschterhas-Adrässe erreichbar.",
+      "domain": "Domain",
+      "hint": "Zum Biispil ostern.ceviduernten.ch. D Oschterhas-Adrässe bliibt zuesätzlich erreichbar.",
+      "status": {
+        "None": "Keini",
+        "Pending": "Wartet uf DNS",
+        "Verified": "Aktiv",
+        "Failed": "Nüme erreichbar"
+      },
+      "verifiedAt": "Aktiv sit {{date}}.",
+      "lastCheck": "Zletscht prüeft {{date}} ({{failed}} Fehlversüech hinterenand).",
+      "dnsIntro": "Dass d Domain funktioniert, mues bim DNS-Abieter vo de Domain dä Iitrag gsetzt werde:",
+      "dnsHint": "Nachher gaht s meistens es paar Minute. Oschterhas prüeft automatisch alli 10 Minute; mit «Jetzt prüefe» gaht s sofort. S HTTPS-Zertifikat wird nach de Prüefig automatisch usgstellt.",
+      "verify": "Jetzt prüefe",
+      "remove": "Entferne",
+      "confirmRemove": "Domain {{domain}} entferne? Si funktioniert nachher sofort nüme.",
+      "outcome": {
+        "Verified": "D Domain zeigt uf Oschterhas und isch jetzt aktiv.",
+        "Unreachable": "D Domain isch nöd erreichbar. Isch de DNS-Iitrag gsetzt? Das cha es paar Minute gah.",
+        "WrongResponse": "D Domain zeigt no nöd uf Oschterhas. Bitte de DNS-Iitrag prüefe.",
+        "Redirect": "D Domain leitet wiiter. Bitte de DNS-Iitrag direkt uf Oschterhas setze (kei Wiiterleitig).",
+        "PrivateAddress": "D Domain zeigt uf e interni Adrässe und wird us Sicherheitsgründ nöd bruucht.",
+        "Timeout": "D Domain het nöd rächtziitig gantwortet. Bitte spöter nomal prüefe."
+      }
     }
   },
   "common": {
@@ -231,7 +258,14 @@
       "cannot_demote_self": "Du chasch di nöd sälber sperre oder abestufe.",
       "not_found": "Dä Benutzer gits nöd."
     },
-    "csrf_invalid": "S Sicherheits-Token fehlt oder isch abgloffe. Bitte lad d Siite neu."
+    "csrf_invalid": "S Sicherheits-Token fehlt oder isch abgloffe. Bitte lad d Siite neu.",
+    "customdomain": {
+      "required": "Bitte e Domain agä.",
+      "invalid": "Bitte e Domain wie ostern.example.ch agä (kei IP-Adrässe).",
+      "platform_domain": "Adrässe under de Oschterhas-Domain sind scho als Underadrässe verfüegbar.",
+      "taken": "Die Domain wird scho vo ere andere Suechi bruucht.",
+      "not_set": "Die Suechi het kei eigeni Domain."
+    }
   },
   "gpxWarnings": {
     "gpx": {

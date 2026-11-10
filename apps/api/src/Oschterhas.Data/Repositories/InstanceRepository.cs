@@ -49,6 +49,20 @@ internal sealed class InstanceRepository(AppDbContext db) : IInstanceRepository
     public Task<bool> IsOrganizerAsync(Guid instanceId, Guid userId, CancellationToken cancellationToken) =>
         db.InstanceOrganizers.AnyAsync(o => o.InstanceId == instanceId && o.UserId == userId, cancellationToken);
 
+    public Task<bool> CustomDomainTakenAsync(string domain, Guid exceptInstanceId, CancellationToken cancellationToken) =>
+        db.Instances.AnyAsync(i => i.CustomDomain == domain && i.Id != exceptInstanceId, cancellationToken);
+
+    public Task<string?> FindCustomDomainTokenAsync(string domain, CancellationToken cancellationToken) =>
+        db.Instances
+            .Where(i => i.CustomDomain == domain && i.CustomDomainStatus != CustomDomainStatus.None)
+            .Select(i => i.CustomDomainToken)
+            .FirstOrDefaultAsync(cancellationToken);
+
+    public Task<List<Instance>> ListWithCustomDomainForUpdateAsync(CancellationToken cancellationToken) =>
+        db.Instances
+            .Where(i => i.CustomDomain != null && i.CustomDomainStatus != CustomDomainStatus.None)
+            .ToListAsync(cancellationToken);
+
     public void Add(Instance instance) => db.Instances.Add(instance);
 
     public void Remove(Instance instance) => db.Instances.Remove(instance);

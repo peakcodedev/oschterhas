@@ -118,6 +118,274 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/instances/{instanceId}/custom-domain': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          instanceId: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['SetCustomDomainRequest'];
+          'text/json': components['schemas']['SetCustomDomainRequest'];
+          'application/*+json': components['schemas']['SetCustomDomainRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['InstanceDetailDto'];
+            'application/json': components['schemas']['InstanceDetailDto'];
+            'text/json': components['schemas']['InstanceDetailDto'];
+          };
+        };
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Forbidden */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Unprocessable Entity */
+        422: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+      };
+    };
+    post?: never;
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          instanceId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['InstanceDetailDto'];
+            'application/json': components['schemas']['InstanceDetailDto'];
+            'text/json': components['schemas']['InstanceDetailDto'];
+          };
+        };
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Forbidden */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/instances/{instanceId}/custom-domain/verify': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          instanceId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['CustomDomainCheckDto'];
+            'application/json': components['schemas']['CustomDomainCheckDto'];
+            'text/json': components['schemas']['CustomDomainCheckDto'];
+          };
+        };
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Forbidden */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Unprocessable Entity */
+        422: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+        /** @description Too Many Requests */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/problem+json': components['schemas']['ProblemDetails'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/.well-known/oschterhas-verification': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': string;
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['ProblemDetails'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/instances/{instanceId}/gpx/preview': {
     parameters: {
       query?: never;
@@ -1653,8 +1921,15 @@ export interface components {
       /** Format: date */
       eventDate: null | string;
     };
+    CustomDomainCheckDto: {
+      instance: components['schemas']['InstanceDetailDto'];
+      outcome: components['schemas']['DomainCheckOutcome'];
+    };
     /** @enum {unknown} */
     CustomDomainStatus: 'None' | 'Pending' | 'Verified' | 'Failed';
+    /** @enum {unknown} */
+    DomainCheckOutcome:
+      'Verified' | 'Unreachable' | 'WrongResponse' | 'Redirect' | 'PrivateAddress' | 'Timeout';
     /** @enum {unknown} */
     GpxImportMode: 'Replace' | 'Merge';
     GpxImportResultDto: {
@@ -1719,6 +1994,12 @@ export interface components {
       subdomainUrl: string;
       customDomain: null | string;
       customDomainStatus: components['schemas']['CustomDomainStatus'];
+      /** Format: date-time */
+      customDomainVerifiedAt: null | string;
+      /** Format: date-time */
+      customDomainLastCheckAt: null | string;
+      /** Format: int32 */
+      customDomainFailedChecks: number;
       organizers: components['schemas']['OrganizerDto'][];
     };
     /** @enum {unknown} */
@@ -1796,6 +2077,9 @@ export interface components {
       lat: number;
       /** Format: double */
       lon: number;
+    };
+    SetCustomDomainRequest: {
+      domain: string;
     };
     SetInstanceStatusRequest: {
       status: components['schemas']['InstanceStatus'];

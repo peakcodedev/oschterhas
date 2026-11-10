@@ -130,6 +130,33 @@
       "invitationSent": "Einladung erneut verschickt.",
       "hareDeleted": "Hase gelöscht.",
       "gpxImported": "GPX importiert."
+    },
+    "customDomain": {
+      "title": "Eigene Domain",
+      "none": "Keine eigene Domain. Die Suche ist unter der Oschterhas-Adresse erreichbar.",
+      "domain": "Domain",
+      "hint": "Zum Beispiel ostern.ceviduernten.ch. Die Oschterhas-Adresse bleibt zusätzlich erreichbar.",
+      "status": {
+        "None": "Keine",
+        "Pending": "Wartet auf DNS",
+        "Verified": "Aktiv",
+        "Failed": "Nicht mehr erreichbar"
+      },
+      "verifiedAt": "Aktiv seit {{date}}.",
+      "lastCheck": "Zuletzt geprüft {{date}} ({{failed}} Fehlversuche in Folge).",
+      "dnsIntro": "Damit die Domain funktioniert, muss beim DNS-Anbieter der Domain dieser Eintrag gesetzt werden:",
+      "dnsHint": "Danach dauert es meist ein paar Minuten. Oschterhas prüft automatisch alle 10 Minuten; mit «Jetzt prüfen» geht es sofort. Das HTTPS-Zertifikat wird nach der Prüfung automatisch ausgestellt.",
+      "verify": "Jetzt prüfen",
+      "remove": "Entfernen",
+      "confirmRemove": "Domain {{domain}} entfernen? Sie funktioniert danach sofort nicht mehr.",
+      "outcome": {
+        "Verified": "Die Domain zeigt auf Oschterhas und ist jetzt aktiv.",
+        "Unreachable": "Die Domain ist nicht erreichbar. Ist der DNS-Eintrag gesetzt? Das kann einige Minuten dauern.",
+        "WrongResponse": "Die Domain zeigt noch nicht auf Oschterhas. Bitte den DNS-Eintrag prüfen.",
+        "Redirect": "Die Domain leitet weiter. Bitte den DNS-Eintrag direkt auf Oschterhas setzen (keine Weiterleitung).",
+        "PrivateAddress": "Die Domain zeigt auf eine interne Adresse und wird aus Sicherheitsgründen nicht verwendet.",
+        "Timeout": "Die Domain hat nicht rechtzeitig geantwortet. Bitte später nochmals prüfen."
+      }
     }
   },
   "common": {
@@ -231,7 +258,14 @@
       "cannot_demote_self": "Du kannst dich nicht selbst sperren oder herabstufen.",
       "not_found": "Diesen Benutzer gibt es nicht."
     },
-    "csrf_invalid": "Das Sicherheits-Token fehlt oder ist abgelaufen. Bitte lade die Seite neu."
+    "csrf_invalid": "Das Sicherheits-Token fehlt oder ist abgelaufen. Bitte lade die Seite neu.",
+    "customdomain": {
+      "required": "Bitte eine Domain angeben.",
+      "invalid": "Bitte eine Domain wie ostern.example.ch angeben (keine IP-Adresse).",
+      "platform_domain": "Adressen unter der Oschterhas-Domain sind bereits als Unteradresse verfügbar.",
+      "taken": "Diese Domain wird schon von einer anderen Suche verwendet.",
+      "not_set": "Diese Suche hat keine eigene Domain."
+    }
   },
   "gpxWarnings": {
     "gpx": {

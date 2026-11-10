@@ -1,0 +1,77 @@
+<section class="card">
+  <h2>{{ 'admin.customDomain.title' | transloco }}</h2>
+
+  @if (instance().customDomain; as domain) {
+    <p>
+      <strong>{{ domain }}</strong>
+      <span
+        class="tag"
+        [class.tag--success]="instance().customDomainStatus === 'Verified'"
+        [class.tag--error]="instance().customDomainStatus === 'Failed'"
+      >
+        {{ 'admin.customDomain.status.' + instance().customDomainStatus | transloco }}
+      </span>
+    </p>
+    <p class="form__hint">
+      @if (instance().customDomainVerifiedAt; as verifiedAt) {
+        {{ 'admin.customDomain.verifiedAt' | transloco: { date: (verifiedAt | date: 'short') } }}
+      }
+      @if (instance().customDomainLastCheckAt; as checkedAt) {
+        {{
+          'admin.customDomain.lastCheck'
+            | transloco
+              : { date: (checkedAt | date: 'short'), failed: instance().customDomainFailedChecks }
+        }}
+      }
+    </p>
+
+    @if (instance().customDomainStatus !== 'Verified') {
+      <div class="dns-help">
+        <p>{{ 'admin.customDomain.dnsIntro' | transloco }}</p>
+        <code class="dns-help__record">{{ domain }}. CNAME {{ dnsTarget }}.</code>
+        <p class="form__hint">{{ 'admin.customDomain.dnsHint' | transloco }}</p>
+      </div>
+    }
+
+    @if (canEdit()) {
+      <div class="form__actions">
+        <button
+          type="button"
+          class="button button--secondary"
+          [disabled]="saving()"
+          (click)="remove()"
+        >
+          {{ 'admin.customDomain.remove' | transloco }}
+        </button>
+        <button type="button" class="button" [disabled]="saving()" (click)="verify()">
+          {{ 'admin.customDomain.verify' | transloco }}
+        </button>
+      </div>
+    }
+  } @else {
+    <p>{{ 'admin.customDomain.none' | transloco }}</p>
+  }
+
+  @if (canEdit()) {
+    <form class="form form--inline" (submit)="save($event)">
+      <label class="form__field">
+        <span class="form__label">{{ 'admin.customDomain.domain' | transloco }}</span>
+        <input
+          class="input"
+          name="domain"
+          required
+          maxlength="253"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="ostern.example.ch"
+          [value]="domain()"
+          (input)="domain.set(value($event))"
+        />
+      </label>
+      <button type="submit" class="button button--secondary" [disabled]="saving()">
+        {{ 'common.save' | transloco }}
+      </button>
+    </form>
+    <p class="form__hint">{{ 'admin.customDomain.hint' | transloco }}</p>
+  }
+</section>

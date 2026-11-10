@@ -25,6 +25,9 @@ export type GpxWaypoint = Schemas['GpxWaypoint'];
 export type GpxImportResult = Schemas['GpxImportResultDto'];
 export type User = Schemas['UserDto'];
 export type UpdateUserRequest = Schemas['UpdateUserRequest'];
+export type CustomDomainStatus = Schemas['CustomDomainStatus'];
+export type CustomDomainCheck = Schemas['CustomDomainCheckDto'];
+export type DomainCheckOutcome = Schemas['DomainCheckOutcome'];
 
 /** RFC 9457 problem with the API's stable error code. */
 export interface ApiProblem {

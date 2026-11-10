@@ -29,6 +29,9 @@ const detail: InstanceDetail = {
   subdomainUrl: 'https://tann.oschterhas.li',
   customDomain: null,
   customDomainStatus: 'None',
+  customDomainVerifiedAt: null,
+  customDomainLastCheckAt: null,
+  customDomainFailedChecks: 0,
   organizers: [],
 };
 
@@ -164,5 +167,40 @@ describe('admin reducer', () => {
     expect(added.message?.key).toBe('admin.messages.organizerInvited');
     expect(removed.detail?.organizers).toEqual([]);
     expect(deleted.instances).toEqual([]);
+  });
+
+  it('shows the outcome of a custom domain check', () => {
+    const verified = reduce(
+      adminPageActions.customDomainVerifyClicked({ instanceId: 'i1' }),
+      adminApiActions.customDomainChecked({
+        check: {
+          instance: {
+            ...detail,
+            customDomain: 'ostern.example.ch',
+            customDomainStatus: 'Verified',
+          },
+          outcome: 'Verified',
+        },
+      }),
+    );
+    const pending = reduce(
+      adminApiActions.customDomainChecked({
+        check: {
+          instance: { ...detail, customDomain: 'ostern.example.ch', customDomainStatus: 'Pending' },
+          outcome: 'Unreachable',
+        },
+      }),
+    );
+
+    expect(verified.saving).toBe(false);
+    expect(verified.detail?.customDomainStatus).toBe('Verified');
+    expect(verified.message).toEqual({
+      kind: 'success',
+      key: 'admin.customDomain.outcome.Verified',
+    });
+    expect(pending.message).toEqual({
+      kind: 'error',
+      key: 'admin.customDomain.outcome.Unreachable',
+    });
   });
 });

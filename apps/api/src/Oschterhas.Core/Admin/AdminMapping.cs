@@ -37,6 +37,9 @@ internal static class AdminMapping
         instance.SubdomainUrl(hosting),
         instance.CustomDomain,
         instance.CustomDomainStatus,
+        instance.CustomDomainVerifiedAt,
+        instance.CustomDomainLastCheckAt,
+        instance.CustomDomainFailedChecks,
         instance.Organizers
             .OrderBy(o => o.User.DisplayName)
             .Select(o => o.User.ToOrganizerDto())

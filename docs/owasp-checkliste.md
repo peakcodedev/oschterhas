@@ -20,7 +20,7 @@ Status: `[ ]` offen · `[x]` erfüllt und geprüft · `[~]` teilweise / bewusst 
 - [ ] CORS aus oder strikt auf die eigene Origin
 - [ ] **Host-Header-Prüfung**: nur Basis-Domain, gültige Subdomains und **verifizierte** Custom Domains; reservierte Slugs (`admin`, `www`, `api`, `custom` …) können nicht als Instanz angelegt werden
 - [ ] Links, Redirects und QR-Codes werden aus der gespeicherten Instanz-Adresse gebaut, **nie aus dem Host-Header** (keine Host-Header-Injection)
-- [ ] Custom Domains: nur `Verified` wird bedient; Verifizierung mit zufälligem Token; HTTP-Prüfung folgt keinen Redirects, hat ein kurzes Timeout und lehnt Ziele mit privaten/internen IP-Adressen ab (SSRF)
+- [ ] Custom Domains: nur `Verified` wird bedient; Verifizierung mit zufälligem Token (32 Byte); HTTP-Prüfung folgt keinen Redirects, hat ein kurzes Timeout und lehnt Ziele mit privaten/internen IP-Adressen ab (SSRF, auch gegen DNS-Rebinding: Verbindung zur geprüften Adresse). Umgesetzt in M4b, Prüfung in M6
 - [ ] `/internal/tls/allowed` ist von aussen nicht erreichbar und gibt nur für verifizierte Domains `200` (keine Zertifikate für fremde Domains, Let's-Encrypt-Limits geschützt)
 - [ ] Entfernte Custom Domains und gelöschte Instanzen werden sofort nicht mehr bedient (Cache invalidiert)
 - [ ] Admin-Bereich ist nur über `admin.oschterhas.li` erreichbar, nicht über Custom Domains

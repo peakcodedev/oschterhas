@@ -26,6 +26,9 @@ public sealed record InstanceDetailDto(
     string SubdomainUrl,
     string? CustomDomain,
     CustomDomainStatus CustomDomainStatus,
+    DateTimeOffset? CustomDomainVerifiedAt,
+    DateTimeOffset? CustomDomainLastCheckAt,
+    int CustomDomainFailedChecks,
     IReadOnlyList<OrganizerDto> Organizers);
 
 public sealed record OrganizerDto(Guid UserId, string Email, string DisplayName, bool InvitationPending);

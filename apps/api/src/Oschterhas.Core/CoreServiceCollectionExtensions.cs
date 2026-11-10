@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Oschterhas.Common.Http;
 using Oschterhas.Common.Resilience;
 using Oschterhas.Core.Admin;
+using Oschterhas.Core.Domains;
 using Oschterhas.Core.Events;
 using Oschterhas.Core.Gpx;
 using Oschterhas.Core.Hares;
@@ -39,6 +40,11 @@ public static class CoreServiceCollectionExtensions
         services.AddScoped<IOrganizerService, OrganizerService>();
         services.AddScoped<IHareAdminService, HareAdminService>();
         services.AddScoped<IGpxImportService, GpxImportService>();
+        services.AddOptions<CustomDomainOptions>();
+        services.AddScoped<ICustomDomainService, CustomDomainService>();
+        services.AddHttpClient<IDomainVerifier, HttpDomainVerifier>()
+            .ConfigurePrimaryHttpMessageHandler(sp =>
+                HttpDomainVerifier.CreateHandler(sp.GetRequiredService<IOptions<CustomDomainOptions>>().Value));
         services.AddHttpClient<IIdentityAdminClient, KeycloakAdminClient>(client => client.Timeout = TimeSpan.FromSeconds(15))
             .AddHttpMessageHandler(sp => new RetryHandler(
                 new RetryOptions { MaxAttempts = 3, BaseDelay = TimeSpan.FromMilliseconds(300) },

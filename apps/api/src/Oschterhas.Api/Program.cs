@@ -4,6 +4,7 @@ using Oschterhas.Api.Auth;
 using Oschterhas.Api.Hosting;
 using Oschterhas.Api.Http;
 using Oschterhas.Core;
+using Oschterhas.Core.Domains;
 using Oschterhas.Core.Events;
 using Oschterhas.Core.Gpx;
 using Oschterhas.Core.Hosting;
@@ -36,6 +37,9 @@ builder.Services.AddOptions<IdentityAdminOptions>()
         o.Issuer = builder.Configuration[$"{OidcOptions.SectionName}:Authority"] ?? o.Issuer;
     });
 builder.Services.AddOschterhasAuthentication(builder.Configuration, builder.Environment);
+builder.Services.AddOptions<CustomDomainOptions>().Bind(builder.Configuration.GetSection(CustomDomainOptions.SectionName));
+builder.Services.AddOptions<InternalNetworkOptions>().Bind(builder.Configuration.GetSection(InternalNetworkOptions.SectionName));
+builder.Services.AddHostedService<CustomDomainMonitor>();
 
 // Same JSON settings for MVC and for the OpenAPI generator (which reads the HTTP JSON options).
 static void ConfigureJson(JsonSerializerOptions json)

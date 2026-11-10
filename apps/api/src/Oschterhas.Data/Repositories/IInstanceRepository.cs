@@ -28,6 +28,15 @@ public interface IInstanceRepository
 
     Task<bool> IsOrganizerAsync(Guid instanceId, Guid userId, CancellationToken cancellationToken);
 
+    /// <summary>True if another instance already uses this custom domain (any status).</summary>
+    Task<bool> CustomDomainTakenAsync(string domain, Guid exceptInstanceId, CancellationToken cancellationToken);
+
+    /// <summary>Verification token of a custom domain that is set (Pending, Verified or Failed); null otherwise.</summary>
+    Task<string?> FindCustomDomainTokenAsync(string domain, CancellationToken cancellationToken);
+
+    /// <summary>All instances with a custom domain, tracked (for the periodic re-check).</summary>
+    Task<List<Instance>> ListWithCustomDomainForUpdateAsync(CancellationToken cancellationToken);
+
     void Add(Instance instance);
 
     void Remove(Instance instance);

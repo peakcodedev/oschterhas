@@ -194,6 +194,35 @@ body {
   background: var(--color-info-bg);
 }
 
+.tag--success {
+  background: var(--color-success-bg);
+}
+
+.tag--error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.dns-help {
+  margin: 12px 0;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--color-page);
+}
+
+.dns-help p {
+  margin: 0 0 8px;
+}
+
+.dns-help__record {
+  display: block;
+  overflow-x: auto;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--color-surface);
+  font-size: 0.95rem;
+}
+
 .form {
   display: flex;
   flex-direction: column;

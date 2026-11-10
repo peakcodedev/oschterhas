@@ -57,6 +57,9 @@ const savingActions = [
   adminPageActions.hareDeleteConfirmed,
   adminPageActions.hareResetClicked,
   adminPageActions.userUpdateSubmitted,
+  adminPageActions.customDomainSubmitted,
+  adminPageActions.customDomainVerifyClicked,
+  adminPageActions.customDomainRemoveConfirmed,
 ] as const;
 
 export const adminFeature = createFeature({
@@ -205,6 +208,16 @@ export const adminFeature = createFeature({
       message: success('admin.messages.gpxImported'),
     })),
     on(adminPageActions.gpxCleared, (state): AdminState => ({ ...state, gpx: initialGpxState })),
+
+    on(adminApiActions.customDomainChecked, (state, { check }): AdminState => ({
+      ...state,
+      saving: false,
+      detail: check.instance,
+      message: {
+        kind: check.outcome === 'Verified' ? 'success' : 'error',
+        key: `admin.customDomain.outcome.${check.outcome}`,
+      },
+    })),
 
     on(adminPageActions.usersOpened, (state): AdminState => ({ ...state, usersStatus: 'loading' })),
     on(adminApiActions.usersLoaded, (state, { users }): AdminState => ({

@@ -4,4 +4,5 @@ export const environment: Environment = {
   production: true,
   baseDomain: 'oschterhas.li',
   adminSubdomain: 'admin',
+  customDomainTarget: 'custom.oschterhas.li',
 };

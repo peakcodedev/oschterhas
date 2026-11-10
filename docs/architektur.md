@@ -128,8 +128,54 @@ Ablauf:
    - empfohlen: `CNAME ostern.ceviduernten.ch → custom.oschterhas.li`
    - für Apex-Domains ohne CNAME-Möglichkeit: `A`/`AAAA` auf die IP-Adressen des Servers
 3. „Prüfen" (oder automatisch alle 10 Min. während `Pending`): Die API ruft `http://ostern.ceviduernten.ch/.well-known/oschterhas-verification` auf. Kommt die Anfrage bei uns an, antwortet derselbe Server mit dem Token. Stimmt es, ist die Domain `Verified`. So ist bewiesen, dass die Domain auf uns zeigt, und es braucht keinen DNS-Client und kein Zusatzpaket (nur `HttpClient`, ohne Redirects zu folgen).
-4. Caddy holt beim ersten HTTPS-Aufruf automatisch ein Let's-Encrypt-Zertifikat (**On-Demand TLS**). Vorher fragt Caddy die API (`GET /internal/tls/allowed?domain=…`, nur aus dem internen Netz erreichbar), ob die Domain verifiziert ist. So gibt es nur Zertifikate für eingetragene, verifizierte Domains.
-5. Ein `BackgroundService` prüft verifizierte Domains täglich erneut. Nach 3 Fehlversuchen in Folge → `Failed`. Die Domain wird dann nicht mehr bedient, und der Admin sieht einen Hinweis.
+4. Status, letzte Prüfung und Fehlversuche sieht der Admin auf der Detailseite; Organisator/innen sehen nur den Status.
+5. Caddy holt beim ersten HTTPS-Aufruf automatisch ein Let's-Encrypt-Zertifikat (**On-Demand TLS**). Vorher fragt Caddy die API (`GET /internal/tls/allowed?domain=…`, nur aus dem internen Netz erreichbar), ob die Domain verifiziert ist. So gibt es nur Zertifikate für eingetragene, verifizierte Domains.
+6. Der `BackgroundService` `CustomDomainMonitor` prüft jede Minute, was fällig ist: `Pending` alle 10 Minuten, `Verified` und `Failed` täglich. Nach 3 Fehlversuchen in Folge → `Failed`, die Domain wird nicht mehr bedient. Ein erfolgreicher Check macht sie wieder `Verified`.
+
+Sicherheit der Prüfung (`HttpDomainVerifier`):
+- Eigene DNS-Auflösung im `ConnectCallback`; verbunden wird nur mit öffentlichen Adressen (`AddressPolicy`: keine Loopback-, privaten, Link-Local-, CGNAT- oder Multicast-Adressen). Weil genau die geprüfte Adresse verbunden wird, hilft auch DNS-Rebinding nicht.
+- Keine Redirects, kein Proxy, keine Cookies, 10 s Timeout, höchstens 1 KB Antwort, Token-Vergleich in konstanter Zeit.
+- Lokal (`appsettings.Development.json`): `AllowLocalhostDomains` und `AllowPrivateAddresses` erlauben `*.localhost` über den Dev-Server auf Port 4300.
+
+Caddy-Vorlage (Produktion, DNS-Modul je nach Anbieter):
+
+```caddyfile
+{
+	on_demand_tls {
+		ask http://api:5080/internal/tls/allowed
+	}
+}
+
+# Plattform-Domain: Wildcard-Zertifikat per DNS-01
+oschterhas.li, *.oschterhas.li {
+	tls {
+		dns <anbieter> {env.DNS_API_TOKEN}
+	}
+	@internal path /internal/*
+	respond @internal 404
+	reverse_proxy api:5080
+}
+
+# Custom Domains: Zertifikat erst, wenn die API "ja" sagt
+https:// {
+	tls {
+		on_demand
+	}
+	@internal path /internal/*
+	respond @internal 404
+	reverse_proxy api:5080
+}
+
+# HTTP: nur die Verifizierung direkt beantworten, sonst auf HTTPS umleiten
+http:// {
+	handle /.well-known/oschterhas-verification {
+		reverse_proxy api:5080
+	}
+	handle {
+		redir https://{host}{uri} permanent
+	}
+}
+```
 
 Regeln:
 - Domain wird normalisiert: klein geschrieben, ohne Punkt am Ende, IDN als Punycode (`System.Globalization.IdnMapping`). Weder `oschterhas.li` selbst noch Subdomains davon sind erlaubt. IP-Adressen und `localhost` werden abgelehnt.
@@ -147,7 +193,7 @@ Die Zuordnung Host → Instanz wird 30 Sekunden mit `IMemoryCache` zwischengespe
 
 ### Lokale Entwicklung
 - `http://tann.oschterhas.localhost:4300` (Instanz) und `http://admin.oschterhas.localhost:4300` (Verwaltung). Chrome und Firefox lösen `*.localhost` automatisch auf. Für Safari Einträge in `/etc/hosts` nötig.
-- Custom Domain testen: z. B. `ostern.cevi-test.localhost:4300` als Custom Domain eintragen. In der Entwicklung setzt `CustomDomains:AutoVerifyInDevelopment = true` den Status direkt auf `Verified`.
+- Custom Domain testen: z. B. `ostern.duernten-test.localhost` bei einer Instanz eintragen und „Jetzt prüfen" klicken. Die Prüfung läuft echt: Die API ruft `http://ostern.duernten-test.localhost:4300/.well-known/oschterhas-verification` über den Dev-Server auf.
 - Angular-Dev-Server mit `allowedHosts: ['.localhost']`, Proxy `/api` → API **mit unverändertem Host-Header**.
 
 ### Produktion

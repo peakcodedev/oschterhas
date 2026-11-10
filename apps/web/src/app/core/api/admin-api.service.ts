@@ -5,6 +5,7 @@ import {
   AddOrganizerRequest,
   AdminHare,
   CreateInstanceRequest,
+  CustomDomainCheck,
   GpxImportMode,
   GpxImportResult,
   GpxPreview,
@@ -103,6 +104,21 @@ export class AdminApiService {
     return this.http.post<GpxImportResult>(`/api/instances/${instanceId}/gpx`, formData(file), {
       params: new HttpParams().set('mode', mode),
     });
+  }
+
+  setCustomDomain(instanceId: string, domain: string): Observable<InstanceDetail> {
+    return this.http.put<InstanceDetail>(`/api/instances/${instanceId}/custom-domain`, { domain });
+  }
+
+  verifyCustomDomain(instanceId: string): Observable<CustomDomainCheck> {
+    return this.http.post<CustomDomainCheck>(
+      `/api/instances/${instanceId}/custom-domain/verify`,
+      {},
+    );
+  }
+
+  removeCustomDomain(instanceId: string): Observable<InstanceDetail> {
+    return this.http.delete<InstanceDetail>(`/api/instances/${instanceId}/custom-domain`);
   }
 
   users(): Observable<User[]> {

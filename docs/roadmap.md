@@ -60,17 +60,18 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [ ] Noch von Hand prüfen: Hase per Drag verschieben, QR-Code drucken, Login als Organisator/in (Otto) und Ablehnung ohne Zugang (Nina), Abmelden
 
 ## M4b – Custom Domains
-- [ ] Domain-Normalisierung und -Validierung (IDN/Punycode, keine IPs, nicht `oschterhas.li`) in Core + Tests
+- [x] Domain-Normalisierung und -Validierung (URL einfügen, IDN/Punycode, keine IPs, nicht `oschterhas.li`) in Core + Tests
 - [x] Host-Auflösung kennt verifizierte Custom Domains (mit `IMemoryCache`) + Tests (in M1 erledigt)
-- [ ] `PUT/DELETE /instances/{id}/custom-domain`, `POST …/verify`, `/.well-known/oschterhas-verification`
-- [ ] Verifizierung per HTTP (ohne Redirects, Timeout, keine privaten IPs) + Tests mit Fake-`HttpMessageHandler`
-- [ ] `BackgroundService`: `Pending` alle 10 Min., `Verified` täglich prüfen, nach 3 Fehlern `Failed`
-- [ ] `/internal/tls/allowed` für Caddy (nur internes Netz)
-- [ ] Admin-UI: Domain eintragen, DNS-Anleitung, Status, „Jetzt prüfen", entfernen; QR-Code/Link mit `publicUrl`
+- [x] `PUT/DELETE /instances/{id}/custom-domain`, `POST …/verify` (10/min), `/.well-known/oschterhas-verification`
+- [x] Verifizierung per HTTP: ohne Redirects, 10 s Timeout, max. 1 KB, Token-Vergleich in konstanter Zeit, eigene DNS-Auflösung mit Sperre privater Adressen (SSRF, DNS-Rebinding) + Tests
+- [x] `BackgroundService`: `Pending` alle 10 Min., `Verified`/`Failed` täglich prüfen, nach 3 Fehlern `Failed`, bei Erfolg wieder `Verified`
+- [x] `/internal/tls/allowed` für Caddy (nur aus `InternalNetwork:AllowedNetworks`, sonst `404`)
+- [x] Admin-UI: Domain eintragen, DNS-Anleitung, Status, „Jetzt prüfen", entfernen; QR-Code/Link mit `publicUrl` (seit M4)
 - [x] Angular: unbekannter Host → Suchansicht, `404` → „Suche nicht gefunden" (in M1 erledigt)
+- [ ] Im Browser mit lokaler Custom Domain durchgespielt
 
 ## M5 – Mehrsprachigkeit & PWA
-- [ ] Sprachwahl im Store, Browser-Sprache als Standard (Transloco ist seit M0 eingerichtet)
+- [ ] Sprachwahl im Store, Browser-Sprache als Standard (Transloco ist seit M0 eingerichtet); Datumsformate (`DatePipe`) in der gewählten Sprache (Locale-Daten de-CH/en registrieren)
 - [ ] Alle UI-Texte übersetzt (Mundart gegenlesen lassen); API-Fehlercodes als Keys
 - [ ] Angular Service Worker, Manifest, App-Icons
 - [ ] Mobile-UX-Feinschliff, Barrierefreiheit; dicht liegende Marker (65 Hasen in Tann überlappen bei Zoom 14): Clustering oder grösserer Start-Zoom prüfen
@@ -86,7 +87,8 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [ ] Migrationen als eigener Deploy-Schritt
 - [ ] Domain `oschterhas.li` registrieren (DNS-Anbieter mit API für DNS-01)
 - [ ] Hosting in der Schweiz, Wildcard-DNS `*.oschterhas.li` + `custom.oschterhas.li`
-- [ ] Caddy: Wildcard-Zertifikat per DNS-01, On-Demand TLS mit `ask` → `/internal/tls/allowed`, `/internal/*` von aussen sperren
+- [ ] Caddy: Wildcard-Zertifikat per DNS-01, On-Demand TLS mit `ask` → `/internal/tls/allowed`, `/internal/*` von aussen sperren, `/.well-known/oschterhas-verification` per HTTP ohne Umleitung auf HTTPS (Vorlage in `docs/architektur.md`)
+- [ ] `InternalNetwork:AllowedNetworks` auf das Docker-Netz von Caddy setzen; `CustomDomains:DnsTarget` und DNS-Eintrag `custom.oschterhas.li`
 - [ ] Produktions-Realm bei Peakcode Identity (Redirect-URIs, SMTP)
 - [ ] Datenbank-Backup
 - [ ] Testlauf mit echten Freiwilligen und echter GPX-Datei

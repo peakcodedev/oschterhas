@@ -130,6 +130,33 @@
       "invitationSent": "Invitation sent again.",
       "hareDeleted": "Bunny deleted.",
       "gpxImported": "GPX imported."
+    },
+    "customDomain": {
+      "title": "Own domain",
+      "none": "No own domain. The hunt is available at its Oschterhas address.",
+      "domain": "Domain",
+      "hint": "For example ostern.ceviduernten.ch. The Oschterhas address stays available too.",
+      "status": {
+        "None": "None",
+        "Pending": "Waiting for DNS",
+        "Verified": "Active",
+        "Failed": "No longer reachable"
+      },
+      "verifiedAt": "Active since {{date}}.",
+      "lastCheck": "Last checked {{date}} ({{failed}} failed checks in a row).",
+      "dnsIntro": "For the domain to work, this record must be set at the domain's DNS provider:",
+      "dnsHint": "This usually takes a few minutes. Oschterhas checks automatically every 10 minutes; “Check now” checks immediately. The HTTPS certificate is issued automatically after the check.",
+      "verify": "Check now",
+      "remove": "Remove",
+      "confirmRemove": "Remove the domain {{domain}}? It stops working immediately.",
+      "outcome": {
+        "Verified": "The domain points to Oschterhas and is now active.",
+        "Unreachable": "The domain is not reachable. Is the DNS record set? This can take a few minutes.",
+        "WrongResponse": "The domain does not point to Oschterhas yet. Please check the DNS record.",
+        "Redirect": "The domain redirects. Please point the DNS record directly to Oschterhas (no redirect).",
+        "PrivateAddress": "The domain points to an internal address and is not used for security reasons.",
+        "Timeout": "The domain did not answer in time. Please check again later."
+      }
     }
   },
   "common": {
@@ -231,7 +258,14 @@
       "cannot_demote_self": "You cannot disable or demote yourself.",
       "not_found": "This user does not exist."
     },
-    "csrf_invalid": "The security token is missing or expired. Please reload the page."
+    "csrf_invalid": "The security token is missing or expired. Please reload the page.",
+    "customdomain": {
+      "required": "Please enter a domain.",
+      "invalid": "Please enter a domain like ostern.example.ch (no IP address).",
+      "platform_domain": "Addresses under the Oschterhas domain are already available as sub-address.",
+      "taken": "This domain is already used by another hunt.",
+      "not_set": "This hunt has no own domain."
+    }
   },
   "gpxWarnings": {
     "gpx": {

@@ -307,6 +307,45 @@ export const sessionExpired = createEffect(
   { functional: true },
 );
 
+export const setCustomDomain = createEffect(
+  (actions$ = inject(Actions), api = inject(AdminApiService)) =>
+    actions$.pipe(
+      ofType(adminPageActions.customDomainSubmitted),
+      exhaustMap(({ instanceId, domain }) =>
+        call('setCustomDomain', api.setCustomDomain(instanceId, domain), (instance) =>
+          adminApiActions.instanceSaved({ instance }),
+        ),
+      ),
+    ),
+  { functional: true },
+);
+
+export const verifyCustomDomain = createEffect(
+  (actions$ = inject(Actions), api = inject(AdminApiService)) =>
+    actions$.pipe(
+      ofType(adminPageActions.customDomainVerifyClicked),
+      exhaustMap(({ instanceId }) =>
+        call('verifyCustomDomain', api.verifyCustomDomain(instanceId), (check) =>
+          adminApiActions.customDomainChecked({ check }),
+        ),
+      ),
+    ),
+  { functional: true },
+);
+
+export const removeCustomDomain = createEffect(
+  (actions$ = inject(Actions), api = inject(AdminApiService)) =>
+    actions$.pipe(
+      ofType(adminPageActions.customDomainRemoveConfirmed),
+      exhaustMap(({ instanceId }) =>
+        call('removeCustomDomain', api.removeCustomDomain(instanceId), (instance) =>
+          adminApiActions.instanceSaved({ instance }),
+        ),
+      ),
+    ),
+  { functional: true },
+);
+
 export const loadUsers = createEffect(
   (actions$ = inject(Actions), api = inject(AdminApiService)) =>
     actions$.pipe(
