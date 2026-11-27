@@ -1,0 +1,12 @@
+{
+  "/api": {
+    "target": "http://localhost:5080",
+    "secure": false,
+    "changeOrigin": false
+  },
+  "/.well-known/oschterhas-verification": {
+    "target": "http://localhost:5080",
+    "secure": false,
+    "changeOrigin": false
+  }
+}

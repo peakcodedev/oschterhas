@@ -1,0 +1,105 @@
+name: oschterhas
+
+# Production stack: API (also serves the Angular app) -> Postgres. HTTPS comes from the shared Caddy
+# (peakcode_infra) over the Docker network "proxy"; deploy.sh installs caddy/oschterhas.caddy there.
+# Login uses the central Peakcode Identity (Keycloak, realm "oschterhas" from identity_peakcode/production).
+# Secrets and URLs come from production/.env on the server (see .env.example); the image tag and the
+# proxy network come from deploy.sh. Deployed by .github/workflows/deploy.yml; see docs/betrieb.md.
+
+x-api-environment: &api-environment
+  Hosting__BaseDomain: ${OSCHTERHAS_BASE_DOMAIN:?Set OSCHTERHAS_BASE_DOMAIN in .env}
+  Oidc__Authority: https://${KEYCLOAK_HOSTNAME:?Set KEYCLOAK_HOSTNAME in .env}/realms/oschterhas
+  Oidc__ClientSecret: ${OSCHTERHAS_OIDC_CLIENT_SECRET:?Set OSCHTERHAS_OIDC_CLIENT_SECRET in .env}
+  IdentityAdmin__BaseUrl: https://${KEYCLOAK_HOSTNAME}
+  IdentityAdmin__ClientSecret: ${OSCHTERHAS_USER_ADMIN_CLIENT_SECRET:?Set OSCHTERHAS_USER_ADMIN_CLIENT_SECRET in .env}
+  IdentityAdmin__InvitationRedirectUri: https://admin.${OSCHTERHAS_BASE_DOMAIN}/login
+  # Keycloak user id (subject) that becomes platform admin on its first login while no user exists.
+  Auth__InitialPlatformAdmins__0: ${OSCHTERHAS_INITIAL_PLATFORM_ADMIN:-}
+  CustomDomains__DnsTarget: ${OSCHTERHAS_CUSTOM_DOMAIN_TARGET:-custom.${OSCHTERHAS_BASE_DOMAIN}}
+  # Caddy reaches the API from the "proxy" network: trust its X-Forwarded-For/-Proto and let it ask
+  # /internal/tls/allowed (index 2: entries 0 and 1 are the loopback networks from appsettings.json).
+  ReverseProxy__TrustedNetworks__0: ${PROXY_SUBNET:?Run deploy.sh, it sets PROXY_SUBNET}
+  InternalNetwork__AllowedNetworks__2: ${PROXY_SUBNET}
+
+services:
+  api:
+    image: ${OSCHTERHAS_IMAGE:-oschterhas-api:local}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *api-environment
+      # Least privilege: the running app may read and write data, but not change the schema.
+      ConnectionStrings__Oschterhas: Host=postgres;Database=oschterhas;Username=oschterhas_app;Password=${POSTGRES_APP_PASSWORD:?Set POSTGRES_APP_PASSWORD in .env};GssEncryptionMode=Disable
+    volumes:
+      - keys:/app/keys
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    # No published ports: only the shared Caddy reaches the API, as oschterhas-api:8080.
+    networks:
+      default:
+      proxy:
+        aliases: [oschterhas-api]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bash",
+          "-c",
+          "exec 3<>/dev/tcp/localhost/8080 && printf 'GET /health HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q Healthy <&3",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
+  # Applies the EF Core migrations with the schema owner, then exits. Not started by "up";
+  # deploy.sh runs it with "docker compose run --rm migrate" before the new version starts.
+  migrate:
+    image: ${OSCHTERHAS_IMAGE:-oschterhas-api:local}
+    profiles: ["migrate"]
+    command: ["--migrate"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *api-environment
+      ConnectionStrings__Oschterhas: Host=postgres;Database=oschterhas;Username=oschterhas;Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};GssEncryptionMode=Disable
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: oschterhas
+      POSTGRES_USER: oschterhas
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      # Read by db/10-app-user.sh when the database is created for the first time.
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?Set POSTGRES_APP_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oschterhas -d oschterhas"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+networks:
+  # Created by peakcode_infra (shared Caddy); deploy that first.
+  proxy:
+    name: proxy
+    external: true
+
+volumes:
+  postgres-data:
+  # ASP.NET data protection keys (session and antiforgery cookies survive restarts and deploys).
+  keys:

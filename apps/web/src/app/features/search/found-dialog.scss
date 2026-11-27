@@ -1,0 +1,69 @@
+.found-dialog {
+  width: min(28rem, calc(100vw - 32px));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+}
+
+.found-dialog::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+
+.found-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+}
+
+.found-dialog__title {
+  margin: 0;
+}
+
+.found-dialog__text,
+.found-dialog__hint {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.found-dialog__hint {
+  font-size: var(--klein-size);
+  line-height: var(--klein-line);
+}
+
+.found-dialog__label {
+  margin-top: var(--space-2);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+}
+
+.found-dialog__input {
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.found-dialog__input:focus-visible {
+  outline: 3px solid var(--color-position);
+  outline-offset: 1px;
+}
+
+.found-dialog__error {
+  margin: 0;
+  color: var(--color-error);
+}
+
+.found-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}

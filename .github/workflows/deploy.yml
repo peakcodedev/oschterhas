@@ -1,0 +1,87 @@
+name: Deploy
+
+# On main: runs the CI checks, validates the production files on GitHub-hosted runners, then builds
+# the image and deploys it with the self-hosted runner on the production server (peakcode_infra).
+# Pull requests only validate. Server setup: docs/betrieb.md.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - production/**
+      - .github/workflows/deploy.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    if: github.event_name != 'pull_request'
+    uses: ./.github/workflows/ci.yml
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - name: Check compose file
+        run: |
+          cp production/.env.example production/.env
+          PROXY_SUBNET=172.18.0.0/16 docker compose -f production/docker-compose.yml config --quiet
+
+      - name: Check shell scripts
+        run: shellcheck production/deploy.sh production/db/*.sh
+
+      # Same layout as the shared Caddy of peakcode_infra (config/Caddyfile imports global/ and sites/).
+      - name: Check Caddy site block and global options
+        run: |
+          mkdir -p "$RUNNER_TEMP/caddy/config" "$RUNNER_TEMP/caddy/sites" "$RUNNER_TEMP/caddy/global"
+          printf '{\n\timport /etc/caddy/global/*.caddy\n}\nimport /etc/caddy/sites/*.caddy\n' > "$RUNNER_TEMP/caddy/config/Caddyfile"
+          cp production/caddy/oschterhas.caddy "$RUNNER_TEMP/caddy/sites/"
+          cp production/caddy/oschterhas.global.caddy "$RUNNER_TEMP/caddy/global/oschterhas.caddy"
+          docker run --rm \
+            -v "$RUNNER_TEMP/caddy/config:/etc/caddy/config:ro" \
+            -v "$RUNNER_TEMP/caddy/sites:/etc/caddy/sites:ro" \
+            -v "$RUNNER_TEMP/caddy/global:/etc/caddy/global:ro" \
+            caddy:2.10 caddy validate --config /etc/caddy/config/Caddyfile --adapter caddyfile
+
+      - name: Build image
+        run: docker build -t oschterhas-api:ci .
+
+  # Runs on the self-hosted runner on the production server (label "peakcode-prod"), as the deploy
+  # user. Only this job uses it: pull request code never runs on the server.
+  deploy:
+    needs: [ci, validate]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, linux, peakcode-prod]
+    # GitHub environment "production": main only, optional required reviewers.
+    environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    env:
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/srv/oschterhas' }}
+      # bin/caddy-site of the shared Caddy (peakcode_infra) on the server
+      CADDY_SITE: ${{ vars.CADDY_SITE || '/srv/infra/bin/caddy-site' }}
+      OSCHTERHAS_IMAGE: oschterhas-api:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      # Built on the server: no registry needed. The tag is the commit, so a rollback is
+      # "OSCHTERHAS_IMAGE=oschterhas-api:<previous sha> sh deploy.sh".
+      - name: Build image
+        run: docker build --pull -t "$OSCHTERHAS_IMAGE" .
+
+      # Only the production files are copied; production/.env stays untouched.
+      - name: Copy files
+        run: rsync -rlp --delete --exclude '.env' production/ "$DEPLOY_PATH/"
+
+      # Migrates the database, starts the new version, and installs the Caddy files.
+      - name: Deploy
+        run: sh "$DEPLOY_PATH/deploy.sh"

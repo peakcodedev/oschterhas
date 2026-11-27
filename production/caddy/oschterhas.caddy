@@ -1,0 +1,33 @@
+# Site block for the shared Caddy (peakcode_infra); deploy.sh installs it with "caddy-site install".
+# Oschterhas serves many hosts: <domain>, admin.<domain>, one subdomain per instance and verified
+# custom domains of the organizers. They cannot be listed, so this is the server's catch-all site:
+# hosts of other applications have their own, more specific site blocks and are not affected.
+# Certificates are issued on demand, only for hosts that the API allows (global "ask", see
+# oschterhas.global.caddy). The API receives the Host header unchanged and resolves the instance.
+
+https:// {
+	tls {
+		on_demand
+	}
+
+	encode zstd gzip
+
+	# Only Caddy itself (from the proxy network) may call /internal/*, never a browser.
+	respond /internal/* 404
+
+	reverse_proxy oschterhas-api:8080 {
+		# Live updates (server-sent events) must not be buffered.
+		flush_interval -1
+	}
+}
+
+# Custom domain verification runs over plain HTTP before a certificate exists, and the API does not
+# follow redirects. Everything else on port 80 goes to HTTPS, as without this block.
+http:// {
+	handle /.well-known/oschterhas-verification {
+		reverse_proxy oschterhas-api:8080
+	}
+	handle {
+		redir https://{host}{uri} permanent
+	}
+}

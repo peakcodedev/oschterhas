@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Testdaten im Stil eines swisstopo-App-Exports. Nur <wpt> ist für Oschterhas relevant.
+  Der erste Wegpunkt stammt aus einem echten Export, die übrigen sind fiktiv. Echter Export: sample_data_2.gpx
+-->
+<gpx version="1.1" creator="Oschterhas Beispiel"
+     xmlns="http://www.topografix.com/GPX/1/1"
+     xmlns:swisstopo="https://prod-static.swisstopo-app.ch/xmlschemas/SwisstopoExtensions">
+	<metadata>
+		<name>Ostersuche Tann (Beispiel)</name>
+	</metadata>
+
+	<wpt lat="47.2705102840" lon="8.8527658385">
+		<ele>514.0</ele>
+		<name>8632 Tann</name>
+		<desc>Hauptstrasse 64 </desc>
+		<extensions>
+			<swisstopo:waypoint_id>101</swisstopo:waypoint_id>
+		</extensions>
+	</wpt>
+	<wpt lat="47.2712400000" lon="8.8541200000">
+		<ele>518.0</ele>
+		<name>Brunnen</name>
+		<desc>Hinter dem Dorfbrunnen</desc>
+		<extensions>
+			<swisstopo:waypoint_id>102</swisstopo:waypoint_id>
+		</extensions>
+	</wpt>
+	<wpt lat="47.2721800000" lon="8.8556900000">
+		<ele>525.0</ele>
+		<name>Waldrand</name>
+		<cmt>Im hohlen Baumstrunk (cmt statt desc)</cmt>
+		<extensions>
+			<swisstopo:waypoint_id>103</swisstopo:waypoint_id>
+		</extensions>
+	</wpt>
+	<wpt lat="47.2698300000" lon="8.8549100000">
+		<ele>511.0</ele>
+		<desc>Ohne Namen – wird automatisch nummeriert</desc>
+		<extensions>
+			<swisstopo:waypoint_id>104</swisstopo:waypoint_id>
+		</extensions>
+	</wpt>
+	<wpt lat="47.2690500000" lon="8.8519800000">
+		<ele>509.0</ele>
+		<name>Goldhase</name>
+		<desc>Bei der Feuerstelle, gut versteckt</desc>
+	</wpt>
+</gpx>

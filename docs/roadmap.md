@@ -1,0 +1,102 @@
+# Roadmap – Oschterhas
+
+Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
+
+## M0 – Projekt-Grundgerüst
+- [x] .NET 10 SDK (in `~/.dotnet`) und `dotnet-ef` 10 als lokales Tool (`apps/api/dotnet-tools.json`)
+- [x] Node 24 via nvm
+- [x] `apps/api`: `Oschterhas.slnx`, `global.json`, `Directory.Build.props`, `Directory.Packages.props`
+- [x] Projekte `Oschterhas.Api`, `Oschterhas.Core`, `Oschterhas.Data`, `Oschterhas.Common` mit Referenzen `Api → Core → Data → Common`
+- [x] Testprojekte `Oschterhas.Common.Tests`, `Oschterhas.Core.Tests`, `Oschterhas.Api.Tests` (xUnit v3 auf Microsoft Testing Platform + NSubstitute)
+- [x] Api: Controllers, OpenAPI (nur Development), Problem Details, `/health` mit DB-Prüfung, Hosting-Optionen mit Validierung
+- [x] Data: Entitäten gemäss `docs/datenmodell.md` (inkl. Custom-Domain-Feldern), `AppDbContext`, Konfigurationen, snake_case, `xmin`, Migration `InitialCreate`
+- [x] Common: `Result`/`Error`, `Retry`, `NamingConventions` + Tests (Zeit über `TimeProvider`)
+- [x] Core: `SlugRules` + Tests
+- [x] `apps/web` mit Angular 22 (standalone, SCSS, Routing, strict, zoneless, Vitest), `allowedHosts: ['.localhost']`, Proxy `/api`
+- [x] NgRx (`store`, `effects`, `entity`, `router-store`, `store-devtools`), Host-Erkennung (`HOST_CONTEXT`), Transloco mit `de`/`gsw`/`en`
+- [x] ESLint (angular-eslint) + Prettier (Web), `dotnet format` + `.editorconfig` (API)
+- [x] `.claude/launch.json` für Dev-Server; Befehle in `CLAUDE.md`
+- [x] GitHub Actions: build, test, lint, format, `has-pending-model-changes`, verbotene Pakete, Schwachstellen, Lizenzprüfung (noch nicht auf GitHub gelaufen – kein Remote)
+
+## M1 – Instanzen per Subdomain & Karte
+- [x] Host-Auflösung: `HostResolver` (Core, mit 30-s-Cache) + `HostResolutionMiddleware` (Api) für Subdomain, Admin, Basis-Domain, reservierte Slugs und verifizierte Custom Domains + Tests
+- [x] Entwicklungs-Seed: `tann` (aktiv, 65 Hasen aus `samples/sample_data_2.gpx`, Custom Domain `ostern.cevi-test.localhost`), `vorschau` (Entwurf), `vorbei` (beendet)
+- [x] `GET /api/public/instance` (PublicController, `PublicInstanceService`, Mapping, Problem Details mit `code`) + Tests
+- [x] Hasenname optional (`null` → „Hase {Nummer}" übersetzt im Frontend), Migration `MakeHareNameOptional`
+- [x] Angular: Host-Erkennung und Routing (seit M0)
+- [x] OpenAPI → TS-Typen (`npm run api:types`, API muss laufen), `PublicApiService`
+- [x] NgRx-Feature `search` (Actions, Reducer mit `@ngrx/entity`, Selektoren, Effects inkl. Geolocation) + Tests
+- [x] Karten-Komponente (Leaflet, Landeskarte/Luftbild/OSM, Attribution), nummerierte Marker offen/gefunden, Popup ohne HTML-Strings
+- [x] Eigene Position + „Meine Position", Fortschritt „x von y Hasen gefunden"
+- [x] Hinweise für `Draft` („noch nicht begonnen"), `Ended` und unbekannte Adresse
+
+## M2 – Gefunden markieren & Live-Updates
+- [x] `POST /api/public/hares/{id}/found`: `FoundService` (Core) mit Verlauf (`found_event`), Concurrency über `xmin`, `409` bei bereits gefunden oder nicht aktiver Suche, `422` bei ungültigem Spitznamen
+- [x] Rate-Limits (eingebaut): 30 Markierungen/Minute und 50 offene Live-Verbindungen pro IP (`RateLimits` in appsettings), `429` mit `Retry-After`
+- [x] `IInstanceEventBroadcaster` (in-memory, ein Kanal pro Verbindung, älteste Ereignisse fallen bei Überlauf weg) + `GET /api/public/events` (SSE mit `ready` zu Beginn und `ping` alle 25 s)
+- [x] NgRx-Effect für `EventSource`: Ereignisse → Actions, Nachladen nach jedem Wiederverbinden, Backoff 1 s → 30 s, Wächter bei 60 s Funkstille
+- [x] „Gefunden!"-Knopf im Popup (nur bei aktiver Suche), Dialog mit optionalem Spitznamen, Fehlermeldungen in drei Sprachen
+- [x] Marker werden gezielt aktualisiert; offene Popups bleiben bei Live-Updates offen
+
+## M3 – GPX-Parser
+- [x] `GpxParser` in Core mit `XmlReader`: nur `<wpt>`, Felder gemäss `docs/architektur.md`, Limit `Gpx:MaxWaypoints = 1000`, XXE-Schutz (in M1 vorgezogen für den Seed)
+- [x] Standardname „Wegpunkt" → kein Name (`Gpx:DefaultNames`), `waypoint_id` unabhängig vom Namespace-Präfix
+- [x] Unit-Tests: `sample_data_2.gpx` (65 Hasen), `beispiel-hasen.gpx`, 300/1000/1001 Wegpunkte, doppelte `waypoint_id`, DTD/XXE, fehlender Name, ungültige Koordinaten, `<trk>` ignoriert, GPX 1.0, Namespace-Varianten
+
+## M4 – Peakcode Identity & Verwaltung
+- [x] Im Repo `identity_peakcode` (Branch `feat/oschterhas-realm`): Realm `oschterhas` mit `oschterhas-bff`, `oschterhas-user-admin` und Testbenutzern (feste IDs)
+- [x] OIDC + Cookie (BFF) auf dem Admin-Host, `/api/auth/*`, Zuordnung über Issuer + Subject, Antiforgery, `401` statt Redirect für API-Aufrufe
+- [x] Berechtigungen in den Core-Services (Plattform-Admin, Organisator/in der Instanz; fremde Instanzen → `404`) + Tests
+- [x] Angular: `auth`-Feature, Login-Seite in der Verwaltung, Abmelden per Formular-POST
+- [x] Plattform-Admin: Instanzen anlegen/bearbeiten/löschen (mit Slug-Prüfung)
+- [x] `IIdentityAdminClient` (Keycloak-Admin-API, Token-Cache, `RetryHandler`) + Tests mit Fake-`HttpMessageHandler`
+- [x] Organisator/in erfassen, einladen, zuordnen, entfernen; Einladung erneut senden
+- [x] NgRx-Feature `admin`; Instanz-Übersicht für Organisator/innen
+- [x] GPX-Upload mit Kartenvorschau, Modi `Replace`/`Merge`, Warnungen
+- [x] Hasen bearbeiten (Drag, umbenennen, löschen, hinzufügen), Gefunden zurücksetzen
+- [x] Suche starten/beenden, Adresse + QR-Code (druckbar), Liste „nur nicht gefundene"
+- [x] Konten-Übersicht (sperren, Plattform-Admin setzen)
+- [x] Im Browser mit echtem Keycloak-Login durchgespielt: Login als Plattform-Admin, Suche anlegen, GPX-Import (Zusammenführen/Ersetzen), Hase umbenennen, Suche starten, Organisatorin einladen (Mail in Mailpit), Gefunden zurücksetzen (live auf der Suchseite), Benutzerseite
+- [ ] Noch von Hand prüfen: Hase per Drag verschieben, QR-Code drucken, Login als Organisator/in (Otto) und Ablehnung ohne Zugang (Nina), Abmelden
+
+## M4b – Custom Domains
+- [x] Domain-Normalisierung und -Validierung (URL einfügen, IDN/Punycode, keine IPs, nicht `oschterhas.li`) in Core + Tests
+- [x] Host-Auflösung kennt verifizierte Custom Domains (mit `IMemoryCache`) + Tests (in M1 erledigt)
+- [x] `PUT/DELETE /instances/{id}/custom-domain`, `POST …/verify` (10/min), `/.well-known/oschterhas-verification`
+- [x] Verifizierung per HTTP: ohne Redirects, 10 s Timeout, max. 1 KB, Token-Vergleich in konstanter Zeit, eigene DNS-Auflösung mit Sperre privater Adressen (SSRF, DNS-Rebinding) + Tests
+- [x] `BackgroundService`: `Pending` alle 10 Min., `Verified`/`Failed` täglich prüfen, nach 3 Fehlern `Failed`, bei Erfolg wieder `Verified`
+- [x] `/internal/tls/allowed` für Caddy (nur aus `InternalNetwork:AllowedNetworks`, sonst `404`)
+- [x] Admin-UI: Domain eintragen, DNS-Anleitung, Status, „Jetzt prüfen", entfernen; QR-Code/Link mit `publicUrl` (seit M4)
+- [x] Angular: unbekannter Host → Suchansicht, `404` → „Suche nicht gefunden" (in M1 erledigt)
+- [x] Im Browser mit lokaler Custom Domain durchgespielt: Domain als URL eingegeben (normalisiert), „Jetzt prüfen" mit echter HTTP-Prüfung → aktiv, Suche unter der Domain erreichbar, QR-Code wechselt, Fehlermeldungen (vergeben, Plattform-Domain, IP), Entfernen wirkt sofort
+
+## M5 – Mehrsprachigkeit & PWA
+- [x] Sprachwahl im Root-Store (`ui`), Auswahlfeld auf Suche, Verwaltung und Info-Seite; Start: gespeicherte Wahl, sonst Browser-Sprache (`de-CH` → Hochdeutsch, Mundart nur bei `gsw`); `<html lang>` folgt; Datumsformate mit Locale `de-CH` / `gsw` / `en-CH`
+- [x] Alle UI-Texte in `de`, `gsw`, `en`; API-Fehlercodes als Keys (seit M4)
+- [ ] **Mundart-Texte von einer Person mit Schweizerdeutsch als Muttersprache gegenlesen lassen** (`apps/web/public/i18n/gsw.json`)
+- [x] Angular Service Worker (nur Production-Build; `/api`, `/.well-known`, `/internal`, `/health` ausgenommen, SSE mit `ngsw-bypass`), Manifest, App-Icons (SVG + PNG 192/512, maskable, Apple Touch), Hinweis „Neue Version – neu laden"
+- [ ] PWA-Installation auf echtem Handy bzw. in Chrome prüfen (das Browser-Panel von Claude unterstützt keine Service Worker)
+- [x] Dicht liegende Marker: in der Übersicht (Zoom < 16) kleine Punkte mit 32-px-Tippfläche, Tippen zoomt hinein; nah nummerierte Marker mit Popup (Karte für Suchende und Verwaltung)
+- [x] Barrierefreiheit: Kontrast der gefundenen Marker (#6b7280), Fokus-Rahmen für Marker und Tabelle, alle Formularfelder beschriftet, `prefers-reduced-motion`, keine seitliche Scrollbar bei 375 px (Hasen-Tabelle scrollt in eigenem Bereich)
+
+## M6 – OWASP-Prüfung
+- [x] Prüfung nach `docs/owasp-checkliste.md` (OWASP Top 10:2025, ASVS 5.0 Level 1, ausgewählte L2-Punkte)
+- [x] OWASP ZAP: API-Scan mit aktiven Angriffen gegen alle Operationen aus dem OpenAPI-Dokument (Instanz-Host) – 0 Fehler
+- [x] `dotnet list package --vulnerable --include-transitive` und `npm audit --omit=dev` ohne Funde
+- [x] Funde behoben (Security-Header/CSP, Server-Header, Inline-Skript im Build, Parser-Details, Sicherheits-Logging, Proxy/Data-Protection-Konfiguration, Datenschutzseite, Dependabot/SHA-Pinning, CORP), Ergebnis in `docs/owasp-bericht.md`
+- [ ] Von Hand: Login als Otto (nur Tann) und Nina (kein Zugang), Abmelden unter CSP
+- [ ] Optional: authentifizierter ZAP-Scan der Verwaltung
+
+## M7 – Betrieb
+- [x] Dockerfile (API liefert Web-Build aus), `production/docker-compose.yml`, Deploy per GitHub Actions wie identity/peakcode_infra ([betrieb.md](betrieb.md))
+- [x] Migrationen als eigener Deploy-Schritt (`--migrate`, App-Benutzer ohne DDL-Rechte)
+- [ ] Domain `oschterhas.li` registrieren (DNS-API nicht mehr nötig, Zertifikate on demand)
+- [ ] Hosting in der Schweiz (gemeinsamer Peakcode-Server), DNS `oschterhas.li`, `*.oschterhas.li` + `custom.oschterhas.li`
+- [ ] peakcode_infra: Branch `feat/global-options` mergen und deployen, danach erster Oschterhas-Deploy (Einrichtung in [betrieb.md](betrieb.md))
+- [x] Caddy (gemeinsam, peakcode_infra): On-Demand TLS für alle Hosts mit `ask` → `/internal/tls/allowed` (statt Wildcard per DNS-01), `/internal/*` von aussen gesperrt, `/.well-known/oschterhas-verification` per HTTP ohne Umleitung. Braucht in peakcode_infra den Branch `feat/global-options`
+- [x] `InternalNetwork:AllowedNetworks` und `ReverseProxy:TrustedNetworks` = Netz `proxy` (setzt `deploy.sh` automatisch); `CustomDomains:DnsTarget` aus `.env`
+- [ ] DNS-Eintrag `custom.oschterhas.li` (mit der Domain)
+- [x] Produktions-Realm bei Peakcode Identity (zentraler Keycloak, `identity_peakcode/production/realms/oschterhas.json`); Secrets und `OSCHTERHAS_ADMIN_URL` beim Einrichten setzen
+- [ ] Datenbank-Backup (automatisch, Ablage in der Schweiz; Befehl für Hand-Sicherung in [betrieb.md](betrieb.md))
+- [ ] Offene Punkte aus `docs/owasp-bericht.md` (HTTPS/HSTS live, Log-Aufbewahrung, Header-Check auf dem Server)
+- [ ] Testlauf mit echten Freiwilligen und echter GPX-Datei

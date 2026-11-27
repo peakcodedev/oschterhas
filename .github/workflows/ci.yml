@@ -1,0 +1,62 @@
+name: CI
+
+# Pull requests run it directly; on main it runs as part of deploy.yml (before the deployment).
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    name: API (.NET)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: apps/api/global.json
+      - name: Forbidden packages (docs/lizenzen.md)
+        run: |
+          if grep -rEi --include='*.csproj' --include='*.props' \
+            'Include="(MediatR|AutoMapper|Polly|FluentAssertions|Moq|MassTransit|Duende)[".]' .; then
+            echo "::error::Forbidden package found, see docs/lizenzen.md"; exit 1
+          fi
+      - run: dotnet tool restore
+      - run: dotnet build --configuration Release
+      - run: dotnet test --configuration Release --no-build
+      - run: dotnet format --verify-no-changes --no-restore
+      - name: Missing migrations
+        run: dotnet ef migrations has-pending-model-changes --project src/Oschterhas.Data --startup-project src/Oschterhas.Api --configuration Release --no-build
+      - name: Vulnerable packages
+        run: |
+          dotnet list package --vulnerable --include-transitive | tee vulnerable.txt
+          if grep -qE '(High|Critical)' vulnerable.txt; then exit 1; fi
+
+  web:
+    name: Web (Angular)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+      - run: npm run licenses:check
+      - run: npm audit --omit=dev --audit-level=high

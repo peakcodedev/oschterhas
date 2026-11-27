@@ -1,0 +1,93 @@
+@switch (loadStatus()) {
+  @case ('loaded') {
+    @if (instance(); as instance) {
+      @if (haresVisible()) {
+        <div class="search">
+          <header class="search__header">
+            <div class="search__title-row">
+              <div class="search__brand">
+                <img
+                  class="brand-signet"
+                  src="brand/oschterhas-signet.svg"
+                  width="40"
+                  height="40"
+                  alt=""
+                />
+                <h1 class="search__title">{{ instance.name }}</h1>
+              </div>
+              <app-language-picker />
+            </div>
+            <p class="search__progress" aria-live="polite">
+              {{ 'search.progress' | transloco: progress() }}
+              ·
+              <a class="search__privacy" routerLink="/datenschutz">{{
+                'privacy.title' | transloco
+              }}</a>
+            </p>
+            @if (instance.status === 'Ended') {
+              <p class="search__banner">{{ 'search.ended' | transloco }}</p>
+            }
+            @if (live() === 'disconnected') {
+              <p class="search__live" role="status">{{ 'live.disconnected' | transloco }}</p>
+            }
+          </header>
+
+          <app-hare-map
+            class="search__map"
+            [hares]="hares()"
+            [position]="position()"
+            [canMarkFound]="canMarkFound()"
+            [ariaLabel]="'map.label' | transloco"
+            (foundRequested)="openFoundDialog($event)"
+          />
+
+          <app-found-dialog
+            [hare]="dialogHare()"
+            [state]="foundDialog()"
+            [lastNickname]="lastNickname()"
+            (submitted)="submitFound($event)"
+            (closed)="closeFoundDialog()"
+          />
+
+          <div class="search__actions">
+            @if (positionError(); as error) {
+              <p class="search__error" role="alert">{{ 'geolocation.' + error | transloco }}</p>
+            }
+            <button type="button" class="button" (click)="locateMe()" [disabled]="locating()">
+              {{ (locating() ? 'geolocation.locating' : 'geolocation.locateMe') | transloco }}
+            </button>
+          </div>
+        </div>
+      } @else {
+        <main class="page notice">
+          <app-language-picker />
+          <h1>{{ instance.name }}</h1>
+          <p>{{ 'search.notStarted' | transloco }}</p>
+          <p>
+            <a routerLink="/datenschutz">{{ 'privacy.title' | transloco }}</a>
+          </p>
+        </main>
+      }
+    }
+  }
+  @case ('notFound') {
+    <main class="page notice">
+      <h1>{{ 'app.name' | transloco }}</h1>
+      <p>{{ 'search.notFound' | transloco }}</p>
+    </main>
+  }
+  @case ('error') {
+    <main class="page notice">
+      <h1>{{ 'app.name' | transloco }}</h1>
+      <p role="alert">{{ 'search.loadError' | transloco }}</p>
+      <button type="button" class="button" (click)="retry()">
+        {{ 'common.retry' | transloco }}
+      </button>
+    </main>
+  }
+  @default {
+    <main class="page notice" aria-busy="true">
+      <p>{{ 'common.loading' | transloco }}</p>
+    </main>
+  }
+}

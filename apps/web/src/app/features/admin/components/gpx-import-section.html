@@ -1,0 +1,100 @@
+<section class="card">
+  <h2>{{ 'admin.gpx.title' | transloco }}</h2>
+  <p class="form__hint">{{ 'admin.gpx.hint' | transloco }}</p>
+
+  <label class="button button--secondary file-button">
+    {{ 'admin.gpx.choose' | transloco }}
+    <input
+      class="visually-hidden"
+      type="file"
+      accept=".gpx,application/gpx+xml,application/xml,text/xml"
+      (change)="choose($event)"
+    />
+  </label>
+
+  @switch (gpx().status) {
+    @case ('previewing') {
+      <p aria-busy="true">{{ 'admin.gpx.reading' | transloco: { file: gpx().fileName } }}</p>
+    }
+    @case ('importing') {
+      <p aria-busy="true">{{ 'admin.gpx.importing' | transloco }}</p>
+    }
+    @case ('done') {
+      @if (gpx().result; as result) {
+        <p role="status">
+          {{
+            'admin.gpx.result'
+              | transloco
+                : { created: result.created, updated: result.updated, deleted: result.deleted }
+          }}
+        </p>
+      }
+    }
+  }
+
+  @if (gpx().status === 'preview' && gpx().preview; as preview) {
+    <div class="gpx-preview">
+      <p>
+        <strong>{{ gpx().fileName }}</strong
+        >:
+        {{ 'admin.gpx.found' | transloco: { count: preview.waypoints.length } }}
+        {{
+          'admin.gpx.existing'
+            | transloco
+              : {
+                  count: preview.existingHares,
+                  found: preview.existingFound,
+                  matching: preview.matchingWaypoints,
+                }
+        }}
+      </p>
+      <p class="form__hint">{{ 'admin.gpx.previewOnMap' | transloco }}</p>
+
+      @if (preview.warnings.length > 0) {
+        <details>
+          <summary>
+            {{ 'admin.gpx.warnings' | transloco: { count: preview.warnings.length } }}
+          </summary>
+          <ul>
+            @for (warning of preview.warnings; track $index) {
+              <li>#{{ warning.position }}: {{ 'gpxWarnings.' + warning.code | transloco }}</li>
+            }
+          </ul>
+        </details>
+      }
+
+      <fieldset class="form__field">
+        <legend class="form__label">{{ 'admin.gpx.mode' | transloco }}</legend>
+        <label class="radio">
+          <input
+            type="radio"
+            name="mode"
+            value="Merge"
+            [checked]="mode() === 'Merge'"
+            (change)="mode.set('Merge')"
+          />
+          {{ 'admin.gpx.modeMerge' | transloco }}
+        </label>
+        <label class="radio">
+          <input
+            type="radio"
+            name="mode"
+            value="Replace"
+            [checked]="mode() === 'Replace'"
+            (change)="mode.set('Replace')"
+          />
+          {{ 'admin.gpx.modeReplace' | transloco }}
+        </label>
+      </fieldset>
+
+      <div class="form__actions">
+        <button type="button" class="button button--secondary" (click)="clear()">
+          {{ 'common.cancel' | transloco }}
+        </button>
+        <button type="button" class="button" (click)="import()">
+          {{ 'admin.gpx.import' | transloco }}
+        </button>
+      </div>
+    </div>
+  }
+</section>

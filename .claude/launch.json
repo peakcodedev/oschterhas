@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd apps/api && DOTNET_ROOT=$HOME/.dotnet PATH=$HOME/.dotnet:$PATH dotnet run --project src/Oschterhas.Api"
+      ],
+      "port": 5080
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "source $HOME/.nvm/nvm.sh && cd apps/web && nvm use >/dev/null && npm start"
+      ],
+      "port": 4300,
+      "url": "http://tann.oschterhas.localhost:4300",
+      "autoPort": false
+    }
+  ]
+}

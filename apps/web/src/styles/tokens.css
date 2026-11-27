@@ -1,0 +1,59 @@
+/* Oschterhas design tokens — generated from design-system/tokens.json by scripts/generate-tokens.mjs. Do not edit. */
+:root {
+  --eierschale: #fff6ea; /* Seitenhintergrund der App. Warmes Off-White statt reinem Weiss. */
+  --weiss: #ffffff; /* Karten, Bottom-Sheets und Eingabefelder auf eierschale. */
+  --linie: #e9dcc9; /* Nur dekorative Trennlinien und Kartenränder. Für Rahmen von Eingabefeldern ink-muted verwenden (Kontrast). */
+  --ink: #24163a; /* Haupttextfarbe und Logo-Schrift. 15.7:1 auf eierschale. Auch Text auf rueebli, eigelb und himmel. */
+  --ink-muted: #5e5270; /* Sekundärtext, Hilfetexte, Rahmen von Eingabefeldern. 6.7:1 auf eierschale. */
+  --rueebli: #ff6b2c; /* Markenfarbe (Lupenring, «has» im Logo). Primär-Buttons mit ink-Text (5.9:1). Nie weisser Text auf rueebli (2.8:1). */
+  --rueebli-text: #b83f0b; /* Orange für Text und Links auf eierschale oder weiss (5.2:1). */
+  --eigelb: #ffc83d; /* Akzent: App-Icon-Hintergrund, Hervorhebungen, Punkte-Badges. Text darauf in ink (10.9:1). */
+  --karamell: #f4a259; /* Fell des Hasen. Nur für Illustration, nicht für Text oder Bedienelemente. */
+  --rosa: #ff8fa3; /* Ohren, Nase und Bäckchen des Hasen. Nur für Illustration. */
+  --wiese: #167a43; /* Erfolg: «Hase gefunden!», abgehakte Posten. Weisser Text darauf (5.4:1) oder als Textfarbe auf eierschale (5.0:1). */
+  --himmel: #6ec1e4; /* Info-Flächen, Hinweiskarten, Wasser auf der Karte. Text darauf in ink (8.3:1). */
+  --himmel-text: #1f6e96; /* Blau für Info-Text und Icons auf eierschale (5.3:1). */
+  --fehler: #c42036; /* Fehler und Warnungen, z. B. falscher Code. 5.4:1 auf eierschale, weisser Text darauf 5.8:1. */
+
+  --font-display: 'Poppins', system-ui, sans-serif;
+  --font-text: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --display-font: var(--font-display);
+  --display-size: 40px;
+  --display-line: 44px;
+  --display-weight: 700;
+  --display-tracking: -0.5px;
+  --titel-1-font: var(--font-display);
+  --titel-1-size: 28px;
+  --titel-1-line: 34px;
+  --titel-1-weight: 700;
+  --titel-2-font: var(--font-display);
+  --titel-2-size: 22px;
+  --titel-2-line: 28px;
+  --titel-2-weight: 600;
+  --text-gross-font: var(--font-text);
+  --text-gross-size: 18px;
+  --text-gross-line: 26px;
+  --text-gross-weight: 400;
+  --text-font: var(--font-text);
+  --text-size: 16px;
+  --text-line: 24px;
+  --text-weight: 400;
+  --label-font: var(--font-text);
+  --label-size: 15px;
+  --label-line: 20px;
+  --label-weight: 700;
+  --klein-font: var(--font-text);
+  --klein-size: 13px;
+  --klein-line: 18px;
+  --klein-weight: 400;
+
+  --space-1: 4px; /* Abstand Icon–Text. */
+  --space-2: 8px; /* Enge Gruppen, Chips. */
+  --space-4: 16px; /* Kartenpadding, Seitenrand auf dem Handy. */
+  --space-6: 24px; /* Abstand zwischen Abschnitten. */
+  --space-8: 32px; /* Grosse Abstände, Startscreen. */
+  --radius-sm: 8px; /* Eingabefelder, Chips. */
+  --radius-md: 16px; /* Karten, Bottom-Sheets. */
+  --radius-lg: 24px; /* Grosse Flächen, Bilder. */
+  --radius-pill: 999px; /* Buttons (Pillenform wie die Hasenohren), Badges. */
+}

@@ -1,0 +1,314 @@
+{
+  "app": {
+    "name": "Oschterhas"
+  },
+  "landing": {
+    "intro": "The app for the Easter hunt outdoors."
+  },
+  "search": {
+    "progress": "{{found}} of {{total}} bunnies found",
+    "notStarted": "The hunt has not started yet. Check back later!",
+    "ended": "The hunt is over. Thanks for taking part!",
+    "notFound": "There is no hunt at this address.",
+    "loadError": "The hunt could not be loaded."
+  },
+  "admin": {
+    "title": "Administration",
+    "logout": "Sign out",
+    "nav": {
+      "label": "Administration",
+      "instances": "Hunts",
+      "users": "Users"
+    },
+    "login": {
+      "title": "Sign in",
+      "text": "The administration is for organizers. Sign in with your Peakcode account.",
+      "button": "Sign in with Peakcode",
+      "reason": {
+        "no_access": "This account has no access to Oschterhas. Please contact the platform administration.",
+        "disabled": "This account has been disabled.",
+        "failed": "Signing in did not work. Please try again."
+      }
+    },
+    "status": {
+      "Draft": "Draft",
+      "Active": "Running",
+      "Ended": "Ended"
+    },
+    "instances": {
+      "title": "Hunts",
+      "new": "New hunt",
+      "empty": "No hunts yet.",
+      "progress": "{{found}} of {{total}} bunnies found"
+    },
+    "instance": {
+      "slug": "Address",
+      "slugHint": "3–40 characters: lowercase letters, digits and hyphens. Can later only be changed by the platform administration.",
+      "name": "Name",
+      "eventDate": "Date",
+      "description": "Description"
+    },
+    "detail": {
+      "start": "Start hunt",
+      "end": "End hunt",
+      "backToDraft": "Back to draft",
+      "restart": "Start again",
+      "confirmStart": "Start the hunt now? The bunnies become visible to everyone.",
+      "confirmEnd": "End the hunt? Nobody can mark bunnies as found afterwards.",
+      "confirmDraft": "Back to draft? The bunnies will no longer be visible.",
+      "open": "Open",
+      "copy": "Copy address",
+      "print": "Print QR code",
+      "alsoAt": "Also available at {{url}}",
+      "details": "Details",
+      "dangerZone": "Delete",
+      "delete": "Delete hunt",
+      "confirmDelete": "Permanently delete the hunt “{{name}}” with all bunnies?"
+    },
+    "organizers": {
+      "title": "Organizers",
+      "empty": "Nobody assigned yet.",
+      "pending": "Invitation pending",
+      "resend": "Resend invitation",
+      "remove": "Remove",
+      "email": "E-mail",
+      "name": "Name",
+      "invite": "Invite",
+      "inviteHint": "New people receive an e-mail from Peakcode to set their password.",
+      "confirmRemove": "Remove {{name}} from this hunt?"
+    },
+    "hares": {
+      "title": "Bunnies",
+      "add": "Add bunny",
+      "mapHint": "Tap a marker to edit, drag to move. New bunnies appear in the middle of the map.",
+      "mapLabel": "Map of the bunnies for editing",
+      "name": "Name",
+      "description": "Description",
+      "status": "Status",
+      "actions": "Actions",
+      "reset": "Reset",
+      "delete": "Delete",
+      "empty": "No bunnies.",
+      "onlyHidden": "Show only bunnies not found",
+      "confirmDelete": "Delete {{name}}?"
+    },
+    "gpx": {
+      "title": "Import GPX",
+      "hint": "Export the waypoints from the swisstopo app as a GPX file (max. 5 MB, 1000 waypoints). Only waypoints are imported.",
+      "choose": "Choose GPX file",
+      "reading": "Reading {{file}} …",
+      "importing": "Importing …",
+      "result": "Import done: {{created}} new, {{updated}} updated, {{deleted}} deleted.",
+      "found": "{{count}} waypoints found.",
+      "existing": "So far {{count}} bunnies ({{found}} found), {{matching}} with the same swisstopo id.",
+      "previewOnMap": "The waypoints are shown as dashed markers on the map below.",
+      "warnings": "{{count}} notes",
+      "mode": "How to apply?",
+      "modeMerge": "Merge: update same swisstopo id, add new ones, keep the rest",
+      "modeReplace": "Replace: delete all existing bunnies",
+      "import": "Import",
+      "confirmReplaceFound": "{{count}} bunnies have already been found. Replacing loses this. Replace anyway?"
+    },
+    "qr": {
+      "alt": "QR code for {{url}}"
+    },
+    "users": {
+      "title": "Users",
+      "name": "Name",
+      "admin": "Platform admin",
+      "active": "Active",
+      "adminFor": "{{name}} is platform admin",
+      "activeFor": "{{name}} is active"
+    },
+    "messages": {
+      "saved": "Saved.",
+      "instanceCreated": "Hunt created.",
+      "instanceDeleted": "Hunt deleted.",
+      "organizerInvited": "Invitation sent.",
+      "organizerAdded": "Assigned.",
+      "organizerRemoved": "Removed.",
+      "invitationSent": "Invitation sent again.",
+      "hareDeleted": "Bunny deleted.",
+      "gpxImported": "GPX imported."
+    },
+    "customDomain": {
+      "title": "Own domain",
+      "none": "No own domain. The hunt is available at its Oschterhas address.",
+      "domain": "Domain",
+      "hint": "For example ostern.ceviduernten.ch. The Oschterhas address stays available too.",
+      "status": {
+        "None": "None",
+        "Pending": "Waiting for DNS",
+        "Verified": "Active",
+        "Failed": "No longer reachable"
+      },
+      "verifiedAt": "Active since {{date}}.",
+      "lastCheck": "Last checked {{date}} ({{failed}} failed checks in a row).",
+      "dnsIntro": "For the domain to work, this record must be set at the domain's DNS provider:",
+      "dnsHint": "This usually takes a few minutes. Oschterhas checks automatically every 10 minutes; “Check now” checks immediately. The HTTPS certificate is issued automatically after the check.",
+      "verify": "Check now",
+      "remove": "Remove",
+      "confirmRemove": "Remove the domain {{domain}}? It stops working immediately.",
+      "outcome": {
+        "Verified": "The domain points to Oschterhas and is now active.",
+        "Unreachable": "The domain is not reachable. Is the DNS record set? This can take a few minutes.",
+        "WrongResponse": "The domain does not point to Oschterhas yet. Please check the DNS record.",
+        "Redirect": "The domain redirects. Please point the DNS record directly to Oschterhas (no redirect).",
+        "PrivateAddress": "The domain points to an internal address and is not used for security reasons.",
+        "Timeout": "The domain did not answer in time. Please check again later."
+      }
+    }
+  },
+  "common": {
+    "loading": "Loading …",
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "edit": "Edit"
+  },
+  "hare": {
+    "defaultName": "Bunny {{number}}",
+    "hidden": "Still hidden",
+    "found": "Found",
+    "foundBy": "Found by {{name}}",
+    "markFound": "Found it!"
+  },
+  "map": {
+    "label": "Map of the hidden bunnies",
+    "layer": {
+      "swisstopo": "National map",
+      "aerial": "Aerial image",
+      "osm": "OpenStreetMap"
+    }
+  },
+  "geolocation": {
+    "locateMe": "My location",
+    "locating": "Finding your location …",
+    "denied": "Location access was not allowed.",
+    "unavailable": "Your location could not be determined.",
+    "unsupported": "This device cannot determine its location."
+  },
+  "foundDialog": {
+    "title": "Found {{name}}?",
+    "text": "Mark the bunny as found so others don't search in vain.",
+    "nickname": "Your name (optional)",
+    "nicknameHint": "Visible to everyone.",
+    "submitting": "Saving …",
+    "error": {
+      "alreadyFound": "This bunny has already been found.",
+      "notActive": "The hunt is not running right now.",
+      "rateLimited": "Too many attempts. Please wait a moment.",
+      "invalidName": "The name is too long or contains invalid characters.",
+      "error": "That didn't work. Please try again."
+    }
+  },
+  "live": {
+    "disconnected": "Connection lost – reconnecting …"
+  },
+  "errors": {
+    "unknown": "Something went wrong. Please try again.",
+    "network": "No connection to the server.",
+    "unauthorized": "Your session has expired. Please sign in again.",
+    "rate_limited": "Too many requests. Please wait a moment.",
+    "auth": {
+      "platform_admin_required": "Only the platform administration may do this."
+    },
+    "instance": {
+      "not_found": "This hunt does not exist or you have no access.",
+      "slug_required": "Please enter an address.",
+      "slug_invalid": "The address may only contain lowercase letters, digits and hyphens (3–40 characters).",
+      "slug_reserved": "This address is reserved.",
+      "slug_taken": "This address is already taken.",
+      "slug_change_forbidden": "Only the platform administration can change the address.",
+      "name_required": "Please enter a name.",
+      "name_too_long": "The name is too long (max. 100 characters).",
+      "description_too_long": "The description is too long (max. 2000 characters).",
+      "changed": "Someone else changed this hunt in the meantime. Please reload."
+    },
+    "organizer": {
+      "email_invalid": "Please enter a valid e-mail address.",
+      "name_invalid": "Please enter a name (max. 200 characters).",
+      "already_assigned": "This person is already assigned.",
+      "already_active": "This person has already signed in.",
+      "invitation_failed": "The person was assigned, but the invitation could not be sent. Please resend it later.",
+      "not_found": "This person is not assigned."
+    },
+    "identity": {
+      "unavailable": "Peakcode Identity is not reachable right now.",
+      "user_conflict": "Peakcode already has an account that does not match. Please contact the administration."
+    },
+    "hare": {
+      "not_found": "This bunny no longer exists.",
+      "changed": "Someone else changed this bunny in the meantime. Please reload.",
+      "coordinates_invalid": "The position is invalid.",
+      "name_too_long": "The name is too long (max. 100 characters).",
+      "description_too_long": "The description is too long (max. 500 characters)."
+    },
+    "gpx": {
+      "file_missing": "Please choose a GPX file.",
+      "file_too_large": "The file is larger than 5 MB.",
+      "invalid_xml": "The file is not valid XML.",
+      "dtd_not_allowed": "The file contains a DTD and is rejected for security reasons.",
+      "not_gpx": "The file is not a GPX file.",
+      "no_waypoints": "The file contains no waypoints.",
+      "too_many_waypoints": "The file contains more than 1000 waypoints."
+    },
+    "user": {
+      "cannot_demote_self": "You cannot disable or demote yourself.",
+      "not_found": "This user does not exist."
+    },
+    "csrf_invalid": "The security token is missing or expired. Please reload the page.",
+    "customdomain": {
+      "required": "Please enter a domain.",
+      "invalid": "Please enter a domain like ostern.example.ch (no IP address).",
+      "platform_domain": "Addresses under the Oschterhas domain are already available as sub-address.",
+      "taken": "This domain is already used by another hunt.",
+      "not_set": "This hunt has no own domain."
+    }
+  },
+  "gpxWarnings": {
+    "gpx": {
+      "invalid_coordinates": "Waypoint without valid coordinates skipped.",
+      "duplicate_waypoint_id": "swisstopo id appears twice.",
+      "name_truncated": "Name shortened.",
+      "description_truncated": "Description shortened.",
+      "waypoint_id_truncated": "swisstopo id shortened."
+    }
+  },
+  "language": {
+    "label": "Language",
+    "names": {
+      "de": "Deutsch",
+      "gsw": "Schwiizerdütsch",
+      "en": "English"
+    }
+  },
+  "update": {
+    "ready": "A new version is available.",
+    "reload": "Reload"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "back": "Back",
+    "intro": "Oschterhas is an app for Easter hunts outdoors. We store as little data as possible.",
+    "searchers": {
+      "title": "For searchers",
+      "noAccount": "You don't need an account.",
+      "found": "When you mark a bunny as found, we store the time and – only if you enter it – your nickname. The nickname is visible to everyone who opens this hunt.",
+      "noIp": "We do not store your IP address. It is only used briefly in memory to slow down misuse.",
+      "location": "Your location is only used by your browser to show it on the map. It is never sent to Oschterhas.",
+      "tiles": "Your browser loads the map images directly from swisstopo (Swiss Federal Office of Topography) or OpenStreetMap. These services see your IP address.",
+      "storage": "Your browser remembers the chosen language locally."
+    },
+    "organizers": {
+      "title": "For organizers",
+      "login": "Sign-in runs through Peakcode Identity. Oschterhas never receives passwords.",
+      "data": "We store name, e-mail address, the assigned hunts, the time of the last sign-in and log entries about changes (e.g. import, reset)."
+    },
+    "hosting": {
+      "title": "Storage location",
+      "text": "Data and backups are stored in Switzerland."
+    }
+  }
+}
