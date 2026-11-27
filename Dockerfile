@@ -17,7 +17,7 @@ COPY apps/api/global.json apps/api/Directory.Build.props apps/api/Directory.Pack
 COPY apps/api/src ./src
 RUN dotnet publish src/Oschterhas.Api -c Release -o /out -p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.14
+FROM mcr.microsoft.com/dotnet/aspnet:11.0.0
 WORKDIR /app
 COPY --from=api /out ./
 COPY --from=web /src/apps/web/dist/web/browser ./wwwroot
