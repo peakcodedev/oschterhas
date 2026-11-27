@@ -103,7 +103,7 @@
             ],
             "port": 4300,
             "headers": {
-              "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://wmts.geo.admin.ch https://tile.openstreetmap.org; connect-src 'self' ws:; font-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' http://localhost:8180",
+              "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://wmts.geo.admin.ch https://tile.openstreetmap.org; connect-src 'self' ws: https://wmts.geo.admin.ch https://tile.openstreetmap.org; font-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' http://localhost:8180",
               "X-Content-Type-Options": "nosniff",
               "Referrer-Policy": "strict-origin-when-cross-origin",
               "Permissions-Policy": "geolocation=(self), camera=(), microphone=(), payment=(), usb=()"

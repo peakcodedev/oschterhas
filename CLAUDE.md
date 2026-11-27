@@ -70,7 +70,7 @@ Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed 
 - **Frontend-State**: fachliches State über NgRx. Komponenten machen keine HTTP-Aufrufe; HTTP und SSE laufen in Effects. Effects-Dateien exportieren **nur Effects** (die Routen geben das ganze Modul an `provideEffects`); Hilfsfunktionen in eigene Dateien.
 - **Nach Frontend-Änderungen** neben `npm test` immer `npx tsc -p tsconfig.app.json --noEmit` oder `npm run build`: Vitest findet nicht jeden Typfehler, und der Dev-Server zeigt dann still die alte Version.
 - **Sicherheit**: neue Endpunkte gegen `docs/owasp-checkliste.md` prüfen. Prüfstand und Funde: `docs/owasp-bericht.md`.
-- **CSP**: keine Inline-Skripte und keine Inline-Event-Handler (`onclick=` usw.), kein `eval`. Neue externe Quellen (Kacheln, Schriften) in `SecurityHeaders.cs` **und** in den Dev-Server-Headern (`angular.json`) eintragen; der Dev-Server nutzt dieselbe CSP, damit Verstösse sofort auffallen.
+- **CSP**: keine Inline-Skripte und keine Inline-Event-Handler (`onclick=` usw.), kein `eval`. Neue externe Quellen (Kacheln, Schriften) in `SecurityHeaders.cs` **und** in den Dev-Server-Headern (`angular.json`) eintragen; der Dev-Server nutzt dieselbe CSP, damit Verstösse sofort auffallen. Was der Service Worker lädt (z. B. Kartenkacheln), braucht zusätzlich `connect-src`, sonst meldet er 504.
 - **Logging**: Sicherheits- und Audit-Einträge mit IDs, nie mit IP-Adressen, Spitznamen, E-Mails, Tokens oder Cookies.
 - **Secrets**: nie ins Repo. Lokal `dotnet user-secrets`, in Produktion Umgebungsvariablen. `.env` im Identity-Repo nicht lesen.
 
