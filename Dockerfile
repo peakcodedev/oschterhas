@@ -10,7 +10,7 @@ COPY design-system /src/design-system
 COPY apps/web ./
 RUN npm run build
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0.403 AS api
+FROM mcr.microsoft.com/dotnet/sdk:11.0.100 AS api
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 WORKDIR /src/apps/api
 COPY apps/api/global.json apps/api/Directory.Build.props apps/api/Directory.Packages.props ./
