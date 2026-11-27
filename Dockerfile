@@ -2,7 +2,7 @@
 # Build: docker build -t oschterhas-api:local .   (context = repository root, see .dockerignore)
 # Base images are pinned; Dependabot (docker) proposes updates.
 
-FROM node:24.22-alpine AS web
+FROM node:26.13-alpine AS web
 WORKDIR /src/apps/web
 COPY apps/web/package.json apps/web/package-lock.json ./
 RUN npm ci --no-audit --no-fund
