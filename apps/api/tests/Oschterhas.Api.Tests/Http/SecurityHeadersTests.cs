@@ -16,7 +16,7 @@ public class SecurityHeadersTests
         Assert.Contains("script-src 'self';", csp, StringComparison.Ordinal);
         Assert.DoesNotContain("unsafe-eval", csp, StringComparison.Ordinal);
         Assert.Contains("img-src 'self' data: https://wmts.geo.admin.ch https://tile.openstreetmap.org", csp, StringComparison.Ordinal);
-        Assert.Contains("connect-src 'self'", csp, StringComparison.Ordinal);
+        Assert.Contains("connect-src 'self' https://wmts.geo.admin.ch https://tile.openstreetmap.org;", csp, StringComparison.Ordinal);
         Assert.Contains("frame-ancestors 'none'", csp, StringComparison.Ordinal);
         Assert.Contains("object-src 'none'", csp, StringComparison.Ordinal);
         Assert.Contains("form-action 'self' https://identity.peakcode.dev", csp, StringComparison.Ordinal);

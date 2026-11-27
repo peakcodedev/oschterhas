@@ -20,7 +20,9 @@ internal static class SecurityHeaders
             "script-src 'self'",
             "style-src 'self' 'unsafe-inline'",
             $"img-src 'self' data: {TileHosts}",
-            "connect-src 'self'",
+            // The service worker loads the tiles with fetch(), which counts as connect-src (not img-src);
+            // without the tile hosts here, every tile fails as "504 Gateway Timeout (from service worker)".
+            $"connect-src 'self' {TileHosts}",
             "font-src 'self'",
             "manifest-src 'self'",
             "worker-src 'self'",
