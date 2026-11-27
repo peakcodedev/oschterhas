@@ -28,15 +28,15 @@ Status: `[ ]` offen · `[x]` erfüllt und geprüft · `[~]` teilweise / bewusst 
 - [x] Admin-Bereich ist nur über `admin.oschterhas.li` erreichbar, nicht über Custom Domains
 - [x] Session-Cookie **ohne `Domain`-Attribut**, damit Instanz-Subdomains es weder lesen noch setzen können
 - [x] Keycloak-Service-Account `oschterhas-user-admin` nur mit `manage-users`, `view-users`, `query-users`
-- [ ] Standard-Passwörter der DB nur lokal; Produktion mit eigenem DB-Benutzer mit minimalen Rechten → M7
-- [ ] Container läuft nicht als root → M7 (noch kein Dockerfile)
+- [x] Standard-Passwörter der DB nur lokal; Produktion: App-Benutzer `oschterhas_app` nur mit SELECT/INSERT/UPDATE/DELETE, Migrationen mit dem Schema-Besitzer
+- [x] Container läuft nicht als root (`app`, uid 1654), Dateisystem read-only, `cap_drop: ALL`, `no-new-privileges`
 
 ## A03 – Software Supply Chain Failures
 - [x] Nur Pakete gemäss `docs/lizenzen.md`; zentrale Versionen in `Directory.Packages.props`, `package-lock.json` eingecheckt
 - [x] `dotnet list package --vulnerable --include-transitive` ohne hohe/kritische Funde
 - [x] `npm audit --omit=dev` ohne hohe/kritische Funde
 - [x] Dependabot (oder Renovate) aktiv; GitHub Actions auf feste Versionen/SHAs gepinnt
-- [ ] Basis-Images mit fester Version, regelmässig aktualisiert → M7
+- [x] Basis-Images mit fester Version (`sdk:10.0.403`, `aspnet:10.0.14`, `node:24.22-alpine`, `postgres:17`), Dependabot für Dockerfile und Compose
 
 ## A04 – Cryptographic Failures
 - [~] Nur HTTPS in Produktion (HSTS), TLS beim Reverse Proxy korrekt konfiguriert → HSTS-Middleware aktiv ausserhalb Development; TLS/Caddy in M7

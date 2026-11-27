@@ -88,13 +88,15 @@ Ein Punkt ≈ ein Commit/PR. Erledigte Punkte abhaken `[x]`.
 - [ ] Optional: authentifizierter ZAP-Scan der Verwaltung
 
 ## M7 – Betrieb
-- [ ] Dockerfile (API liefert Web-Build aus), `docker-compose.prod.yml`
-- [ ] Migrationen als eigener Deploy-Schritt
-- [ ] Domain `oschterhas.li` registrieren (DNS-Anbieter mit API für DNS-01)
-- [ ] Hosting in der Schweiz, Wildcard-DNS `*.oschterhas.li` + `custom.oschterhas.li`
-- [ ] Caddy: Wildcard-Zertifikat per DNS-01, On-Demand TLS mit `ask` → `/internal/tls/allowed`, `/internal/*` von aussen sperren, `/.well-known/oschterhas-verification` per HTTP ohne Umleitung auf HTTPS (Vorlage in `docs/architektur.md`)
-- [ ] `InternalNetwork:AllowedNetworks` auf das Docker-Netz von Caddy setzen; `CustomDomains:DnsTarget` und DNS-Eintrag `custom.oschterhas.li`
-- [ ] Produktions-Realm bei Peakcode Identity (Redirect-URIs, SMTP)
-- [ ] Datenbank-Backup
-- [ ] Offene Punkte aus `docs/owasp-bericht.md` (HTTPS/HSTS live, Proxy-Netze, Data-Protection-Verzeichnis, Container ohne root, DB-Benutzer, Log-Aufbewahrung, Header-Check auf Staging)
+- [x] Dockerfile (API liefert Web-Build aus), `production/docker-compose.yml`, Deploy per GitHub Actions wie identity/peakcode_infra ([betrieb.md](betrieb.md))
+- [x] Migrationen als eigener Deploy-Schritt (`--migrate`, App-Benutzer ohne DDL-Rechte)
+- [ ] Domain `oschterhas.li` registrieren (DNS-API nicht mehr nötig, Zertifikate on demand)
+- [ ] Hosting in der Schweiz (gemeinsamer Peakcode-Server), DNS `oschterhas.li`, `*.oschterhas.li` + `custom.oschterhas.li`
+- [ ] peakcode_infra: Branch `feat/global-options` mergen und deployen, danach erster Oschterhas-Deploy (Einrichtung in [betrieb.md](betrieb.md))
+- [x] Caddy (gemeinsam, peakcode_infra): On-Demand TLS für alle Hosts mit `ask` → `/internal/tls/allowed` (statt Wildcard per DNS-01), `/internal/*` von aussen gesperrt, `/.well-known/oschterhas-verification` per HTTP ohne Umleitung. Braucht in peakcode_infra den Branch `feat/global-options`
+- [x] `InternalNetwork:AllowedNetworks` und `ReverseProxy:TrustedNetworks` = Netz `proxy` (setzt `deploy.sh` automatisch); `CustomDomains:DnsTarget` aus `.env`
+- [ ] DNS-Eintrag `custom.oschterhas.li` (mit der Domain)
+- [x] Produktions-Realm bei Peakcode Identity (zentraler Keycloak, `identity_peakcode/production/realms/oschterhas.json`); Secrets und `OSCHTERHAS_ADMIN_URL` beim Einrichten setzen
+- [ ] Datenbank-Backup (automatisch, Ablage in der Schweiz; Befehl für Hand-Sicherung in [betrieb.md](betrieb.md))
+- [ ] Offene Punkte aus `docs/owasp-bericht.md` (HTTPS/HSTS live, Log-Aufbewahrung, Header-Check auf dem Server)
 - [ ] Testlauf mit echten Freiwilligen und echter GPX-Datei

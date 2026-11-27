@@ -197,12 +197,12 @@ Die Zuordnung Host → Instanz wird 30 Sekunden mit `IMemoryCache` zwischengespe
 - Angular-Dev-Server mit `allowedHosts: ['.localhost']`, Proxy `/api` → API **mit unverändertem Host-Header**.
 
 ### Produktion
-- DNS bei `oschterhas.li`: Wildcard `*.oschterhas.li` und `custom.oschterhas.li` auf den Server.
-- Caddy (Apache-2.0) als Reverse Proxy:
-  - Wildcard-Zertifikat `*.oschterhas.li` per DNS-01 (benötigt das Caddy-DNS-Modul des DNS-Anbieters)
-  - On-Demand TLS mit `ask`-Endpunkt für Custom Domains
+- DNS bei `oschterhas.li`: `oschterhas.li`, Wildcard `*.oschterhas.li` und `custom.oschterhas.li` auf den Server.
+- Gemeinsamer Caddy aus peakcode_infra (Apache-2.0) als Reverse Proxy:
+  - On-Demand-Zertifikate für **alle** Oschterhas-Hosts (Basis-Domain, `admin.`, Instanz-Subdomains, Custom Domains) statt Wildcard per DNS-01: kein DNS-Modul nötig
+  - `ask`-Endpunkt `/internal/tls/allowed` als globale Option (`caddy-site install-global`): nur bekannte Hosts bekommen ein Zertifikat
   - leitet den Host-Header unverändert an die API weiter
-- Let's-Encrypt-Limits beachten. Das `ask` verhindert Zertifikate für fremde Domains.
+- Details, Einrichtung und Ablauf: [betrieb.md](betrieb.md).
 
 ## GPX-Import
 
@@ -312,9 +312,12 @@ Laufend gemäss [owasp-checkliste.md](owasp-checkliste.md); vollständige Prüfu
 - Security-Header per eigener Middleware (CSP, HSTS, `nosniff`, Referrer-Policy, `Permissions-Policy: geolocation=(self)`).
 - Problem Details (RFC 9457); keine Stacktraces in Produktion.
 
-## Deployment (vorläufig)
+## Deployment
 
-- Ein Docker-Image: API liefert die gebaute Angular-App aus (`wwwroot`), plus PostgreSQL.
-- Caddy davor: Wildcard-Zertifikat `*.oschterhas.li`, On-Demand-Zertifikate für Custom Domains (siehe oben).
-- Migrationen als eigener Schritt vor dem Start der neuen Version.
+Siehe [betrieb.md](betrieb.md). Kurz:
+
+- Ein Docker-Image: die API liefert die gebaute Angular-App aus (`wwwroot`, App-Routen fallen auf `index.html` zurück, Dateien mit Hash im Namen ein Jahr cachebar). Dazu PostgreSQL im selben Compose-Projekt.
+- Login über die zentrale Peakcode Identity (identity_peakcode, Realm `oschterhas`).
+- Gemeinsamer Caddy aus peakcode_infra davor; Deploy per GitHub Actions auf dem Self-hosted Runner des Servers.
+- Migrationen als eigener Schritt (`--migrate`, Schema-Besitzer) vor dem Start der neuen Version; die App läuft mit einem DB-Benutzer ohne DDL-Rechte.
 - Hosting in der Schweiz (Vorgabe Peakcode Identity: Daten und Backups in der Schweiz). Anbieter noch offen.

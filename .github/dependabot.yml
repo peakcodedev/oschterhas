@@ -30,3 +30,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+
+  - package-ecosystem: docker-compose
+    directory: /production
+    schedule:
+      interval: weekly

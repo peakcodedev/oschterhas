@@ -11,6 +11,7 @@ Web-App (PWA) für die Oster-Suche im Gelände. Ein Plattform-Admin legt **Insta
 - [docs/lizenzen.md](docs/lizenzen.md) – erlaubte und verbotene Pakete
 - [docs/owasp-checkliste.md](docs/owasp-checkliste.md) – Sicherheitsanforderungen
 - [docs/roadmap.md](docs/roadmap.md) – Meilensteine; **Fortschritt dort abhaken**
+- [docs/betrieb.md](docs/betrieb.md) – Produktion: Image, Compose, gemeinsamer Caddy (peakcode_infra), zentrale Identity, Deploy
 - [design-system/README.md](design-system/README.md) – Designsystem (Farben, Schriften, Logos, Regeln); `npm run tokens` erzeugt daraus `apps/web/src/styles/tokens.css`
 
 ## Tech-Stack (Kurzfassung)
@@ -23,7 +24,7 @@ Web-App (PWA) für die Oster-Suche im Gelände. Ein Plattform-Admin legt **Insta
   - Abhängigkeiten nur `Api → Core → Data → Common`. Neue Projekte nur mit klarem Grund, Schema `Oschterhas.<Name>`.
 - **Login**: Peakcode Identity = Keycloak aus `/Users/ufo/CODE/identity_peakcode`, Realm `oschterhas`, BFF mit httpOnly-Cookie, nur auf `admin.`-Host
 - **Frontend** `apps/web`: Angular, Standalone Components, Signals, TypeScript strict, **NgRx**, Leaflet, Transloco, Service Worker
-- **Domain**: `oschterhas.li` (`.ch` ist besetzt). Produktion hinter Caddy (Wildcard- und On-Demand-Zertifikate)
+- **Domain**: `oschterhas.li` (`.ch` ist besetzt). Produktion auf dem gemeinsamen Peakcode-Server: gemeinsamer Caddy aus `peakcode_infra` (On-Demand-Zertifikate für alle Hosts), zentrale Keycloak-Instanz aus `identity_peakcode/production`, Deploy per GitHub Actions auf `main` ([docs/betrieb.md](docs/betrieb.md))
 - **Lokal**: Suche unter `http://tann.oschterhas.localhost:4300`, Verwaltung unter `http://admin.oschterhas.localhost:4300` (Port 4300 fest, weil Keycloak genau diese Redirect-URI kennt), Keycloak `http://localhost:8180`, Mailpit `http://localhost:8025`
 - **Testkonten** (Realm `oschterhas`, Passwort `OSCHTERHAS_TEST_USER_PASSWORD` in `identity_peakcode/.env`): `pia.plattform@oschterhas.test` (Plattform-Admin), `otto.organisator@oschterhas.test` (Organisator `tann`), `olga.organisatorin@oschterhas.test` (Organisatorin `vorschau`), `nina.neu@unbekannt.test` (kein Zugang)
 - **Secrets lokal**: `dotnet user-secrets` im Projekt `Oschterhas.Api` (`Oidc:ClientSecret`, `IdentityAdmin:ClientSecret`), gleiche Werte wie in `identity_peakcode/.env`
@@ -56,7 +57,7 @@ npm run licenses:check
 npm run api:types                                         # TS-Typen aus OpenAPI 3.0 neu erzeugen (API muss laufen)
 ```
 
-Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed (leere DB): `tann` (aktiv, Custom Domain `ostern.cevi-test.localhost`), `vorschau` (Entwurf), `vorbei` (beendet). DB zurücksetzen: `docker compose down -v && docker compose up -d db`. CI: `.github/workflows/ci.yml` führt dieselben Prüfungen aus.
+Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed (leere DB): `tann` (aktiv, Custom Domain `ostern.cevi-test.localhost`), `vorschau` (Entwurf), `vorbei` (beendet). DB zurücksetzen: `docker compose down -v && docker compose up -d db`. CI: `.github/workflows/ci.yml` führt dieselben Prüfungen aus (Pull Requests; auf `main` als Teil von `deploy.yml`). Produktions-Image: `docker build -t oschterhas-api:local .`
 
 ## Harte Regeln
 
@@ -91,4 +92,4 @@ Dev-Server für Claude: `.claude/launch.json` (`api`, `web`). Entwicklungs-Seed 
 3. Umsetzen, Unit-Tests schreiben, Build/Tests/Lint laufen lassen.
 4. Bei UI-Änderungen im Browser prüfen (mobile Breite 375 px).
 5. Roadmap und betroffene Doku aktualisieren.
-6. Änderungen am Realm gehören ins Repo `identity_peakcode` (dessen `AGENTS.md` beachten), nicht hierher.
+6. Änderungen am Realm gehören ins Repo `identity_peakcode`, am gemeinsamen Caddy ins Repo `peakcode_infra` (jeweils deren `AGENTS.md` beachten), nicht hierher.

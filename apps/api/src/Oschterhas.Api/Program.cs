@@ -42,6 +42,7 @@ builder.Services.AddOptions<CustomDomainOptions>().Bind(builder.Configuration.Ge
 builder.Services.AddOptions<InternalNetworkOptions>().Bind(builder.Configuration.GetSection(InternalNetworkOptions.SectionName));
 builder.Services.AddHostedService<CustomDomainMonitor>();
 builder.Services.AddReverseProxySupport(builder.Configuration);
+builder.Services.AddWebApp();
 
 // Same JSON settings for MVC and for the OpenAPI generator (which reads the HTTP JSON options).
 static void ConfigureJson(JsonSerializerOptions json)
@@ -64,6 +65,13 @@ builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 
 var app = builder.Build();
 
+// Deploy step before the new version starts: "dotnet Oschterhas.Api.dll --migrate" applies migrations and exits.
+if (args.Contains("--migrate", StringComparer.Ordinal))
+{
+    await app.MigrateDatabaseAsync();
+    return;
+}
+
 app.UseForwardedHeaders();
 app.UseSecurityHeaders(IdentityOrigin(app.Configuration), app.Environment.IsDevelopment());
 if (!app.Environment.IsDevelopment())
@@ -81,6 +89,8 @@ if (app.Environment.IsDevelopment())
     await app.SeedDevelopmentDataAsync();
 }
 
+app.UseWebAppFiles();
+
 app.UseWhen(
     context => context.Request.Path.StartsWithSegments("/api"),
     branch => branch.UseMiddleware<HostResolutionMiddleware>());
@@ -91,6 +101,7 @@ app.UseAuthorization();
 app.UseRateLimiter();
 app.MapControllers();
 app.MapHealthChecks("/health").AllowAnonymous();
+app.MapWebAppFallback().AllowAnonymous();
 
 await app.RunAsync();
 

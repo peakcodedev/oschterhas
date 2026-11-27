@@ -1,0 +1,6 @@
+# Global options for the shared Caddy (peakcode_infra); deploy.sh installs it with
+# "caddy-site install-global". Caddy only requests an on-demand certificate if the API answers 200 here
+# (own hosts and verified custom domains), so nobody can make Caddy issue certificates for other domains.
+on_demand_tls {
+	ask http://oschterhas-api:8080/internal/tls/allowed
+}

@@ -77,8 +77,8 @@ docker run --rm -v $W:/zap/wrk:rw zaproxy/zap-stable zap-api-scan.py -t /zap/wrk
 | Punkt | Wann |
 |---|---|
 | HTTPS/HSTS, `Secure`-Cookies und CSP mit `upgrade-insecure-requests` live prüfen; Header-Check (securityheaders.com) | M7 (Staging) |
-| `ReverseProxy:TrustedNetworks`, `DataProtectionKeysDirectory`, `InternalNetwork:AllowedNetworks` setzen | M7 |
-| Container nicht als root, Basis-Images gepinnt, DB-Benutzer mit minimalen Rechten, Log-Aufbewahrung | M7 |
+| ~~`ReverseProxy:TrustedNetworks`, `DataProtectionKeysDirectory`, `InternalNetwork:AllowedNetworks` setzen~~ erledigt 2026-11-27: `deploy.sh` setzt das Netz `proxy`, Schlüssel im Volume `keys` | M7 |
+| ~~Container nicht als root, Basis-Images gepinnt, DB-Benutzer mit minimalen Rechten~~ erledigt 2026-11-27 ([betrieb.md](betrieb.md)); Log-Aufbewahrung offen | M7 |
 | Produktions-Realm bei Peakcode Identity ohne Testbenutzer | M7 |
 | CI-Workflow einmal auf GitHub laufen lassen | sobald ein Remote existiert |
 | Von Hand: Login als Organisator (Otto) – sieht nur Tann; Login ohne Zugang (Nina); Abmelden (auch unter CSP) | nächster manueller Test |

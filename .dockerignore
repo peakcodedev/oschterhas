@@ -1,0 +1,19 @@
+# Only what the image build needs (see Dockerfile).
+**/node_modules
+**/bin
+**/obj
+**/dist
+**/.angular
+**/coverage
+**/TestResults
+**/.DS_Store
+**/.env
+**/.env.*
+.git
+.github
+.claude
+.vscode
+docs
+samples
+production
+apps/api/tests

@@ -7,7 +7,7 @@ namespace Oschterhas.Api.Hosting;
 internal static class DatabaseMigrationExtensions
 {
     /// <summary>
-    /// Applies pending EF Core migrations. Development only: in production migrations run as a separate deploy step.
+    /// Applies pending EF Core migrations. Runs on start in development; in production as a separate deploy step (<c>--migrate</c>, see Program.cs).
     /// Retries while the database container is still starting.
     /// </summary>
     public static async Task MigrateDatabaseAsync(this WebApplication app)
